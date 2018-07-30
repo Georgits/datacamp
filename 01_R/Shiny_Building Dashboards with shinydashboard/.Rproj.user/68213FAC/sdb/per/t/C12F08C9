@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(\"shiny\")\n\nbody <- dashboardBody(\n  fluidRow(\n    # Column 1\n    column(width = 6,\n           infoBox(\n             width = NULL,\n             title = \"Regular Box, Column 1\",\n             subtitle = \"Gimme those Star Wars\"\n           )\n    ),\n    # Column 2\n    column(width = 6,  \n           infoBox(\n             width = NULL,\n             title = \"Regular Box, Column 2\",\n             subtitle = \"Don't let them end\"\n           )\n    )\n  )\n)\n\nui <- dashboardPage(header = dashboardHeader(),\n                    sidebar = dashboardSidebar(),\n                    body = body\n)\n\nserver <- function(input, output) {}\n\nshinyApp(ui, server)",
+    "created" : 1529748364557.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1745054960",
+    "id" : "C12F08C9",
+    "lastKnownWriteTime" : 1529748407,
+    "last_content_update" : 1529748407207,
+    "path" : "C:/Users/d91067/Desktop/R/Building Dashboards with shinydashboard/09_fluidRow_plus_colum.R",
+    "project_path" : "09_fluidRow_plus_colum.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

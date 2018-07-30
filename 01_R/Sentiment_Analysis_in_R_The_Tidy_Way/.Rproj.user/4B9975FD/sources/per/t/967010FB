@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1532502314777.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3526066183",
+    "id" : "967010FB",
+    "lastKnownWriteTime" : 1502017949,
+    "last_content_update" : 1502017949,
+    "path" : "C:/Users/D91067/Desktop/R/datacamp/01_R/Sentiment_Analysis_in_R_The_Tidy_Way/Sentiment_Analysis_in_R_The_Tidy_Way.R",
+    "project_path" : "Sentiment_Analysis_in_R_The_Tidy_Way.R",
+    "properties" : {
+        "cursorPosition" : "0,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

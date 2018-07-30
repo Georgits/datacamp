@@ -1,0 +1,7 @@
+*.dta
+*.pdf
+*.shp
+*.Rhistory
+*.Rproj
+*.db
+*.Rprof

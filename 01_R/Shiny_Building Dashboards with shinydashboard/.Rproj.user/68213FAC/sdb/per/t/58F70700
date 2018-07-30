@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(shinydashboard)\n\nheader <- dashboardHeader()\nsidebar <- dashboardSidebar()\nbody <- dashboardBody()\n\n# Create the UI using the header, sidebar, and body\nui <- dashboardPage(header, sidebar, body)\n\nserver <- function(input, output) {}\n\nshinyApp(ui, server)",
+    "created" : 1529666058943.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2301429945",
+    "id" : "58F70700",
+    "lastKnownWriteTime" : 1529666091,
+    "last_content_update" : 1529666091850,
+    "path" : "C:/Users/d91067/Desktop/R/Building Dashboards with shinydashboard/01_basic.R",
+    "project_path" : "01_basic.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

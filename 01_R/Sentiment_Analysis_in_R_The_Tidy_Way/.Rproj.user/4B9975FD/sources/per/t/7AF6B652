@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1532502327463.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "7AF6B652",
+    "lastKnownWriteTime" : 7226435092887896064,
+    "last_content_update" : 1532502327463,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "C5F7C33B",
+        "caption" : "shakespeare",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=shakespeare&cache_key=C5F7C33B",
+        "displayedObservations" : 25888,
+        "environment" : "",
+        "object" : "shakespeare",
+        "preview" : 0,
+        "totalObservations" : 25888,
+        "variables" : 3
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

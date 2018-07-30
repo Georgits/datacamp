@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# http://blog.revolutionanalytics.com/2016/02/japans-ageing-population-animated-with-r.html\n# https://github.com/walkerke/idbr\n# Läuft nicht: https://github.com/dgrtwo/gganimate/issues/22\n\nlibrary(idbr) # devtools::install_github('walkerke/idbr')\nlibrary(ggplot2)\nlibrary(animation)\nlibrary(dplyr)\nlibrary(ggthemes)\nlibrary(ImageMagick)\n\nidb_api_key(\"1cfba561ff6d00351e4e7ea2264eb8b8760b6c62\")\n\nmale <- idb1('JA', 2010:2050, sex = 'male') %>%\n  mutate(POP = POP * -1,\n         SEX = 'Male')\n\nfemale <- idb1('JA', 2010:2050, sex = 'female') %>%\n  mutate(SEX = 'Female')\n\njapan <- rbind(male, female) %>%\n  mutate(abs_pop = abs(POP))\n\n# Animate it with a for loop\n\nsaveGIF({\n  \n  for (i in 2010:2050) {\n    \n    title <- as.character(i)\n    \n    year_data <- filter(japan, time == i)\n    \n    g1 <- ggplot(year_data, aes(x = AGE, y = POP, fill = SEX, width = 1)) +\n      coord_fixed() + \n      coord_flip() +\n      annotate('text', x = 98, y = -800000, \n               label = 'Data: US Census Bureau IDB; idbr R package', size = 3) + \n      geom_bar(data = subset(year_data, SEX == \"Female\"), stat = \"identity\") +\n      geom_bar(data = subset(year_data, SEX == \"Male\"), stat = \"identity\") +\n      scale_y_continuous(breaks = seq(-1000000, 1000000, 500000),\n                         labels = paste0(as.character(c(seq(1, 0, -0.5), c(0.5, 1))), \"m\"), \n                         limits = c(min(japan$POP), max(japan$POP))) +\n      theme_economist(base_size = 14) + \n      scale_fill_manual(values = c('#ff9896', '#d62728')) + \n      ggtitle(paste0('Population structure of Japan, ', title)) + \n      ylab('Population') + \n      xlab('Age') + \n      theme(legend.position = \"bottom\", legend.title = element_blank()) + \n      guides(fill = guide_legend(reverse = TRUE))\n    \n    print(g1)\n    \n  }\n  \n}, movie.name = 'japan_pyramid.gif', interval = 0.1, ani.width = 700, ani.height = 600)",
+    "created" : 1495487970951.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2258880455",
+    "id" : "DE95AF05",
+    "lastKnownWriteTime" : 1495490602,
+    "last_content_update" : 1495490602551,
+    "path" : "C:/Users/d91067/Desktop/datacamp/DataVisualization/Data_Visualization_with_ggplot2/animation.R",
+    "project_path" : "animation.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

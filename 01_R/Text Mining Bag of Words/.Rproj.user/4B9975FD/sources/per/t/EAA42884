@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1532502149867.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4071428896",
+    "id" : "EAA42884",
+    "lastKnownWriteTime" : 1499009998,
+    "last_content_update" : 1499009998,
+    "path" : "C:/Users/D91067/Desktop/R/datacamp/01_R/Text Mining Bag of Words/Text Mining Bag of Words.R",
+    "project_path" : "Text Mining Bag of Words.R",
+    "properties" : {
+        "cursorPosition" : "656,0",
+        "scrollLine" : "641"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

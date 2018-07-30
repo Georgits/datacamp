@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1532448030559.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D0F21D1C",
+    "lastKnownWriteTime" : 1532534145,
+    "last_content_update" : 1532534145909,
+    "path" : "C:/Users/D91067/Desktop/R/datacamp/01_R/Building Web Applications in R with Shiny_ Case Studies/10_wordcloud.R",
+    "project_path" : "10_wordcloud.R",
+    "properties" : {
+        "cursorPosition" : "86,16",
+        "scrollLine" : "73"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
