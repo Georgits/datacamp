@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# Chapter 1. \n\n# Onboarding | Tables ----\nSELECT name FROM people;\n\n# -- Try running me!\n  SELECT 'DataCamp <3 SQL'\n  AS result;\n  ",
+    "created" : 1497627511372.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "4124114487",
+    "id" : "3453148E",
+    "lastKnownWriteTime" : 19002432,
+    "last_content_update" : 1497627786906,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
