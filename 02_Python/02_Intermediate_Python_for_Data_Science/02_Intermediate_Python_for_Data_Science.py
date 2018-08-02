@@ -4,6 +4,8 @@ Created on Thu Aug 10 22:56:08 2017
 
 @author: d91067
 """
+path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\02_Intermediate_Python_for_Data_Science'
+os.chdir(path)
 
 # Chapter 1: Matplotlib
 # Line plot (1)
@@ -340,7 +342,7 @@ cars = pd.read_csv('cars.csv')
 print(cars)
 
 # Fix import by including index_col
-cars = pd.read_csv('C:\\Users\\d91067\\Desktop\\datacamp\\02_Python\\Intermediate_Python_for_Data_Science\\cars.csv', index_col = 0)
+cars = pd.read_csv('cars.csv', index_col = 0)
 
 # Print out cars
 print(cars)
@@ -373,9 +375,6 @@ print(cars[3:6])
 cars.loc['RU']
 cars.iloc[4]
 
-cars.loc[['RU']]
-cars.iloc[[4]]
-
 cars.loc[['RU', 'AUS']]
 cars.iloc[[4, 1]]
 
@@ -401,7 +400,7 @@ cars.iloc[[3, 4], [0, 1]]
 
 # Import cars data
 import pandas as pd
-cars = pd.read_csv('C:\\Users\\d91067\\Desktop\\datacamp\\02_Python\\Intermediate_Python_for_Data_Science\\cars.csv', index_col = 0)
+cars = pd.read_csv('cars.csv', index_col = 0)
 
 # Print out drives_right value of Morocco
 print(cars.loc['MOR', "drives_right"])

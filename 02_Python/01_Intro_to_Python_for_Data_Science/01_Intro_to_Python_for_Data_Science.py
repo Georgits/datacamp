@@ -138,7 +138,7 @@ print(len(var1))
 
 # Convert var2 to an integer: out2
 out2 = int(var2)
-
+print(out2)
 
 
 
@@ -242,7 +242,7 @@ print(dist)
 
 
 # Different ways of importing
-# uppose you want to use the function inv(), which is in the linalg subpackage of the scipy package. 
+# suppose you want to use the function inv(), which is in the linalg subpackage of the scipy package. 
 # You want to be able to use this function as follows:
 # my_inv([[1,2], [3,4]])
 

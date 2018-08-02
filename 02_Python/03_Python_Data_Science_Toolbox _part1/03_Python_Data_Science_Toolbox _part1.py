@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-path = 'C:\\Users\\d91067\\Desktop\\datacamp\\02_Python\\03_Python_Data_Science_Toolbox _part1'
+path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\03_Python_Data_Science_Toolbox _part1'
 os.chdir(path)
 
 # Chapter 1: Writing your own functions
