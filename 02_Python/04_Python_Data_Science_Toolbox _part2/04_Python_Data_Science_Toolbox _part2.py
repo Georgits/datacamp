@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-path = 'C:\\Users\\d91067\\Desktop\\datacamp\\02_Python\\04_Python_Data_Science_Toolbox _part2'
+path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\04_Python_Data_Science_Toolbox _part2'
 os.chdir(path)
 
 # Chapter 1: Using iterators in PythonLand
@@ -607,13 +607,12 @@ with open('world_ind_pop_data.csv') as file:
 
 
 
-
 # Writing a generator to load data in chunks (3)
 # Initialize an empty dictionary: counts_dict
 counts_dict = {}
 
 # Open a connection to the file
-with open('world_dev_ind.csv') as file:
+with open('world_ind_pop_data.csv') as file:
 
     # Iterate over the generator from read_large_file()
     for line in read_large_file(file):
@@ -695,7 +694,7 @@ plt.show()
 
 
 # Writing an iterator to load data in chunks (4)
-# his is neat because you're going to be able to process the entire 
+# this is neat because you're going to be able to process the entire 
 # large dataset by just working on smaller pieces of it! 
 # Initialize reader object: urb_pop_reader
 urb_pop_reader = pd.read_csv('world_ind_pop_data.csv', chunksize=1000)

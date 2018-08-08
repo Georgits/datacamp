@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-path = 'C:\\Users\\d91067\\Desktop\\datacamp\\02_Python\\06_Importing_Data_in_Python_part2'
+path = 'C:\\Users\\d91067\\Desktop\\r\\datacamp\\02_Python\\06_Importing_Data_in_Python_part2'
 os.chdir(path)
 
 import os
@@ -148,6 +148,7 @@ print(text)
 # Specify url: url
 url = 'https://www.python.org/~guido/'
 url = 'http://www.ambebi.ge'
+# url = 'https://www.xing.com/contacts/contacts?page=1&initial=&order_by=last_name&cities%5B%5D=&companies%5B%5D=&tags%5B%5D=&no_tags=&query=&view_type=condensed&custom_url=false'
 
 # Package the request, send the request and catch the response: r
 r = requests.get(url)
@@ -280,7 +281,7 @@ class MyStreamListener(tweepy.StreamListener):
         tweet = status._json
         self.file.write( json.dumps(tweet) + '\n' )
         self.num_tweets += 1
-        if self.num_tweets < 2:
+        if self.num_tweets < 5:
             return True
         else:
             return False
@@ -308,7 +309,7 @@ stream.filter(track = ['clinton', 'trump', 'sanders', 'cruz'])
 
 # Load and explore your Twitter data
 # String of path to file: tweets_data_path
-tweets_data_path = 'tweets.txt'
+tweets_data_path = 'tweets3.txt'
 
 # Initialize empty list to store tweets: tweets_data
 tweets_data = []

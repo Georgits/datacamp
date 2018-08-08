@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 from numpy import NaN
 import matplotlib.pyplot as plt
-path = 'C:\\Users\\d91067\\Desktop\\datacamp\\02_Python\\07_Cleaning_Data_in_Python'
+path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\07_Cleaning_Data_in_Python'
 os.chdir(path)
 
 import os
@@ -49,12 +49,6 @@ print(df.info())
 
 # Calculating summary statistics
 #Frequency counts for categorical data
-print(df['Borough'].value_counts(dropna=False))
-print(df['State'].value_counts(dropna=False))
-print(df['Site Fill'].value_counts(dropna=False))
-
-
-#   Frequency counts for categorical data
 print(df['Borough'].value_counts(dropna=False))
 print(df['State'].value_counts(dropna=False))
 print(df['Site Fill'].value_counts(dropna=False))
@@ -372,11 +366,11 @@ print(tips.head())
 
 # Lambda functions
 # Write the lambda function using replace
-tips['total_dollar_replace'] = tips['total_dollar'].apply(lambda x: x.replace('$', ''))
+tips['total_dollar_replace'] = tips['total_bill'].apply(lambda x: x.replace('$', ''))
 
 # Write the lambda function using regular expressions
 # Notice that because re.findall() returns a list, you have to slice it in order to access the actual value.
-tips['total_dollar_re'] = tips['total_dollar'].apply(lambda x: re.findall('\d+\.\d+', x)[0])
+tips['total_dollar_re'] = tips['total_bill'].apply(lambda x: re.findall('\d+\.\d+', x)[0])
 
 # Print the head of tips
 print(tips.head())

@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-path = 'C:\\Users\\d91067\\Desktop\\datacamp\\02_Python\\05_Importing_Data_in_Python_part1'
+path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\05_Importing_Data_in_Python_part1'
 os.chdir(path)
 
 import os
