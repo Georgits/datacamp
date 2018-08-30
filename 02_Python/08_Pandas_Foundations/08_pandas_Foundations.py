@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-path = 'C:\\Users\\d91067\\Desktop\\datacamp\\02_Python\\08_Pandas_Foundations'
+path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\08_Pandas_Foundations'
 os.chdir(path)
 
 # NumPy and pandas working together
