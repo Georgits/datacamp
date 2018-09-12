@@ -216,7 +216,8 @@ print(names_1981.shape)
 print(names_1881.shape)
 
 
-pd.read_csv('names_1881.csv', index_col = 0 )names_1881['year'] = 1881
+pd.read_csv('names_1881.csv', index_col = 0)
+names_1881['year'] = 1881
 names_1981['year'] = 1981
 # Append names_1981 after names_1881 with ignore_index=True: combined_names
 combined_names = names_1881.append(names_1981, ignore_index = True)
@@ -235,3 +236,118 @@ print(combined_names.loc[combined_names['name'] =='Morgan'])
 weather = pd.concat([weather_max, weather_mean], axis = 1)
 # Print weather
 print(weather)
+
+
+
+# Reading multiple files to build a DataFrame
+medals = []
+medal_types = ['bronze', 'silver', 'gold']
+
+for medal in medal_types:
+    # Create the file name: file_name
+    file_name = "%s_top5.csv" % medal
+    # Create list of column names: columns
+    columns = ['Country', medal]
+    # Read file_name into a DataFrame: df
+    medal_df = pd.read_csv(file_name, header = 0, index_col = 'Country', names=columns)
+    # Append medal_df to medals
+    medals.append(medal_df)
+# Concatenate medals horizontally: medals
+medals = pd.concat(medals, axis = 'columns')
+# Print medals
+print(medals)
+
+
+
+# Concatenating vertically to get MultiIndexed rows
+for medal in medal_types:
+    file_name = "%s_top5.csv" % medal
+    # Read file_name into a DataFrame: medal_df
+    medal_df = pd.read_csv(file_name, header = 0, index_col = 'Country')
+    # Append medal_df to medals
+    medals.append(medal_df)
+# Concatenate medals: medals
+medals = pd.concat(medals, keys = ['bronze', 'silver', 'gold'], axis = 0)
+# Print medals in entirety
+print(medals)
+
+
+
+# Slicing MultiIndexed DataFrames
+# Sort the entries of medals: medals_sorted
+medals_sorted = medals.sort_index(level =0)
+# Print the number of Bronze medals won by Germany
+print(medals_sorted.loc[('bronze','Germany')])
+# Print data about silver medals
+print(medals_sorted.loc['silver'])
+# Create alias for pd.IndexSlice: idx
+idx = pd.IndexSlice
+# Print all the data on medals won by the United Kingdom
+print(medals_sorted.loc[idx[:,'United Kingdom'],:])
+
+
+
+# Concatenating horizontally to get MultiIndexed columns
+hardware = pd.read_csv('feb-sales-Hardware.csv', index_col = 'Date')
+software = pd.read_csv('feb-sales-Software.csv', index_col = 'Date')
+service = pd.read_csv('feb-sales-Service.csv', index_col = 'Date')
+dataframes = [hardware, software, service]
+# Concatenate dataframes: february
+february = pd.concat(dataframes, keys = ['Hardware', 'Software', 'Service'], axis = 1)
+# Print february.info()
+print(february.info())
+# Assign pd.IndexSlice: idx
+idx = pd.IndexSlice
+# Create the slice: slice_2_8
+slice_2_8 = february.loc['2015-02-02':'2015-02-08', idx[:, 'Company']]
+# Print slice_2_8
+print(slice_2_8)
+
+
+
+# Concatenating DataFrames from a dict
+jan = pd.read_csv('sales-jan-2015.csv', index_col = 'Date')
+feb = pd.read_csv('sales-feb-2015.csv', index_col = 'Date')
+mar = pd.read_csv('sales-mar-2015.csv', index_col = 'Date')
+# Make the list of tuples: month_list
+month_list = [('january', jan), ('february', feb), ('march', mar)]
+# Create an empty dictionary: month_dict
+month_dict = {}
+for month_name, month_data in month_list:
+    # Group month_data: month_dict[month_name]
+    month_dict[month_name] = month_data.groupby('Company').sum() 
+# Concatenate data in month_dict: sales
+sales = pd.concat(month_dict)
+# Print sales
+print(sales)
+# Print all sales by Mediacore
+idx = pd.IndexSlice
+print(sales.loc[idx[:, 'Mediacore'], :])
+
+
+
+# Concatenating DataFrames with inner join
+bronze = pd.read_csv('bronze_top5.csv', index_col = 'Country')
+silver = pd.read_csv('silver_top5.csv', index_col = 'Country')
+gold = pd.read_csv('gold_top5.csv', index_col = 'Country')
+# Create the list of DataFrames: medal_list
+medal_list = [bronze, silver, gold]
+# Concatenate medal_list horizontally using an inner join: medals
+medals = pd.concat(medal_list, keys = ['bronze', 'silver', 'gold'], axis = 1, join = 'inner')
+# Print medals
+print(medals)
+
+
+
+# Resampling & concatenating DataFrames with inner join
+china = pd.read_csv('gdp_china.csv', parse_dates=True, index_col = 'Year')
+us = pd.read_csv('GDP_usa.csv', parse_dates=True, index_col='DATE')
+# NICHT LAUFFÄHIG !!!!
+# Resample and tidy china: china_annual
+china_annual = china.resample('A').pct_change(10).dropna()
+# Resample and tidy us: us_annual
+us_annual = us.resample('A').pct_change(10).dropna()
+# Concatenate china_annual and us_annual: gdp
+gdp = pd.concat([china_annual, us_annual], axis = 1, join = 'inner')
+# Resample gdp and print
+print(gdp.resample('10A').last())
