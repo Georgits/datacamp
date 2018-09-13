@@ -8,8 +8,8 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-# path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\10_Introduction_to_Databases_in_Python'
-path = 'C:\\Users\\georg\\Desktop\\georgi\\github\\datacamp\\02_Python\\11_Merging_DataFrames_with_pandas'
+path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\11_Merging_DataFrames_with_pandas'
+# path = 'C:\\Users\\georg\\Desktop\\georgi\\github\\datacamp\\02_Python\\11_Merging_DataFrames_with_pandas'
 os.chdir(path)
 
 # Chapter 1: Preparing data
@@ -351,3 +351,132 @@ us_annual = us.resample('A').pct_change(10).dropna()
 gdp = pd.concat([china_annual, us_annual], axis = 1, join = 'inner')
 # Resample gdp and print
 print(gdp.resample('10A').last())
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Chapter 3: Merging data
+# Merging on a specific column
+revenue = pd.read_csv('revenue.csv', index_col = 0)
+managers = pd.read_csv('managers.csv', index_col = 0)
+# Merge revenue with managers on 'city': merge_by_city
+merge_by_city = pd.merge(revenue, managers, on = 'city')
+# Print merge_by_city
+print(merge_by_city)
+# Merge revenue with managers on 'branch_id': merge_by_id
+merge_by_id = pd.merge(revenue, managers, on = 'branch_id')
+# Print merge_by_id
+print(merge_by_id)
+
+
+
+# Merging on columns with non-matching labels
+revenue = pd.read_csv('revenue.csv', index_col = 0)
+managers_2 = pd.read_csv('managers_2.csv', index_col = 0)
+# Merge revenue & managers on 'city' & 'branch': combined
+combined = pd.merge(revenue, managers_2, left_on = 'city', right_on = 'branch')
+# Print combined
+print(combined)
+
+
+
+# Merging on multiple columns
+# Add 'state' column to revenue: revenue['state']
+# revenue['state'] = ['TX','CO','IL','CA']
+# Add 'state' column to managers: managers['state']
+# managers['state'] = ['TX','CO','CA','MO']
+# Merge revenue & managers on 'branch_id', 'city', & 'state': combined
+combined = pd.merge(revenue, managers, on = ['branch_id', 'city', 'state'])
+# Print combined
+print(combined)
+
+
+
+# Joining by Index
+# Choose the function call below that will join the DataFrames on their indexes and return 5 rows with index labels [10, 20, 30, 31, 47].
+# Explore each of them in the IPython Shell to get a better understanding of their functionality.
+revenue = pd.read_csv('revenue.csv', index_col = 'branch_id')
+managers_2 = pd.read_csv('managers_2.csv', index_col = 'branch_id')
+pd.merge(revenue, managers_2, on='branch_id')
+pd.merge(managers_2, revenue, how='left')
+revenue.join(managers_2, lsuffix='_rev', rsuffix='_mng', how='outer')  # THIS
+managers_2.join(revenue, lsuffix='_mgn', rsuffix='_rev', how='left')
+
+
+
+# Left & right merging on multiple columns
+revenue = pd.read_csv('revenue.csv', index_col = 0)
+sales = pd.read_csv('sales.csv', index_col = 0)
+managers_2 = pd.read_csv('managers_2.csv', index_col = 0)
+# Merge revenue and sales: revenue_and_sales
+revenue_and_sales = pd.merge(revenue, sales, how = 'right', on = ['city', 'state'])
+# Print revenue_and_sales
+print(revenue_and_sales)
+# Merge sales and managers: sales_and_managers
+sales_and_managers = pd.merge(sales, managers_2, how = 'left', left_on = ['city', 'state'], right_on = ['branch', 'state'])
+# Print sales_and_managers
+print(sales_and_managers)
+
+
+
+# Merging DataFrames with outer join
+# Perform the first merge: merge_default
+merge_default = pd.merge(sales_and_managers, revenue_and_sales)
+# Print merge_default
+print(merge_default)
+# Perform the second merge: merge_outer
+merge_outer = pd.merge(sales_and_managers, revenue_and_sales, how = 'outer')
+# Print merge_outer
+print(merge_outer)
+# Perform the third merge: merge_outer_on
+merge_outer_on = pd.merge(sales_and_managers, revenue_and_sales, on = ['city', 'state'], how = 'outer')
+# Print merge_outer_on
+print(merge_outer_on)
+
+
+
+# Using merge_ordered()
+austin =  pd.read_csv('austin.csv', index_col = 0)
+houston =  pd.read_csv('houston.csv', index_col = 0)
+# Perform the first ordered merge: tx_weather
+tx_weather = pd.merge_ordered(austin, houston)
+# Print tx_weather
+print(tx_weather)
+# Perform the second ordered merge: tx_weather_suff
+tx_weather_suff = pd.merge_ordered(austin, houston, suffixes = ['_aus', '_hus'], on = 'date')
+# Print tx_weather_suff
+print(tx_weather_suff)
+# Perform the third ordered merge: tx_weather_ffill
+tx_weather_ffill = pd.merge_ordered(austin, houston, suffixes = ['_aus', '_hus'], on = 'date', fill_method='ffill')
+# Print tx_weather_ffill
+print(tx_weather_ffill)
+
+
+
+# Using merge_asof()
+# Similar to pd.merge_ordered(), the pd.merge_asof() function will also merge values in order using the on column, 
+# but for each row in the left DataFrame, only rows from the right DataFrame whose 'on' column values are less than the left value will be kept.
+# This function can be used to align disparate datetime frequencies without having to first resample.
+auto =  pd.read_csv('automobiles.csv')
+auto['yr']=pd.to_datetime(auto['yr'])
+oil =  pd.read_csv('oil_price.csv')
+oil['Date']=pd.to_datetime(oil['Date'])
+# Merge auto and oil: merged
+merged = pd.merge_asof(auto, oil, left_on = 'yr', right_on = 'Date')
+# Print the tail of merged
+print(merged.tail())
+# Resample merged: yearly
+yearly = merged.resample('A', on = 'Date')[['mpg', 'Price']].mean()
+# Print yearly
+print(yearly)
+# print yearly.corr()
+print(yearly.corr())
