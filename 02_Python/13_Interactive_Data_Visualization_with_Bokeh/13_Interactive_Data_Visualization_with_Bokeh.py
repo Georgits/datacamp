@@ -31,6 +31,16 @@ from bokeh.layouts import gridplot
 from bokeh.models.widgets import Panel, Tabs
 
 
+# Perform necessary imports
+from bokeh.io import curdoc
+from bokeh.plotting import figure
+# Perform the necessary imports
+from bokeh.io import curdoc
+from bokeh.layouts import widgetbox
+from bokeh.models import Slider
+
+
+
 literacy_birth_rate = pd.read_csv('literacy_birth_rate.csv')
 literacy_birth_rate = literacy_birth_rate.iloc[:162,:]
 fertility = pd.to_numeric(literacy_birth_rate['fertility'])
@@ -407,3 +417,41 @@ p.add_tools(hover)
 # Specify the name of the output_file and show the result
 output_file('hover.html')
 show(p)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Chapter 3: Building interactive apps with Bokeh
+# Using the current document
+# Create a new plot: plot
+plot = figure()
+# Add a line to the plot
+plot.line(x = [1,2,3,4,5], y = [2,5,4,6,7])
+# Add the plot to the current document
+curdoc().add_root(plot)
+
+
+
+
+# Add a single slider
+# Create a slider: slider
+slider = Slider(title='my slider', start=0, end=10, step=0.1, value=2)
+# Create a widgetbox layout: layout
+layout = widgetbox(slider)
+# Add the layout to the current document
+curdoc().add_root(layout)
