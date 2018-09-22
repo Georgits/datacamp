@@ -16,7 +16,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from numpy.random import random
+from numpy.random import random, normal, lognormal
 path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\13_Interactive_Data_Visualization_with_Bokeh'
 # path = 'C:\\Users\\georg\\Desktop\\georgi\\github\\datacamp\\02_Python\\13_Interactive_Data_Visualization_with_Bokeh'
 os.chdir(path)
@@ -45,40 +45,48 @@ from bokeh.plotting import figure
 # Perform the necessary imports
 from bokeh.io import curdoc
 from bokeh.layouts import widgetbox, column
-from bokeh.models import Slider, ColumnDataSource
+from bokeh.models import Slider, ColumnDataSource, Select
+
+
+literacy_birth_rate = pd.read_csv('literacy_birth_rate.csv')
+literacy_birth_rate = literacy_birth_rate.iloc[:162,:]
+fertility = pd.to_numeric(literacy_birth_rate['fertility'])
+female_literacy = pd.to_numeric(literacy_birth_rate['female_literacy'])
+population = pd.to_numeric(literacy_birth_rate['population'])
 
 
 
 
-
-
-
-# How to combine Bokeh models into layouts
-N = 300
-x = random(N)
-y = np.sin(x)
-slider = Slider(title='my slider', start=1, end=10, step=1, value=1)
 # Create ColumnDataSource: source
+source = ColumnDataSource(data={
+    'x' : fertility,
+    'y' : female_literacy
+})
+# Create a new plot: plot
 plot = figure()
-source = ColumnDataSource(data={'x': x, 'y': y})
-# Add a line to the plot
-plot.line('x', 'y', source=source)
-# Create a column layout: layout
-layout = column(widgetbox(slider), plot)
-# Add the layout to the current document
-curdoc().add_root(layout)
-
-
-# Define a callback function: callback
-def callback(attr, old, new):
-    # Read the current value of the slider: scale
-    scale = slider.value
-    # Compute the updated y using np.sin(scale/x): new_y
-    new_y = np.sin(scale/x)
-    # Update source with the new data values
-    source.data = {'x': x, 'y': new_y}
-# Attach the callback to the 'value' property of slider
-slider.on_change('value', callback)
+# Add circles to the plot
+plot.circle('x', 'y', source=source)
+# Define a callback function: update_plot
+def update_plot(attr, old, new):
+    # If the new Selection is 'female_literacy', update 'y' to female_literacy
+    if new == 'female_literacy': 
+        source.data = {
+            'x' : fertility,
+            'y' : female_literacy
+        }
+    # Else, update 'y' to population
+    else:
+        source.data = {
+            'x' : fertility,
+            'y' : population
+        }
+# Create a dropdown Select widget: select    
+select = Select(title="distribution", options=['female_literacy', 'population'], value='female_literacy')
+# Attach the update_plot callback to the 'value' property of select
+select.on_change('value', update_plot)
 # Create layout and add to current document
-layout = column(widgetbox(slider), plot)
+layout = row(select, plot)
 curdoc().add_root(layout)
+
+
+# bokeh serve --show myapp_3.py
