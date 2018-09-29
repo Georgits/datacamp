@@ -8,8 +8,8 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-# path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\10_Introduction_to_Databases_in_Python'
-path = 'C:\\Users\\georg\\Desktop\\georgi\\github\\datacamp\\02_Python\\10_Introduction_to_Databases_in_Python'
+path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\10_Introduction_to_Databases_in_Python'
+# path = 'C:\\Users\\georg\\Desktop\\georgi\\github\\datacamp\\02_Python\\10_Introduction_to_Databases_in_Python'
 os.chdir(path)
 
 
