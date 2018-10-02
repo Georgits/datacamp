@@ -468,3 +468,51 @@ WHERE year = 2015 AND code NOT IN
 ORDER BY inflation_rate;
 
 
+-- Final challenge
+-- In this exercise, you'll need to get the country names and other 2015 data in the economies table and the countries table for Central American countries with an official language.
+SELECT DISTINCT c.name, total_investment, imports
+FROM countries AS c
+LEFT JOIN economies AS e
+ON (c.code = e.code
+  AND c.code IN (
+    SELECT l.code
+    FROM languages AS l
+    WHERE official = 'true'
+  ) )
+WHERE year = 2015 AND region = 'Central America'
+ORDER BY c.name;
+
+
+
+-- Final challenge (2)
+--  calculate the average fertility rate for each region in 2015.
+-- choose fields
+SELECT region, continent, AVG(fertility_rate) AS avg_fert_rate
+-- left table
+FROM countries AS c
+-- right table
+INNER JOIN populations AS p
+-- join conditions
+ON c.code = p.country_code
+-- specific records matching a condition
+WHERE year = 2015
+-- aggregated for each what?
+GROUP BY continent, region
+-- how should we sort?
+ORDER BY avg_fert_rate;
+
+
+
+-- Final challenge (3)
+-- determining the top 10 capital cities in Europe and the Americas in terms of a calculated percentage using city_proper_pop and metroarea_pop in cities
+SELECT name, country_code, city_proper_pop, metroarea_pop,  
+      city_proper_pop  / metroarea_pop * 100 AS city_perc
+FROM cities
+WHERE name IN
+  (SELECT capital
+   FROM countries
+   WHERE (continent = 'Europe'
+      OR continent LIKE '%America%'))
+     AND metroarea_pop IS NOT NULL
+ORDER BY city_perc DESC
+LIMIT 10;
