@@ -5,6 +5,7 @@ Created on Fri Oct  5 09:52:34 2018
 @author: georg
 """
 
+# https://github.com/datacamp/course-resources-ml-with-experts-budgets/blob/master/notebooks/1.0-full-model.ipynb
 import os
 import pandas as pd
 import numpy as np
@@ -16,6 +17,14 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Imputer
+from sklearn.preprocessing import FunctionTransformer
+from sklearn.pipeline import FeatureUnion
+from sklearn.ensemble import RandomForestClassifier
+
+
 
 plt.style.use('ggplot')
 # path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\18_Machine_Learning_with_the_Experts_School_Budgets'
@@ -222,3 +231,235 @@ def combine_text_columns(data_frame, to_drop=NUMERIC_COLUMNS + LABELS):
     text_data.fillna('', inplace = True)
     # Join all text items in a row that have a space in between
     return text_data.apply(lambda x: " ".join(x), axis=1)
+
+
+
+
+# What's in a token?
+# Create the basic token pattern
+TOKENS_BASIC = '\\S+(?=\\s+)'
+# Create the alphanumeric token pattern
+TOKENS_ALPHANUMERIC = '[A-Za-z0-9]+(?=\\s+)'
+# Instantiate basic CountVectorizer: vec_basic
+vec_basic = CountVectorizer(token_pattern = TOKENS_BASIC)
+# Instantiate alphanumeric CountVectorizer: vec_alphanumeric
+vec_alphanumeric = CountVectorizer(token_pattern = TOKENS_ALPHANUMERIC)
+# Create the text vector
+text_vector = combine_text_columns(df)
+# Fit and transform vec_basic
+vec_basic.fit_transform(text_vector)
+# Print number of tokens of vec_basic
+print("There are {} tokens in the dataset".format(len(vec_basic.get_feature_names())))
+# Fit and transform vec_alphanumeric
+vec_alphanumeric.fit_transform(text_vector)
+# Print number of tokens of vec_alphanumeric
+print("There are {} alpha-numeric tokens in the dataset".format(len(vec_alphanumeric.get_feature_names())))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Chapter 3: Improving your model 
+# Instantiate pipeline
+# Split and select numeric data only, no nans 
+X_train, X_test, y_train, y_test = train_test_split(sample_df[['numeric']],
+                                                    pd.get_dummies(sample_df['label']), 
+                                                    random_state=22)
+# Instantiate Pipeline object: pl
+pl = Pipeline([
+        ('clf', OneVsRestClassifier(LogisticRegression()))
+    ])
+# Fit the pipeline to the training data
+pl.fit(X_train, y_train)
+# Compute and print accuracy
+accuracy = pl.score(X_test, y_test)
+print("\nAccuracy on sample data - numeric, no nans: ", accuracy)
+
+
+
+# Preprocessing numeric features
+# Create training and test sets using only numeric data
+X_train, X_test, y_train, y_test = train_test_split(sample_df[['numeric', 'with_missing']],
+                                                    pd.get_dummies(sample_df['label']), 
+                                                    random_state=456)
+# Insantiate Pipeline object: pl
+pl = Pipeline([
+        ('imp', Imputer()),
+        ('clf', OneVsRestClassifier(LogisticRegression()))
+    ])
+# Fit the pipeline to the training data
+pl.fit(X_train, y_train)
+# Compute and print accuracy
+accuracy = pl.score(X_test, y_test)
+print("\nAccuracy on sample data - all numeric, incl nans: ", accuracy)
+
+
+
+# Preprocessing text features
+# Split out only the text data
+X_train, X_test, y_train, y_test = train_test_split(sample_df['text'],
+                                                    pd.get_dummies(sample_df['label']), 
+                                                    random_state=456)
+# Instantiate Pipeline object: pl
+pl = Pipeline([
+        ('vec', CountVectorizer()),
+        ('clf', OneVsRestClassifier(LogisticRegression()))
+    ])
+# Fit to the training data
+pl.fit(X_train, y_train)
+# Compute and print accuracy
+accuracy = pl.score(X_test, y_test)
+print("\nAccuracy on sample data - just text data: ", accuracy)
+
+
+
+
+# Multiple types of processing: FunctionTransformer
+# Obtain the text data: get_text_data
+get_text_data = FunctionTransformer(lambda x: x['text'], validate=False)
+# Obtain the numeric data: get_numeric_data
+get_numeric_data = FunctionTransformer(lambda x: x[['numeric', 'with_missing']], validate=False)
+# Fit and transform the text data: just_text_data
+just_text_data = get_text_data.fit_transform(sample_df)
+# Fit and transform the numeric data: just_numeric_data
+just_numeric_data = get_numeric_data.fit_transform(sample_df)
+# Print head to check results
+print('Text Data')
+print(just_text_data.head())
+print('\nNumeric Data')
+print(just_numeric_data.head())
+
+
+# Multiple types of processing: FeatureUnion
+# Split using ALL data in sample_df
+X_train, X_test, y_train, y_test = train_test_split(sample_df[['numeric', 'with_missing', 'text']],
+                                                    pd.get_dummies(sample_df['label']), 
+                                                    random_state=22)
+# Create a FeatureUnion with nested pipeline: process_and_join_features
+process_and_join_features = FeatureUnion(
+            transformer_list = [
+                ('numeric_features', Pipeline([
+                    ('selector', get_numeric_data),
+                    ('imputer', Imputer())
+                ])),
+                ('text_features', Pipeline([
+                    ('selector', get_text_data),
+                    ('vectorizer', CountVectorizer())
+                ]))
+             ]
+        )
+# Instantiate nested pipeline: pl
+pl = Pipeline([
+        ('union', process_and_join_features),
+        ('clf', OneVsRestClassifier(LogisticRegression()))
+    ])
+# Fit pl to the training data
+pl.fit(X_train, y_train)
+# Compute and print accuracy
+accuracy = pl.score(X_test, y_test)
+print("\nAccuracy on sample data - all data: ", accuracy)
+
+
+
+
+# Using FunctionTransformer on the main dataset
+# Get the dummy encoding of the labels
+dummy_labels = pd.get_dummies(df[LABELS])
+# Get the columns that are features in the original df
+NON_LABELS = [c for c in df.columns if c not in LABELS]
+# Split into training and test sets
+X_train, X_test, y_train, y_test = multilabel_train_test_split(df[NON_LABELS],
+                                                               dummy_labels,
+                                                               0.2, 
+                                                               seed=123)
+# Preprocess the text data: get_text_data
+get_text_data = FunctionTransformer(combine_text_columns, validate = False)
+# Preprocess the numeric data: get_numeric_data
+get_numeric_data = FunctionTransformer(lambda x: x[NUMERIC_COLUMNS], validate=False)
+
+
+
+# Add a model to the pipeline
+# Complete the pipeline: pl
+pl = Pipeline([
+        ('union', FeatureUnion(
+            transformer_list = [
+                ('numeric_features', Pipeline([
+                    ('selector', get_numeric_data),
+                    ('imputer', Imputer())
+                ])),
+                ('text_features', Pipeline([
+                    ('selector', get_text_data),
+                    ('vectorizer', CountVectorizer())
+                ]))
+             ]
+        )),
+        ('clf', OneVsRestClassifier(LogisticRegression()))
+    ])
+# Fit to the training data
+pl.fit(X_train, y_train)
+# Compute and print accuracy
+accuracy = pl.score(X_test, y_test)
+print("\nAccuracy on budget dataset: ", accuracy)
+
+
+
+
+# Try a different class of model
+# Edit model step in pipeline
+pl = Pipeline([
+        ('union', FeatureUnion(
+            transformer_list = [
+                ('numeric_features', Pipeline([
+                    ('selector', get_numeric_data),
+                    ('imputer', Imputer())
+                ])),
+                ('text_features', Pipeline([
+                    ('selector', get_text_data),
+                    ('vectorizer', CountVectorizer())
+                ]))
+             ]
+        )),
+        ('clf', RandomForestClassifier())
+    ])
+# Fit to the training data
+pl.fit(X_train, y_train)
+# Compute and print accuracy
+accuracy = pl.score(X_test, y_test)
+print("\nAccuracy on budget dataset: ", accuracy)
+
+
+
+# Can you adjust the model or parameters to improve accuracy?
+# Add model step to pipeline: pl
+pl = Pipeline([
+        ('union', FeatureUnion(
+            transformer_list = [
+                ('numeric_features', Pipeline([
+                    ('selector', get_numeric_data),
+                    ('imputer', Imputer())
+                ])),
+                ('text_features', Pipeline([
+                    ('selector', get_text_data),
+                    ('vectorizer', CountVectorizer())
+                ]))
+             ]
+        )),
+        ('clf', RandomForestClassifier(n_estimators=15))
+    ])
+# Fit to the training data
+pl.fit(X_train, y_train)
+# Compute and print accuracy
+accuracy = pl.score(X_test, y_test)
+print("\nAccuracy on budget dataset: ", accuracy)
