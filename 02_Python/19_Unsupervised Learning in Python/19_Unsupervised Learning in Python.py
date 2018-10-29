@@ -841,3 +841,208 @@ df = pd.DataFrame({'labels': labels, 'varieties': varieties})
 ct = pd.crosstab(df['labels'], df['varieties'])
 # Display ct
 print(ct)
+
+
+
+
+# t-SNE visualization of grain dataset
+samples = pd.read_csv('seeds.csv')
+variety_numbers = ['1'] * 70 + ['2']*70 + ['3'] * 69
+
+# Import TSNE
+from sklearn.manifold import TSNE
+# Create a TSNE instance: model
+    model = TSNE(learning_rate=200)
+# Apply fit_transform to samples: tsne_features
+tsne_features = model.fit_transform(samples)
+# Select the 0th feature: xs
+xs = tsne_features[:,0]
+# Select the 1st feature: ys
+ys = tsne_features[:,1]
+# Scatter plot, coloring by variety_numbers
+plt.scatter(xs, ys, c=variety_numbers)
+plt.show()
+
+
+
+# A t-SNE map of the stock market
+# NICHT LAUFFÄHIG!!!
+# Import TSNE
+from sklearn.manifold import TSNE
+# Create a TSNE instance: model
+model = TSNE(learning_rate=50)
+# Apply fit_transform to normalized_movements: tsne_features
+tsne_features = model.fit_transform(normalized_movements)
+# Select the 0th feature: xs
+xs = tsne_features[:,0]
+# Select the 1th feature: ys
+ys = tsne_features[:,1]
+# Scatter plot
+plt.scatter(xs, ys, alpha=0.5)
+# Annotate the points
+for x, y, company in zip(xs, ys, companies):
+    plt.annotate(company, (x, y), fontsize=5, alpha=0.75)
+plt.show()
+
+
+
+
+
+
+
+
+
+# Chapter 3: Decorrelating your data and dimension reduction
+# Correlated data in nature
+grains = pd.read_csv('seeds-width-vs-length.csv')
+# Perform the necessary imports
+import matplotlib.pyplot as plt
+from scipy.stats import pearsonr
+# Assign the 0th column of grains: width
+width = grains.iloc[:,0]
+# Assign the 1st column of grains: length
+length = grains.iloc[:,1]
+# Scatter plot width vs length
+plt.scatter(width, length)
+plt.axis('equal')
+plt.show()
+# Calculate the Pearson correlation
+correlation, pvalue = pearsonr(width, length)
+# Display the correlation
+print(correlation)
+
+
+
+# Decorrelating the grain measurements with PCA
+# Import PCA
+from sklearn.decomposition import PCA
+# Create PCA instance: model
+model = PCA()
+# Apply the fit_transform method of model to grains: pca_features
+pca_features = model.fit_transform(grains)
+# Assign 0th column of pca_features: xs
+xs = pca_features[:,0]
+# Assign 1st column of pca_features: ys
+ys = pca_features[:,1]
+# Scatter plot xs vs ys
+plt.scatter(xs, ys)
+plt.axis('equal')
+plt.show()
+# Calculate the Pearson correlation of xs and ys
+correlation, pvalue = pearsonr(xs, ys)
+# Display the correlation
+print(correlation)
+
+
+
+# The first principal component
+# Make a scatter plot of the untransformed points
+plt.scatter(grains.iloc[:,0], grains.iloc[:,1])
+# Create a PCA instance: model
+model = PCA()
+# Fit model to points
+model.fit(grains)
+# Get the mean of the grain samples: mean
+mean = model.mean_
+# Get the first principal component: first_pc
+first_pc = model.components_[0,:]
+# Plot first_pc as an arrow, starting at mean
+plt.arrow(mean[0], mean[1], first_pc[0], first_pc[1], color='red', width=0.01)
+# Keep axes on same scale
+plt.axis('equal')
+plt.show()
+
+
+
+# Variance of the PCA features
+df = pd.read_csv('fish.csv')
+samples = df.iloc[:,1:]
+# Perform the necessary imports
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+import matplotlib.pyplot as plt
+# Create scaler: scaler
+scaler = StandardScaler()
+# Create a PCA instance: pca
+pca = PCA()
+# Create pipeline: pipeline
+pipeline = make_pipeline(scaler, pca)
+# Fit the pipeline to 'samples'
+pipeline.fit(samples)
+# Plot the explained variances
+features = range(pca.n_components_)
+plt.bar(features, pca.explained_variance_)
+plt.xlabel('PCA feature')
+plt.ylabel('variance')
+plt.xticks(features)
+plt.show()
+
+
+
+
+# Dimension reduction of the fish measurements
+# Import PCA
+from sklearn.decomposition import PCA
+from sklearn import preprocessing
+# Create a PCA model with 2 components: pca
+pca = PCA(n_components = 2)
+# Fit the PCA instance to the scaled samples
+scaled_samples = preprocessing.scale(samples)
+pca.fit(scaled_samples)
+# Transform the scaled samples: pca_features
+pca_features = pca.transform(scaled_samples)
+# Print the shape of pca_features
+print(pca_features.shape)
+
+
+# A tf-idf word-frequency array
+# In this exercise, you'll create a tf-idf word frequency array for a toy collection of documents. 
+# For this, use the TfidfVectorizer from sklearn. It transforms a list of documents into a word frequency array,
+#  which it outputs as a csr_matrix. It has fit() and transform() methods like other sklearn objects.
+
+# You are given a list documents of toy documents about pets. Its contents have been printed in the IPython Shell.
+# Import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+# Create a TfidfVectorizer: tfidf
+tfidf = TfidfVectorizer() 
+# Apply fit_transform to document: csr_mat
+csr_mat = tfidf.fit_transform(documents)
+# Print result of toarray() method
+print(csr_mat.toarray())
+# Get the words: words
+words = tfidf.get_feature_names()
+# Print words
+print(words)
+
+
+# Clustering Wikipedia part I
+# You saw in the video that TruncatedSVD is able to perform PCA on sparse arrays in csr_matrix format,
+#  such as word-frequency arrays. Combine your knowledge of TruncatedSVD and k-means to cluster some popular pages from Wikipedia. 
+# In this exercise, build the pipeline. In the next exercise, you'll apply it to the word-frequency array of some Wikipedia articles.
+
+# Create a Pipeline object consisting of a TruncatedSVD followed by KMeans. (This time, we've precomputed the word-frequency matrix 
+# for you, so there's no need for a TfidfVectorizer).
+# Perform the necessary imports
+from sklearn.decomposition import TruncatedSVD
+from sklearn.cluster import KMeans
+from sklearn.pipeline import make_pipeline
+# Create a TruncatedSVD instance: svd
+svd = TruncatedSVD(n_components = 50)
+# Create a KMeans instance: kmeans
+kmeans = KMeans(n_clusters = 6)
+# Create a pipeline: pipeline
+pipeline = make_pipeline(svd, kmeans)
+
+
+
+# Clustering Wikipedia part II
+# NICHT LAUFFÄHIG!!!
+# Fit the pipeline to articles
+pipeline.fit(articles)
+# Calculate the cluster labels: labels
+labels = pipeline.predict(articles)
+# Create a DataFrame aligning labels and titles: df
+df = pd.DataFrame({'label': labels, 'article': titles})
+# Display df sorted by cluster label
+print(df.sort_values('label'))
