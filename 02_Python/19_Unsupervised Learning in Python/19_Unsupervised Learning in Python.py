@@ -1046,3 +1046,44 @@ labels = pipeline.predict(articles)
 df = pd.DataFrame({'label': labels, 'article': titles})
 # Display df sorted by cluster label
 print(df.sort_values('label'))
+
+
+
+
+
+
+
+
+
+# Chapter 4: Discovering interpretable features
+# NICHT LAUFFÄHIG!!!
+# NMF applied to Wikipedia articles
+# Import NMF
+from sklearn.decomposition import NMF
+# Create an NMF instance: model
+model = NMF(n_components = 6)
+# Fit the model to articles
+model.fit(articles)
+# Transform the articles: nmf_features
+nmf_features = model.transform(articles)
+# Print the NMF features
+print(nmf_features)
+
+
+# NMF features of the Wikipedia articles
+# Create a pandas DataFrame: df
+df = pd.DataFrame(nmf_features, index = titles)
+# Print the row for 'Anne Hathaway'
+print(df.loc['Anne Hathaway'])
+# Print the row for 'Denzel Washington'
+print(df.loc['Denzel Washington'])
+
+# Create a DataFrame: components_df
+components_df = pd.DataFrame(model.components_, columns=words)
+# Print the shape of the DataFrame
+print(components_df.shape)
+# Select row 3: component
+component = components_df.iloc[3]
+# Print result of nlargest
+print(component.nlargest())
+components_df
