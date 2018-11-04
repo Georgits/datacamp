@@ -313,3 +313,88 @@ plt.xlabel('Iterations')
 plt.ylabel('Mean Squared Error')
 plt.show()
     
+
+
+
+
+
+
+
+# Chapter 3: Building deep learning models with keras
+# Specifying a model
+# Import necessary modules
+import keras
+from keras.layers import Dense
+from keras.models import Sequential
+
+
+df = pd.read_csv('hourly_wages.csv')
+predictors = df.iloc[:,1:].values
+target = df.iloc[:,0].values
+
+# Save the number of columns in predictors: n_cols
+n_cols = predictors.shape[1]
+# Set up the model: model
+model = Sequential()
+# Add the first layer
+model.add(Dense(50, activation='relu', input_shape=(n_cols,)))
+# Add the second layer
+model.add(Dense(32, activation='relu'))
+# Add the output layer
+model.add(Dense(1))
+
+# Compiling the model
+# Compile the model
+model.compile(optimizer='adam', loss='mean_squared_error')
+# Verify that model contains information from compiling
+print("Loss function: " + model.loss)
+
+# Fitting the model
+# Fit the model
+model.fit(predictors, target)
+
+
+
+
+
+
+# Last steps in classification models
+# Import necessary modules
+import keras
+from keras.layers import Dense
+from keras.models import Sequential
+from keras.utils import to_categorical
+
+df = pd.read_csv('titanic_all_numeric.csv')
+train = df.iloc[:800,:]
+test = df.iloc[801:,:]
+
+predictors = train.iloc[:,1:].values
+target = train.iloc[:,0].values
+
+n_cols = predictors.shape[1]
+
+# Convert the target to categorical: target
+target = to_categorical(target)
+# Set up the model
+model = Sequential()
+# Add the first layer
+model.add(Dense(32, activation='relu', input_shape = (n_cols,)))
+# Add the output layer
+model.add(Dense(2, activation='softmax'))
+# Compile the model
+model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+# Fit the model
+model.fit(predictors, target)
+
+
+
+
+# Making predictions
+pred_data = test.iloc[:,1:].values
+# Calculate predictions: predictions
+predictions = model.predict(pred_data)
+# Calculate predicted probability of survival: predicted_prob_true
+predicted_prob_true = predictions[:,1]
+# print predicted_prob_true
+print(predicted_prob_true)
