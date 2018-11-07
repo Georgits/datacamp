@@ -32,7 +32,7 @@ os.chdir(path)
 
 import networkx as nx
 import requests
-import date
+import datetime
 
 # Read the graph from local disk.
 T = nx.read_gpickle('ego-twitter.p')
@@ -105,3 +105,108 @@ def find_selfloop_nodes(G):
     return nodes_in_selfloops
 # Check whether number of self loops equals the number of nodes in self loops
 assert T.number_of_selfloops() == len(find_selfloop_nodes(T))
+
+
+
+
+# Visualizing using Matrix plots
+# Import nxviz
+import nxviz as nv
+# Create the MatrixPlot object: m
+m = nv.MatrixPlot(T)
+# Draw m to the screen
+m.draw()
+# Display the plot
+plt.show()
+# Convert T to a matrix format: A
+A = nx.to_numpy_matrix(T)
+# Convert A back to the NetworkX form as a directed graph: T_conv
+T_conv = nx.from_numpy_matrix(A, create_using=nx.DiGraph())
+# Check that the `category` metadata field is lost from each node
+for n, d in T_conv.nodes(data=True):
+    assert 'category' not in d.keys()
+    
+    
+    
+
+# Visualizing using Circos plots
+# Import necessary modules
+import matplotlib.pyplot as plt
+from nxviz import CircosPlot
+# Create the CircosPlot object: c
+c = CircosPlot(T)
+# Draw c to the screen
+c.draw()
+# Display the plot
+plt.show()
+
+
+
+# Visualizing using Arc plots
+# Import necessary modules
+import matplotlib.pyplot as plt
+from nxviz import ArcPlot
+# Create the un-customized ArcPlot object: a
+a = ArcPlot(T)
+# Draw a to the screen
+a.draw()
+# Display the plot
+plt.show()
+# Create the customized ArcPlot object: a2
+a2 = ArcPlot(T, node_order='category', node_color='category')
+# Draw a2 to the screen
+a2.draw()
+# Display the plot
+plt.show()
+
+
+
+
+
+
+# Chapter 2: Important nodes
+# Define nodes_with_m_nbrs()
+def nodes_with_m_nbrs(G, m):
+    """
+    Returns all nodes in graph G that have m neighbors.
+    """
+    nodes = set()
+    # Iterate over all nodes in G
+    for n in G.nodes():
+        # Check if the number of neighbors of n matches m
+        if len(G.neighbors(n)) == m:
+            # Add the node n to the set
+            nodes.add(n)
+    # Return the nodes with m neighbors
+    return nodes
+# Compute and print all nodes in T that have 6 neighbors
+six_nbrs = nodes_with_m_nbrs(T, 6)
+print(six_nbrs)
+
+
+
+
+# Compute degree distribution
+# Compute the degree of every node: degrees
+degrees = [len(T.neighbors(n)) for n in T.nodes()]
+# Print the degrees
+print(degrees)
+
+
+
+
+# Degree centrality distribution
+# Compute the degree centrality of the Twitter network: deg_cent
+deg_cent = nx.degree_centrality(T)
+# Plot a histogram of the degree centrality distribution of the graph.
+plt.figure()
+plt.hist(list(deg_cent.values()))
+plt.show()
+# Plot a histogram of the degree distribution of the graph
+plt.figure()
+plt.hist([len(T.neighbors(n)) for n in T.nodes()])
+plt.show()
+# Plot a scatter plot of the centrality distribution and the degree distribution
+plt.figure()
+plt.scatter(degrees, list(deg_cent.values()))
+plt.show()
