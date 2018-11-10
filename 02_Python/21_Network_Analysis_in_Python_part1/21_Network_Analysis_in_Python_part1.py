@@ -697,3 +697,4 @@ for n, d in G.nodes(data = True):
 all_counts = sorted(recommended.values())
 top10_pairs = [pair for pair, count in recommended.items() if count > all_counts[-10]]
 print(top10_pairs)
+    
