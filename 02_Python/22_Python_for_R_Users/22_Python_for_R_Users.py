@@ -27,6 +27,8 @@ path = 'C:\\Users\\d91067\\Desktop\\R\\datacamp\\02_Python\\22_Python_for_R_User
 os.chdir(path)
 
 
+tips = pd.read_csv('tips.csv')
+
 
 # Chapter 1: The Basics
 # Assignment and data types
@@ -206,3 +208,179 @@ sq_lambda = lambda x: x**2
 
 # Use the lambda function
 print(sq_lambda(3))
+
+
+
+
+# Mapping functions
+# map the binge_male function to num_drinks
+print(list(map(binge_male, num_drinks)))
+
+# map the binge_female function to num_drinks
+print(list(map(binge_female, num_drinks)))
+
+
+# List comprehension
+inflam_files =  ['inflammation-02.csv', 'inflammation-03.csv', 'inflammation-01.csv']
+
+# Append dataframes into list with for loop
+dfs_list = []
+for f in inflam_files:
+    dat = pd.read_csv(f)
+    dfs_list.append(dat)
+
+# Re-write the provided for loop as a list comprehension: dfs_comp
+dfs_comp = [pd.read_csv(f) for f in inflam_files]
+print(dfs_comp)
+
+
+
+# Dictionary comprehension
+twitter_followers = [['jonathan', 458], ['daniel', 660], ['hugo', 3509], ['datacamp', 26400]]
+# Write a dict comprehension
+tf_dict = {key:value for (key, value) in twitter_followers}
+# Print tf_dict
+print(tf_dict)
+
+
+
+
+
+
+
+
+
+# Chapter 3: Pandas
+# Selecting columns
+# Print the tip column using dot notation
+print(tips.tip)
+# Print the sex column using square bracket notation
+print(tips['sex'])
+# Print the tip and sex columns
+print(tips[['tip', 'sex']])
+
+# Print the first row of tips using iloc
+print(tips.iloc[0])
+# Print all the rows where sex is Female
+print(tips.loc[tips.sex == 'Female'])
+# Print all the rows where sex is Female and total_bill is greater than 15
+print(tips.loc[(tips.sex == 'Female') & (tips.total_bill > 15)])
+
+
+
+
+# Selecting rows and columns
+# Subset rows and columns
+print(tips.loc[tips['sex'] == 'Female', ['total_bill', 'tip', 'sex']])
+
+# 3 rows and 3 columns with iloc
+print(tips.iloc[0:3, 0:3])
+
+
+
+# Integers and floats
+#Inspect the output of tips.dtypes in the shell
+tips.dtypes
+# Convert the size column
+tips['size'] = tips['size'].astype(int)
+# Convert the tip column
+tips['tip'] = tips['tip'].astype(float)
+    # Look at the types
+print(tips.dtypes)
+
+
+
+# Strings
+# Inspect the 'sex' and 'smoker' columns in the shell
+tips[['sex', 'smoker']]
+# Convert sex to lower case
+tips['sex'] = tips['sex'].str.lower()
+# Convert smoker to upper case
+tips['smoker'] = tips['smoker'].str.upper()
+# Print the sex and smoker columns
+print(tips[['sex', 'smoker']])
+
+
+# Category
+tips['time']
+# Convert the type of time column
+tips['time'] = tips['time'].astype('category')
+# Use the cat accessor to print the categories in the time column
+print(tips['time'].cat.categories)
+# Order the time category so lunch is before dinner
+tips['time2'] = tips['time'].cat.reorder_categories(['Lunch', 'Dinner'], ordered=True)
+# Use the cat accessor to print the categories in the time2 column
+print(tips['time2'].cat.categories)
+
+
+
+# Dates (I)
+# Load the country_timeseries dataset
+ebola = pd.read_csv('country_timeseries.csv')
+# Inspect the Date column
+print(ebola['Date'].dtype)
+ebola['Date']
+# Convert the type of Date column into datetime
+ebola['Date'] = pd.to_datetime(ebola['Date'], format='%m/%d/%Y')
+# Inspect the Date column
+print(ebola['Date'].dtype)
+ebola['Date']
+
+
+
+# Dates (II)
+# Load the dataset and ensure Date column is imported as datetime
+ebola = pd.read_csv('country_timeseries.csv', parse_dates=['Date'])
+# Inspect the Date column
+print(ebola['Date'].dtype)
+# Create a year, month, day column using the dt accessor
+ebola['year'] = ebola.Date.dt.year
+ebola['month'] = ebola.Date.dt.month
+ebola['day'] = ebola.Date.dt.day
+# Inspect the newly created columns
+print(ebola[['year', 'month', 'day']].head())
+
+
+
+# Missing values
+# Print the rows where total_bill is missing
+print(tips.loc[pd.isnull(tips['total_bill'])])
+# Mean of the total_bill column
+tbill_mean = tips['total_bill'].mean()
+# Fill in missing total_bill
+print(tips['total_bill'].fillna(tbill_mean))
+
+
+
+# Print the rows where total_bill is missing
+print(tips.loc[pd.isnull(tips['total_bill'])])
+# Mean of the total_bill column
+tbill_mean = tips['total_bill'].mean()
+# Fill in missing total_bill
+print(tips['total_bill'].fillna(tbill_mean))
+# You can also drop missing values using the .dropna() method
+
+
+
+# Groupby
+# Mean tip by sex
+print(tips.groupby('sex')['tip'].mean())
+# Mean tip by sex and time
+print(tips.groupby(['sex', 'time'])['tip'].mean())
+# In addition to calculating the mean, you can use other methods such as .agg() and .filter() on grouped DataFrames.
+
+
+
+# Tidy data
+airquality = pd.read_csv('airquality.csv')
+
+# Melt the airquality DataFrame
+airquality_melted = pd.melt(airquality, id_vars=['Day', 'Month'])
+print(airquality_melted)
+
+# Pivot the molten DataFrame
+airquality_pivoted = airquality_melted.pivot_table(index=['Month', 'Day'], columns='variable', values='value')
+print(airquality_pivoted)
+
+# Reset the index
+print(airquality_pivoted.reset_index())
