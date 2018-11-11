@@ -504,3 +504,133 @@ plt.show()
 
 
 
+# Chapter 5: Capstone
+# Load multiple data files
+import glob
+# Get a list of all the csv files
+csv_files = glob.glob('*.csv')
+# List comprehension that loads of all the files
+dfs = [pd.read_csv(x) for x in csv_files]
+# List comprehension that looks at the shape of all DataFrames
+print([x.shape for x in dfs])
+print(csv_files)
+
+
+# Explore
+# Get the planes DataFrame
+planes = dfs[4]
+# Count the frequency of engines in our data
+print(planes['engines'].value_counts())
+# Look at all planes with >= 3 engines
+print(planes.loc[planes['engines'] >= 3])
+# Look at all planes with >= 3 engines and < 100 seats
+print(planes.loc[(planes['engines'] >= 3) & (planes['seats']<= 100)])
+
+
+
+# Visualize
+# Scatter plot of engines and seats
+planes.plot(x='engines', y='seats', kind='scatter')
+plt.show()
+
+# Histogram of seats
+planes['seats'].plot(kind = 'hist')
+plt.show()
+
+# Boxplot of seats by engine
+planes.boxplot(column='seats', by='engine')
+plt.xticks(rotation=45)
+plt.show()
+
+
+
+# Recode dates
+# We defined the get_season() function that converts a given date to a season (one of winter, spring, summer, and fall)
+def calculate_season(month, day):
+    if month < 3:
+        return('winter')
+    elif month == 3:
+        if day < 20:
+            return('winter')
+        else:
+            return('spring')
+    elif month < 6:
+        return('spring')
+    elif month == 6:
+        if day < 21:
+            return('spring')
+        else:
+            return('summer')
+    elif month < 9:
+        return('summer')
+    elif month == 9:
+        if day < 22:
+            return('summer')
+        else:
+            return('fall')
+    elif month < 12:
+        return('fall')
+    elif month == 12:
+        if day < 21:
+            return('fall')
+        else:
+            return('winter')
+    else:
+        return(np.NaN)
+
+def get_season(time_hour):
+    y_m_dt = time_hour.split('-')
+    month = int(y_m_dt[1])
+    
+    d_t = y_m_dt[2].split(' ')
+    day = int(d_t[0])
+    return(calculate_season(month, day))
+
+
+flights = dfs[2]
+# Print time_hour
+print(flights['time_hour'])
+# Apply the function on data
+flights['season'] = flights['time_hour'].apply(get_season)
+# Print time_hour and season
+print(flights[['time_hour', 'season']])
+
+
+
+# Groupby aggregates
+# Calculate total_delay
+flights['total_delay'] = flights['dep_delay'] + flights['arr_delay']
+# Mean total_delay by carrier
+tdel_car = flights.groupby('carrier')['total_delay'].mean().reset_index()
+print(tdel_car)
+# Mean dep_delay and arr_delay for each season
+dadel_season = flights.groupby('season')['dep_delay', 'arr_delay'].mean().reset_index()
+print(dadel_season)
+# Mean and std delays by origin
+del_ori = flights.groupby('origin')['total_delay', 'dep_delay', 'arr_delay'].agg(['mean', 'std'])
+print(del_ori)
+
+
+
+
+# Plots
+# Create a figure
+fig, (ax1, ax2) = plt.subplots(2,1)
+# Boxplot and barplot in the axes
+sns.boxplot(x='origin', y='dep_delay', data=flights, ax=ax1)
+sns.barplot(x='carrier', y='total_delay', data=tdel_car, ax=ax2)
+# Label axes
+ax1.set_title('Originating airport and the departure delay')
+# Use tight_layout() so the plots don't overlap
+fig.tight_layout()
+plt.show()
+
+
+
+# Dummy variables
+# Look at the head of flights_sub
+print(flights.head())
+# Create dummy variables
+flights_dummies = pd.get_dummies(flights)
+# Look at the head of flights_dummies
+print(flights_dummies.head())
