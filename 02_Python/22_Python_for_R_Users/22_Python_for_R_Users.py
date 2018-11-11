@@ -373,14 +373,134 @@ print(tips.groupby(['sex', 'time'])['tip'].mean())
 
 # Tidy data
 airquality = pd.read_csv('airquality.csv')
-
 # Melt the airquality DataFrame
 airquality_melted = pd.melt(airquality, id_vars=['Day', 'Month'])
 print(airquality_melted)
-
 # Pivot the molten DataFrame
 airquality_pivoted = airquality_melted.pivot_table(index=['Month', 'Day'], columns='variable', values='value')
 print(airquality_pivoted)
-
 # Reset the index
 print(airquality_pivoted.reset_index())
+
+
+
+
+
+
+
+
+# Chapter 4: Plotting
+# Univariate plots in pandas
+# Histogram of tip
+tips['tip'].plot(kind = 'hist')
+plt.show()
+
+# Boxplot of the tip column
+tips['tip'].plot(kind = 'box')
+plt.show()
+
+# Bar plot
+cts = tips['sex'].value_counts()
+cts.plot(kind = 'bar')
+plt.show()
+
+
+# Bivariate plots in pandas
+# Scatter plot between the tip and total_bill
+tips.plot(x = 'total_bill', y = 'tip', kind = 'scatter')
+plt.show()
+
+# Boxplot of the tip column by sex
+tips.boxplot(column='tip', by='sex')
+plt.show()
+
+
+
+# Univariate plots in seaborn
+# Bar plot
+sns.countplot(x='sex', data=tips)
+plt.show()
+
+# Histogram
+sns.distplot(tips['total_bill'])
+plt.show()
+
+
+# Bivariate plots in seaborn
+# Boxplot for tip by sex
+sns.boxplot(x='sex', y='tip', data=tips)
+plt.show()
+
+# Scatter plot of total_bill and tip
+sns.regplot(x='total_bill', y='tip', data=tips)
+plt.show()
+
+
+
+# Facet plots in seaborn
+# Scatter plot of total_bill and tip faceted by smoker and colored by sex
+sns.lmplot(x='total_bill', y='tip', data=tips, hue='sex', col='smoker')
+plt.show()
+
+# FacetGrid of time and smoker colored by sex
+facet = sns.FacetGrid(tips, col='time', row='smoker', hue='sex')
+# Map the scatter plot of total_bill and tip to the FacetGrid
+facet.map(plt.scatter, 'total_bill', 'tip')
+plt.show()
+
+
+
+# Univariate and bivariate plots in matplotlib
+# Univariate histogram
+plt.hist(tips['total_bill'])
+plt.show()
+
+# Bivariate scatterplot
+plt.scatter(tips['tip'], tips['total_bill'])
+plt.show()
+
+
+# Subfigures in matplotlib
+# Create a figure with 1 axes
+fig, ax = plt.subplots(1, 1)
+
+# Plot a scatter plot in the axes
+ax.scatter(tips['tip'], tips['total_bill'])
+plt.show()
+
+
+# Create a figure with scatter plot and histogram
+fig, (ax1, ax2) = plt.subplots(1, 2)
+ax1.scatter(tips['tip'], tips['total_bill'])
+ax2.hist(tips['total_bill'])
+plt.show()
+
+
+
+# Working with axes
+# Distplot of tip
+dis = sns.distplot(tips['tip'])
+# Print the type
+print(type(dis))
+
+
+# Figure with 2 axes: regplot and distplot
+fig, (ax1, ax2) = plt.subplots(1,2)
+sns.distplot(tips['tip'], ax=ax1)
+sns.regplot(x='total_bill', y='tip', data=tips, ax=ax2)
+plt.show()
+
+
+
+# Polishing up a figure
+# Create a figure with 1 axes
+fig, ax = plt.subplots()
+# Draw a displot
+ax = sns.distplot(tips['total_bill'])
+# Label the title and x axis
+ax.set_title('Histogram')
+ax.set_xlabel('Total Bill')
+plt.show()
+
+
+
