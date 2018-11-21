@@ -4,3 +4,4 @@
 *.Rproj
 *.db
 *.Rprof
+.Rproj.user
