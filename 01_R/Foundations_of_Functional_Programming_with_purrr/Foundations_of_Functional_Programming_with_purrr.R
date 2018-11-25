@@ -1,5 +1,6 @@
 library(purrr)
 library(readr)
+library(repurrrsive)
 
 # Chapter 1: Simplifying Iteration and Lists With purrr
 
@@ -92,3 +93,33 @@ map(wesanderson, ~length(.x))
 map(wesanderson, length)
 # Create a numcolors column and fill with length of each wesanderson element
 data.frame(numcolors = map_dbl(wesanderson, ~length(.x)))
+
+
+
+
+
+
+
+# Chapter 2: More complex iterations
+# Names & pipe refresher
+# Use pipes to check for names in sw_films
+sw_films %>%
+  names()
+
+
+# Setting names
+# Set names so each element of the list is named for the film title
+sw_films_named <- sw_films %>% 
+  set_names(map_chr(sw_films, "title"))
+
+# Check to see if the names worked/are correct
+names(sw_films_named)
+
+
+
+# Pipes in map()
+# Create a list of values from 1 through 10
+numlist <- list(1,2,3,4,5,6,7,8,9,10)
+
+# Iterate over the numlist 
+map(numlist, ~.x %>% sqrt() %>% sin())
