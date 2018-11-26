@@ -1,6 +1,7 @@
 library(purrr)
 library(readr)
 library(repurrrsive)
+library(ggplot2)
 
 # Chapter 1: Simplifying Iteration and Lists With purrr
 
@@ -208,3 +209,114 @@ list_of_files_pmap <- pmap(pmapinputs,
 list_of_files_pmap
 
 
+
+
+
+
+# Chapter 3: Troubleshooting lists with purrr
+# safely() replace with NA
+
+# Map safely over log
+a <- list(-10, 1, 10, 0) %>% 
+  map(safely(log, otherwise = NA_real_)) %>%
+  # Transpose the result
+  transpose()
+
+# Print the list
+a
+
+# Print the result element in the list
+a[["result"]]
+
+# Print the error element in the list
+a[["error"]]
+
+
+
+
+
+# Convert data to numeric with purrr
+# Load sw_people data
+data(sw_people)
+
+# Map over sw_people and pull out the height element
+height_cm <- map(sw_people, ~.x[["height"]]) %>%
+  map(function(x){
+    ifelse(x == "unknown",NA,
+           as.numeric(x))
+  })
+
+
+
+
+# Finding the problem areas
+# Map over sw_people and pull out the height element
+height_ft <- map(sw_people , ~.x[["height"]]) %>% 
+  map(safely(function(x){
+    x * 0.0328084
+  }, quiet = FALSE)) %>% 
+  transpose()
+
+# Print your list, the result element, and the error element
+height_ft
+height_ft[["result"]]
+height_ft[["error"]]
+
+
+
+
+
+# Replace safely() with possibly()
+# Take the log of each element in the list
+a <- list(-10, 1, 10, 0) %>% 
+  map(possibly(function(x){
+    log(x)
+  },otherwise = NA_real_))
+
+
+
+# Convert values with possibly()
+# Create a piped workflow that returns double vectors
+height_cm %>%  
+  map_dbl(possibly(function(x){
+    # Convert centimeters to feet
+    x * 0.0328084
+  }, otherwise = NA_real_))
+
+
+
+# Comparing walk() vs no walk() outputs
+people_by_film <- sw_people[[1]]
+
+# Print normally
+people_by_film
+# Print with walk
+walk(people_by_film, print)
+
+
+
+
+# walk() for printing cleaner list outputs
+# Load the gap_split data
+data(gap_split)
+
+# Map over the first 10 elements of gap_split
+plots <- map2(gap_split[1:10], 
+              names(gap_split[1:10]), 
+              ~ ggplot(.x, aes(year, lifeExp)) + 
+                geom_line() +
+                labs(title = .y))
+
+# Object name, then function name
+# Load the gap_split data
+data(gap_split)
+
+# Map over the first 10 elements of gap_split
+plots <- map2(gap_split[1:10], 
+              names(gap_split[1:10]), 
+              ~ ggplot(.x, aes(year, lifeExp)) + 
+                geom_line() +
+                labs(title = .y))
+
+# Object name, then function name
+walk(plots, print)
