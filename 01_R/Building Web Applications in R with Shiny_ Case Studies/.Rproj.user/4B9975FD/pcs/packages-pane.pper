@@ -1,7 +1,0 @@
-{
-    "installOptions" : {
-        "installDependencies" : true,
-        "installFromRepository" : true,
-        "libraryPath" : "C:/Users/D91067/AppData/Local/conda/conda/envs/rstudio/lib/R/library"
-    }
-}

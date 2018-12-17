@@ -1,0 +1,42 @@
+---
+title: "03_Tabset"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### Chart A1
+```{r}
+
+```
+
+### Chart A2
+```{r}
+
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
+
+
+

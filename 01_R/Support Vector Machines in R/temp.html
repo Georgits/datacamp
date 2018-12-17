@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Start | XING</title>
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<meta name="referrer" content="default">
+<meta name="logjam-request-id" content="perlapp-production-2b8775dd51c348b8ad5adcc431c74ad3">
+<meta name="logjam-action" content="Startpage#home">
+<meta name="logjam-collector" content="https://www.xing.com/logjam/">
+<meta name="apple-itunes-app" content="app-id=297625850, affiliate-data=at=10lRnD&amp;ct=banner_sp_onboarding">
+<link rel="shortcut icon" href="https://www.xing.com/assets/frontend_minified/img/shared/xing_r1.ico" type="image/ico">
+<meta name="application-name" content="XING">
+<meta name="msapplication-config" content="https://www.xing.com/browserconfig.xml">
+<link rel="search" type="application/opensearchdescription+xml" title="XING" href="/media/xing-opensearch.xml">
+<link rel="apple-touch-icon" href="https://www.xing.com/assets/frontend_minified/img/shared/xing_icon_apple.png">
+<link rel="canonical" href="https://www.xing.com/app/startpage">
+<script>/*<![CDATA[*/!function(e){function t(r){if(n[r])return n[r].exports;var i=n[r]={i:r,l:!1,exports:{}};return e[r].call(i.exports,i,i.exports,t),i.l=!0,i.exports}var n={};t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="/",t(t.s=55)}({0:function(e,t){var n;n=function(){return this}();try{n=n||Function("return this")()||(0,eval)("this")}catch(e){"object"==typeof window&&(n=window)}e.exports=n},1:function(e,t,n){"use strict";(function(e){Object.defineProperty(t,"__esModule",{value:!0}),t.assign=void 0;var r=n(3),i=function(e){return e&&e.__esModule?e:{default:e}}(r),o=function(e){if(void 0===e||null===e)throw new TypeError("Cannot convert undefined or null to object");for(var t=Object(e),n=1;n<arguments.length;n++){var r=arguments[n];if(void 0!==r&&null!==r)for(var i in r)r.hasOwnProperty(i)&&(t[i]=r[i])}return t};t.default=(0,i.default)(e.Object.assign)?e.Object.assign:o,t.assign=o}).call(t,n(0))},21:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0}),t.buildSandboxUrl=void 0;var i=n(8),o=r(i),a=n(57),u=r(a),c=n(56),f=r(c),l=n(1),d=r(l),s=function(e,t){var n=t.host||("production"===e?"stan.xing.com":"preview-stan.xing.com"),r=t.sandboxFile||"stm-v1.html";return t.sandboxUrl||"https://"+n+"/"+r},v=function(e){var t=!1,n=(0,f.default)(e),r={version:"1.2.5",baseData:{},_dl:{}};return r.assign=d.default,r.init=function(t){var r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};if(n.initialized)return o.default.resolve();r=(0,d.default)({debug:/debug=true/.test(e.location.search)},r,{env:t});var i=s(t,r);return n.load(i),n.init(r)},r.pageview=function(e,t,n,i){r.baseData=(0,d.default)({},n);var o=r._updateDataLayer("store",(0,d.default)({},n,{PropChannel:e,pageName:t})),a=(0,d.default)({},o,i);return r._rawEvent("pageview",a)},r.event=function(e,t){return r._rawEvent(e,r._updateDataLayer("improve",t))},r.virtualPageview=function(){return r.pageview.apply(r,arguments)},r.withPerformanceMetrics=function(t){return new o.default(function(n){var r=function(){setTimeout(function(){var r=(0,u.default)(e),i=Object.keys(r).map(function(e){return e+"="+r[e]}).join(";"),o={PropTechnicalPerformance:i};t&&t(o),n()},0)};if(e.document&&"complete"===e.document.readyState||!e.addEventListener)r();else{var i=function t(){r(),e.removeEventListener("load",t,!0)};e.addEventListener("load",i,!0)}})},r.createProxy=function(e){n.createProxy(e||"*",r._updateDataLayer)},r.useProxy=function(e,r){t=!0,n.useProxy(e,r||"*")},r._rawEvent=function(e,t){return n.track(e,(0,d.default)({},t,{PropAppId:"ttt@"+r.version}))},r._rawPageview=r._rawEvent.bind(null,"pageview"),r._updateDataLayer=function(n,i){if(t)return i;var o={PropAppId:"ttt@"+r.version};return"improve"===n?i=(0,d.default)({},r._dl,i,o):"store"===n&&((0,d.default)(o,{PropDestinationUrl:e.location.href,PropReferringUrl:r._dl&&r._dl.PropDestinationUrl||e.document.referrer}),r._dl=i=(0,d.default)({},r.baseData,i,o)),i},r._getSandbox=function(){return n},r._unload=function(){return n.unload()},r};t.default=v,t.buildSandboxUrl=s},22:function(e,t,n){"use strict";function r(){var e=this,t=new o.default(function(t){e.resolve=function(e){return t(e)}});this.then=function(e){return t.then(e)}}Object.defineProperty(t,"__esModule",{value:!0});var i=n(8),o=function(e){return e&&e.__esModule?e:{default:e}}(i);t.default=r},3:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=function(e){return/\{\s*\[native code\]\s*\}/.test(""+e)};t.default=r},55:function(e,t,n){"use strict";var r=n(21),i=function(e){return e&&e.__esModule?e:{default:e}}(r);window.ttt=(0,i.default)(window)},56:function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0}),t.createProxyHandler=t.createHandler=t.createFrame=t.createMessageProxy=t.postMessage=void 0;var i=n(22),o=r(i),a=n(8),u=r(a),c=n(1),f=r(c),l=function(e,t,n,r){return{to:e,from:t,action:n,payload:r}},d=function(e,t,n){e.postMessage(JSON.stringify(n),t||"*")},s=function(e,t,n,r){e.addEventListener("message",function(e){var i=void 0;try{var o=e.data;if("*"!==n&&n!==e.origin)return;if("string"!=typeof o||"{"!==o.charAt(0))return;i=JSON.parse(o)}catch(e){return}var a=i,u=a.to,c=a.action,f=a.payload;if("ttt"===u&&"proxy"===c){var l=f.event,d=f.props;d=r("pageview"===l?"store":"improve",d),t.track(l,d)}})},v=function(e,t){return new u.default(function(n){var r=e.document,i=e.innerWidth||0,o=e.innerHeight||0,a=r.createElement("iframe");a.setAttribute("id","stm"),a.setAttribute("sandbox","allow-scripts allow-same-origin"),a.setAttribute("style","top:-"+o+"px;left:-"+i+"px;width:"+i+"px;height:"+o+"px;border:0;position:absolute;visibility:hidden;opacity:0"),a.onload=function(){return n(a)},a.setAttribute("src",t);var u=function(){var e=r.body;e.insertBefore(a,e.childNodes[0])};r.body?u():r.addEventListener("DOMContentLoaded",u,!0)})},p=function(e,t){var n=d.bind(null,e,t);return{init:function(e){n(l("stm","ttt","init",e))},track:function(e,t){n(l("stm","ttt","track",{event:e,props:t}))}}},b=function(e,t){var n=d.bind(null,e,t);return{init:function(){},track:function(e,t){n(l("ttt","ttt","proxy",{event:e,props:t}))}}},y=function(){throw new Error("Please call ttt.init first")},m=function(e){var t={initialized:!1,iframe:null},n=new o.default,r=new o.default;r.then(function(e){if(!e)throw new Error("aaaaa")});var i=function(e){return function(){for(var n=arguments.length,i=Array(n),o=0;o<n;o++)i[o]=arguments[o];return!t.initialized&&y(),r.then(function(t){t[e].apply(t,i)})}};return(0,f.default)(t,{load:function(i){return t.initialized=!0,v(e,i).then(function(e){var i=p(e.contentWindow);return n.resolve(e),r.resolve(i),t.iframe=e,e})},unload:function(){n&&n.then(function(n){n&&e.document.body.removeChild(n),t.iframe=null}),t.initialized=!1,n=null},createProxy:function(n,i){return!t.initialized&&y(),r.then(function(t){s(e,t,n,i)})},useProxy:function(e,n){var i=b(e,n);t.initialized=!0,r.resolve(i)},init:i("init"),track:i("track")})};t.default=m,t.postMessage=d,t.createMessageProxy=s,t.createFrame=v,t.createHandler=p,t.createProxyHandler=b},57:function(e,t,n){"use strict";function r(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}Object.defineProperty(t,"__esModule",{value:!0});var i=n(1),o=function(e){return e&&e.__esModule?e:{default:e}}(i),a=function(e){var t=e.performance||e.webkitPerformance||e.mozPerformance||e.msPerformance;if(!t||!t.timing)return{};var n=t.timing,i=(new Date).getTime(),a={network:n.responseEnd||i,pageLoad:n.domContentLoadedEventEnd||i,pageSetup:n.loadEventStart||i,loadEvent:i},u=n.navigationStart;return Object.keys(a).map(function(e){var t=a[e],n=t-u;return u=t,r({},e,n)}).reduce(function(e,t){return(0,o.default)(e,t)},{})};t.default=a},8:function(e,t,n){"use strict";function r(e){var t=!1,n=null,i=[];e(function(e){t||(t=!0,n=e,i.forEach(function(t){return t(e)}),i.length=0)}),this.then=function(e){return new r(function(r){var o=function(t){r(e?e(t):t)};t?o(n):i.push(o)})}}Object.defineProperty(t,"__esModule",{value:!0}),r.resolve=function(e){return new r(function(t){return t(e)})},t.default=r}});/*]]>*/</script><script>
+ttt.baseData = {"PropUserBusinessCountry":"de","PropLoginState":"logged_in","PropUserGender":"m","PropUserAge":"undefined","PropUserBusinessCity":"Frankfurt/Main","PropSuccessfulInvitation":"0","PropApplicationLanguage":"de","PropMembership":"0","PropAccountDuration":"142","PropUserBusinessStatus":"employee","PropLastLogin":"0","PropHashedUserId":"8f3669785aeb72d5","PropNumberContacts":"153"};
+ttt.init("production");
+
+</script><link rel="stylesheet" media="all" href="https://www.xing.com/assets/frontend_minified/css/general-5156cae15b5e7fd11c0fa2118e7fdaad.css">
+<link rel="stylesheet" media="all" href="https://www.xing.com/assets/frontend_minified/css/birthday_box-8c5969d3db99eec240b8a67cc1a318fd.css">
+<link rel="stylesheet" media="all" href="https://www.xing.com/css/v/1eb827/startpage.min.css">
+<!--[if IE 9]>
+<link rel="stylesheet" media="all" href="https://www.xing.com/assets/frontend_minified/css/ie_filter-e7da014d6eb1c1b231c98e0f18b3f8b5.css">
+<![endif]--><script>
+window.storableAssets = {'css/webfont.css': ["https://www.xing.com/assets/frontend_minified/css/webfont-6ee69c71412d8bbc162bf9feaca16775.css"]};
+</script><script src="https://www.xing.com/assets/frontend_minified/js/xing-b99520be6f8391c835809732f0fb40df.js"></script><script>xing.globals.assets=xing.mixIn(xing.globals.assets||{},{_host:"https://www.xing.com",_origin:"/assets/frontend_minified/"},{"css/webfont.css":"css/webfont-6ee69c71412d8bbc162bf9feaca16775.css","js/admin_common_new.js":"js/admin_common_new-f93ca8d8ab8e3529461f7b0d9353df9b.js","css/components/form.wysihtml5.css":"css/components/form.wysihtml5-98db52350e66fc56d514e430b4c1b753.css","css/general.css":"css/general-5156cae15b5e7fd11c0fa2118e7fdaad.css","js/tag_list.js":"js/tag_list-c3ed715e3533495c04ac4453e1648bc1.js","js/swfobject.js":"js/swfobject-539fef25103c8298ee2ab11aeb0010a2.js","js/mockHttpRequest.js":"js/mockHttpRequest-7e81250fa87fff03892b554fa6086bfa.js","js/admin_shared.js":"js/admin_shared-b21b5031cc08ac744eeb1f16cf3ab590.js","js/textarea_limiter.js":"js/textarea_limiter-44b1df5fb999e3ff74c1aa21c1e9417a.js","js/calendar.js":"js/calendar-eac5dd5260d2d6157629faaded2ae86a.js","js/item_chooser.js":"js/item_chooser-593f92571603b3a5b5870f6b86aee939.js","js/endless_scroll.js":"js/endless_scroll-9e31858bc3022da763c71265ffe19163.js","css/to_top.css":"css/to_top-aeb46d559b646b32629f43cfc0b5d73b.css","css/page_popup.css":"css/page_popup-52784d8f7bfa56ddfdbed9e1a15e6f54.css","js/image_on_view.js":"js/image_on_view-20346b9b22929cb93e008ac5471e41da.js","css/crop.css":"css/crop-0e2e99e7a8fbacd1d3d37899e7601cff.css","js/content_switcher.js":"js/content_switcher-456e2dc128cee5d95054e9df379dadd5.js","css/qunit.css":"css/qunit-8906659a7111cdad471cef2684eba2d2.css","js/pager.js":"js/pager-c644f65c6225a0cb76ea2adc3388c6e0.js","js/ad_engine.js":"js/ad_engine-24c45bc169a5e477b0c0f894deed7c18.js","css/birthday_box.css":"css/birthday_box-8c5969d3db99eec240b8a67cc1a318fd.css","js/password.js":"js/password-085175e58aec8dc57e70437de9a2a795.js","js/edit_widget.js":"js/edit_widget-7da555df22e0aebc5b20fdaed7117609.js","css/print.css":"css/print-6b19dec564b3f544f3e285929efdee70.css","js/top_display_area.js":"js/top_display_area-6ef9bca22925e50c715699614840ca16.js","js/one_click_hide.js":"js/one_click_hide-c6e49ddcb3fe859a9b09d16d8f3719e0.js","css/elements/communication.mark.css":"css/elements/communication.mark-5192885d5976a4a2837cebc13db7145e.css","js/shared_data.js":"js/shared_data-71d48d3046a4d4081384f713a00fb552.js","css/edit_widget.css":"css/edit_widget-517bfafbfea46af7a8ddde11873f902e.css","js/form_empty_inputs.js":"js/form_empty_inputs-b23cc5054a9b13d5ba4fc05cb11b277a.js","css/login_layer.css":"css/login_layer-e43bd6f281104f6ab77d52fb3931be53.css","js/loggedout.js":"js/loggedout-e0d36f1f53b0d6ce52a333842e1d9340.js","css/header_minimal.css":"css/header_minimal-76610dcd4ee46a726effa0e33a817d3e.css","css/mobile_signup.css":"css/mobile_signup-cd49b91074f28d2700a3b14655d72a37.css","css/top_display_area.css":"css/top_display_area-ddeabfe36e0a2069bb13ac83a217cebe.css","css/mediumrectangle.css":"css/mediumrectangle-cd025c86fb8c5c11231f56614ff600e4.css","js/ajax.js":"js/ajax-8193dec05e75602cfa6cfa0d46955df7.js","js/infinite_scroll.js":"js/infinite_scroll-bad4f389f662bdc6ef11870855f8d44e.js","js/inplace_editor.js":"js/inplace_editor-95c69171d09d12fc9ddf430b689a1338.js","js/qunit.js":"js/qunit-7edc2c8a4d2c2daa5c0e066cbdb4a92c.js","js/social_plugins.js":"js/social_plugins-bdec9d29c88eea95fe1bdadcf9e3b9a2.js","css/admin_shared.css":"css/admin_shared-11013f319bf4cbe10bbffbd5f8b9d58f.css","js/fe_defaults.js":"js/fe_defaults-bd8547302d6a0e7d298900f03427e55e.js","css/loggedout.css":"css/loggedout-c6aaf4945c462ea45a64dc3db1a15074.css","css/date_picker.css":"css/date_picker-9d88313eb6927636f8ab6fd3489df960.css","css/tag_list.css":"css/tag_list-abce150f18d091df754c752f3495d085.css","js/help.js":"js/help-5471f6fd101a746fec74c7d9b1a2f749.js","css/header.css":"css/header-e0ff9eea40d47249234e8083b13e3018.css","css/social_plugins.css":"css/social_plugins-7c3c677e907f295fc9c6a1af352afe99.css","js/navigation.js":"js/navigation-02d4924fc90a822ff78d2edad1d95c0c.js","js/xing_async.js":"js/xing_async-30154b9d2bf2b92346e6882c201c25ee.js","js/suggestor.js":"js/suggestor-45434679327631f8224909b88a581850.js","js/json.js":"js/json-388b2fa18f3dd1c11697dcf0bf77a92b.js","css/contact_chooser.css":"css/contact_chooser-42a92c10d7badb0c911916d096ed797d.css","js/xing_unit_tests.js":"js/xing_unit_tests-6a36430011ad5aada91084de811f6655.js","css/loggedout_indexpage_responsive.css":"css/loggedout_indexpage_responsive-c6ffb18629b104b2cd05310efbe8bc14.css","js/forag_frame_deps.js":"js/forag_frame_deps-a77196e1d89b5e7281a438b01f0ca33e.js","css/wysihtml5_output.css":"css/wysihtml5_output-71b4ebcf517950480be7b3434f9508a1.css","js/textarea_auto_resize.js":"js/textarea_auto_resize-ce829c692943f947ea469844fc217095.js","css/feed_shared.css":"css/feed_shared-d6d3f9e514de4490f5e88b9c310845de.css","js/crop.js":"js/crop-a7b46219b85488f0ab976339e2f6db9b.js","css/loggedout_frame_signup.css":"css/loggedout_frame_signup-2b2140848d960237a944899bc69dcc0f.css","js/embedding.js":"js/embedding-b9caf65de3da74f324c87caea386eb7b.js","js/charts.js":"js/charts-c0102cb01804ec794c60e52b1add17cc.js","js/dependent_select.lazy.js":"js/dependent_select.lazy-4599b3abdfdb5e865cba27dbf0d33f4c.js","js/xing_bootstrap.js":"js/xing_bootstrap-555afdcfe390ae229bf8fad1e136591b.js","js/sc.js":"js/sc-bddbfcee14008121b33a0173267e81c0.js","css/forgot_password_responsive.css":"css/forgot_password_responsive-5d7bfda3f1010ed516e0c2af4dee42fa.css","css/loggedout_minimal.css":"css/loggedout_minimal-210e19c18cd92e5ff6a4ab1fa8814222.css","css/editable_logo.css":"css/editable_logo-ce4fc8bfaabde98698533325d64c2044.css","js/capture.js":"js/capture-512da7c07ad03b7ba484ce16204c4e73.js","js/carousel.js":"js/carousel-fc83d39723546b1ac89ebf3be2a246ee.js","js/toggle_box.js":"js/toggle_box-e268cfb5215d3046cefbcb77ce1ba049.js","css/wysihtml5_toolbar.css":"css/wysihtml5_toolbar-c381c68c005e9b36b6e4893a5362eca7.css","css/carousel.css":"css/carousel-cfdc3dd7b5f8d90ad6b8e5bcc07dc9db.css","js/oauth_callback.js":"js/oauth_callback-a556279d6e5f26a60e033d3b776fcfff.js","js/xing_unit_tests_bootstrap.js":"js/xing_unit_tests_bootstrap-9f8bf2f1fe04816176f6a618b484d96c.js","js/lightbox_upload.js":"js/lightbox_upload-2cf58eaec83ddc7a6eb35341f335239a.js","css/loginapp_uvp.css":"css/loginapp_uvp-4ece365204cd49ad441aab98221bd21c.css","js/mockjax.js":"js/mockjax-bff3e027c94b93eaba2f14df174bc5d6.js","css/ie_filter.css":"css/ie_filter-e7da014d6eb1c1b231c98e0f18b3f8b5.css","js/monitoring.js":"js/monitoring-a9d0aa8f290233d9e91c603483a91655.js","js/error_reporter_selenium.js":"js/error_reporter_selenium-9c9b2f4286cdd0dd80730e63b94abd49.js","css/loginapp.css":"css/loginapp-5a08bd611357fec05f3fabe2c2213f57.css","js/notifications.js":"js/notifications-e50050591d2d018131fd53517587dfae.js","css/suggestor.css":"css/suggestor-082fdf8c2b805b1d273c5f30837ec9f4.css","css/buttons.css":"css/buttons-6aa155638b77d2452614d44bcd408b9a.css","css/404.css":"css/404-ea98bbc72873baf79d2f2c383081c3b3.css","css/wallpaper.css":"css/wallpaper-08740215109c59d2d70499d40edc3935.css","css/components/form.outfit.css":"css/components/form.outfit-7351772483f0a4f84c50437161c17d51.css","js/oembed_helper.js":"js/oembed_helper-0a35ab0c02d416f55f4dfe6feb2b22d9.js","js/list.js":"js/list-7699bfd28173aebdaf7b8838f7cfa6d2.js","css/components/communication.infolayer.css":"css/components/communication.infolayer-cd90baae1052663494fa9d2607c76315.css","js/incremental_search.js":"js/incremental_search-fdd7e569cffd62bb29d4254a135f4b91.js","js/fix_element.js":"js/fix_element-265f268586b289400e23ca00009cce19.js","js/xing_patternlibrary.js":"js/xing_patternlibrary-52c511c1c40553e38668280da0a55ba7.js","css/components/navigation.pagination.css":"css/components/navigation.pagination-8d77d23404d6a0ecaee1805277753e56.css","js/ie.js":"js/ie-b0ea99a263d55e03642f7b4a8a1862a8.js","js/jquery.js":"js/jquery-31d4301ecae0b437a589bde27089e2e4.js","js/recommendations_tracking.js":"js/recommendations_tracking-812c69120642ab7d8b2aac8aac24af6f.js","js/load_more_items.js":"js/load_more_items-3efbb3d6bf9d5c5a3930044006940426.js","js/wysihtml5.js":"js/wysihtml5-fff3c0403f0b9fc6743fcd7ad85e7c05.js","css/superbanner.css":"css/superbanner-aca7b342af9ececda787215ab054e941.css","js/contact_chooser.js":"js/contact_chooser-b1f50849a4ba09acd693f398c96d82e6.js","css/admin_common_new.css":"css/admin_common_new-4adbbb782b55a15ca9ffd5936a660f77.css","js/getusermedia.js":"js/getusermedia-cfef6fdfb9ae6cb1cf8d8d8fc6232853.js","js/reco_boxes.js":"js/reco_boxes-6acefc763b0d8d31f4dab5d127a1543b.js","js/jqext.lazy.js":"js/jqext.lazy-84b90248d446761dc10388498174a0f4.js","js/error_reporter.js":"js/error_reporter-e2a3675bf59903b852eb8efbb473c806.js","js/list_chooser.js":"js/list_chooser-24575a3e481858869a1e448eccb01936.js","css/skyscraper.css":"css/skyscraper-bbd433b26ef00f13002eddb5c7130642.css","js/range_handler.js":"js/range_handler-435af191ae752f9fd84e0d0b7485a5e0.js","js/xing.js":"js/xing-b99520be6f8391c835809732f0fb40df.js","css/reklame.css":"css/reklame-34b7372129d5ed1f29fdb00cb4ce3f17.css","js/form_observer.js":"js/form_observer-eef170c7baf88e4af3bf87a2281453b5.js","css/billboard.css":"css/billboard-d3c97cfcf03b2998d751d87403615532.css","js/ttt.js":"js/ttt-79d915a5191adde499295e25afb4e980.js","js/map.js":"js/map-a077fe7022b5bc31de65b47ad86fd5a1.js","css/layer.css":"css/layer-37706a181be5b09791bd69acad6ea661.css","js/contacts.js":"js/contacts-a3a9938808d3d0978286f7a4940fb87a.js","css/sitebar.css":"css/sitebar-06d1151cd0938be9f809ffcb94624851.css","js/oauth_popup.js":"js/oauth_popup-6158ecaf7bd6d4efacdf288c44ad1ba2.js","js/tab_switcher.js":"js/tab_switcher-e92987d5cb8e311bad8e6a20bcf888bf.js","css/layout_responsive.css":"css/layout_responsive-7944dca792c5f0ad3e6f3d924331a433.css","js/video_manager.js":"js/video_manager-6a52696ca4b78a72e6587f06517ce209.js","css/slideshow.css":"css/slideshow-71e701b7ad57ba4401c4e01fa60c4c73.css","css/footer.css":"css/footer-e6920c73046df10d9d04c67b9d5442f3.css","js/one_click_add.js":"js/one_click_add-90dbc93cc492c3e938298f8fe80a812e.js"});</script><!--[if IE]>
+<script src="https://www.xing.com/assets/frontend_minified/js/ie-b0ea99a263d55e03642f7b4a8a1862a8.js"></script>
+<![endif]--><script>
+var xing = xing || {};
+xing.user = {
+
+id: "6749602",
+hashed_id: "f8f2eeb2a7a67b850b2939e8f3e447bf1fac08de",
+location: "de",
+numContacts: "153",
+language: "de"
+
+};
+xing.globals = xing.mixIn(xing.globals || {}, {
+baseUrl: "https://www.xing.com",
+countryCode: "de",
+reklame:{base:"https://ad.de.doubleclick.net/N3673",type:"/adi",unit:"/xing"},
+
+csrfToken: "6749602.90a815",
+
+confirmPresets:{"delete":{title:"Wirklich löschen?",okLabel:"Ja, bitte löschen."}},
+toTop:"Nach oben",
+commonTexts:{"cancel":"Abbrechen","close":"Fenster schließen","continue":"OK","unknownError":"Da ist leider etwas schiefgelaufen. Probieren Sie es bitte später noch einmal."}
+});
+window.adsc_adunit1 = "xing";
+window.adsc_adunit2 = "startpage";
+window.adsc_mode = "infinite";
+xing.globals.assets.add({
+
+DeletionConfirm: "/js/v/1ac0fe/deletion_confirm.min.js",
+Expander: "/js/v/62ae4b/expander.min.js",
+OnboardingForm: "/js/v//onboarding_form.min.js",
+TermsAndConditionsModal: "/js/v/15658a/terms_and_conditions_modal.min.js"
+
+});
+;(function(w) {
+xing.mixIn(Date,{MONTH_NAMES:"Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember".split(","),DAY_NAMES:"Mo,Di,Mi,Do,Fr,Sa,So".split(","),FORMAT:"DD.MM.YYYY",HINT:"TT.MM.JJJJ",LABELS:{MONTH_PREV:"zurück",MONTH_NEXT:"vor",TODAY:"Heute",SELECTION:"Auswahl",CLOSE:"Schließen"}});
+
+w.alert = xing.noop;if("console" in w){try{w.console.log=xing.noop;}catch(e){}}
+
+})(this);
+$.ajaxPrefilter(function(options) {
+if (!options.crossDomain) {
+var token = (document.cookie.match(/(?:^|;\s*)xing_csrf_token=([^;]+)/) || [])[1];
+if (token) {
+options.headers["X-CSRF-Token"] = token;
+}
+}
+});
+</script><script>
+xing.billing = xing.billing || {};
+xing.billing.tracking = xing.billing.tracking || {};
+xing.billing.tracking.urls = xing.billing.tracking.urls || [];
+xing.ready(function() {
+
+var path = "/js/v/323ca9/utils.min.js";
+
+new xing.utils.LazyLoader(path, function() {
+var trackingUrls = xing.billing.tracking.urls || [];
+trackingUrls.forEach(function(url){
+xing.billing.utils.createTrackingIframe(url);
+});
+});
+});
+</script>
+</head>
+<body class="foundation-grid startpage-fuml foundation-adaptive-grid basic-user  ">
+<a href="#content" class="skip-link">Skip navigation</a>
+
+<div class="foundation-root container">
+
+
+
+<div class="banner-top" data-gpt-banner="DESKTOP_BANNER_ANY" id="gpt-top" data-banner-label="Anzeige"></div>
+
+
+
+
+<header><div class="content-center">
+
+<div class="foundation-collapsable">
+<a class="navigation navigation-main-logo-big header-xing-logo" href="/app/startpage">
+XING – For a better working life
+</a>
+</div>
+
+<div class="foundation-grid-space">
+<div class="foundation-row">
+<div class="foundation-col-12">
+<div class="foundation-row">
+
+
+<div class="foundation-col-8 header-search">
+<div class="foundation-row">
+<div class="foundation-col-push-1 foundation-col-5 pos-rel">
+<form action="/search/members" method="get">
+<input type="hidden" name="hdr" value="1"><input type="text" name="keywords" value="" maxlength="255" class="text" placeholder="Namen oder Stichwort eingeben"><div id="sps-head" style="display: none;"></div>
+<button onclick="s_objectID='NAV_SEARCH';" value="find" type="submit" class="main-search-button foundation-icon-core-search">Suchen</button>
+</form>
+</div>
+<div class="foundation-col-2">
+<div class="inline-block pos-rel">
+<span class="header-trigger-advanced">
+Erweiterte Suche
+<i class="foundation-icon-shape-arrow-down header-arrow"></i>
+</span>
+<ul class="dropdown" style="display:none">
+<li class="txl first">Erweiterte Suche im Bereich ...</li>
+<li class="txl">
+<a class="advanced-search" href="/search/members/query?advanced_form=open&amp;hrd=1">
+<i class="foundation-icon-navigation-contacts xtsearch-icon"></i>
+Mitglieder
+</a>
+</li>
+<li class="txl">
+<a class="advanced-search" href="/jobs/search?advanced_form=open&amp;hrd=1&amp;paging_context=global_search">
+<i class="foundation-icon-navigation-jobs xtsearch-icon"></i>
+Jobs
+</a>
+</li>
+<li class="txl">
+<a class="advanced-search" href="/search/events?advanced_form=open&amp;hrd=1">
+<i class="foundation-icon-navigation-events xtsearch-icon"></i>
+Events
+</a>
+</li>
+<li class="txl">
+<a class="advanced-search" href="/search/news?advanced_form=open&amp;hrd=1">
+<i class="foundation-icon-navigation-news xtsearch-icon"></i>
+News
+</a>
+</li>
+<li class="txl">
+<a class="advanced-search" href="/search/communities?advanced_form=open&amp;hrd=1">
+<i class="foundation-icon-navigation-communities xtsearch-icon"></i>
+Gruppen
+</a>
+</li>
+<li class="txl">
+<a class="advanced-search" href="/search/companies?advanced_form=open&amp;hrd=1">
+<i class="foundation-icon-navigation-companies xtsearch-icon"></i>
+Unternehmen
+</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div class="foundation-col-4  header-settings foundation-new-form">
+<a href="/app/help?op=helpcenter" class="header-trigger-help" data-help-center="https://faq.xing.com/de">Hilfe</a>
+<div class="header-trigger-personal pos-rel">
+<a class="header-personal element-form-button-gray foundation-icon-core-settings" href="#" data-simplelayer="next">
+<i class="foundation-icon-shape-arrow-down header-arrow"></i>
+</a>
+<ul class="dropdown header-dropdown" style="display:none;">
+<li>
+<a class="header-upsell-highlight personal-item" href="/upsell/premium_offers?reagent=uplt_284">
+Premium
+</a>
+</li>
+<li>
+<a class="header-upsell-highlight personal-item" href="/upsell/projobs?reagent=uplt_283">
+ProJobs
+</a>
+</li>
+<li>
+<a class="header-upsell-highlight personal-item" href="/upsell/pro_business_offers?reagent=uplt_500">
+ProBusiness
+</a>
+</li>
+
+
+
+
+
+
+
+
+<li>
+<a class="personal-item" href="/settings">
+Einstellungen
+</a>
+</li>
+<li>
+<a class="personal-item" href="/payments/settings">
+Rechnungen &amp; Konten
+</a>
+</li>
+<li>
+<a class="personal-item" href="/login/logout">
+Ausloggen
+</a>
+</li>
+</ul>
+</div>
+<a href="/contacts/recommendations" class="element-form-button-solid-lime header-trigger-contacts">
+Neue Kontakte finden
+</a>
+
+
+
+<a href="/upsell/premium_offers?reagent=uplt_95" id="myxing-premfix" class="sign">
+Jetzt Premium-Mitglied werden! <span>Mehr Infos</span>
+</a>
+
+
+</div>
+
+
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</header><main class="content-center"><div class="foundation-collapsable data-tooltip-right">
+
+
+<nav><ul class="component-navigation-vertical">
+<li class="myxing-profile">
+<a class="myxing-profile-anchor" href="/profile/Georgi_Tsertsvadze?sc_o=mxb_p" data-tooltip="Mein Profil">
+<span class="element-user-image element-user-image-64x64 myxing-profile-image">
+<img alt="Dr. Georgi Tsertsvadze" height="64" src="https://www.xing.com/img/users/7/a/a/01b39e725.6749602,5.64x64.jpg" width="64"></span>
+<span class="myxing-profile-name">Dr. Georgi Tsertsvadze</span>
+
+
+<span class="myxing-profile-membership">Basis</span>
+
+
+</a>
+</li> 
+
+<li class="navigation-vertical-item open">
+<a class="navigation-vertical-anchor foundation-icon-navigation-startpage" href="/app/startpage" data-tooltip="Startseite">
+Startseite
+<span class="flag-notification navigation-vertical-notification" data-update="home" style="display:none"></span>
+</a>
+</li>
+<li class="navigation-vertical-item ">
+<a class="navigation-vertical-anchor foundation-icon-navigation-contacts" href="/contacts" data-tooltip="Kontakte">
+Kontakte
+<span class="flag-notification navigation-vertical-notification" data-update="contact_requests" style="display:none"></span>
+</a>
+</li>
+<li class="navigation-vertical-item">
+<a class="navigation-vertical-anchor foundation-icon-navigation-messages" href="/messenger" data-tooltip="Nachrichten">
+Nachrichten
+<span class="flag-notification navigation-vertical-notification" data-update="unread_chats" style="display:none"></span>
+</a>
+</li>
+
+<li class="navigation-vertical-item ">
+<a class="navigation-vertical-anchor navigation-premium navigation-upsell" href="/premium?sc_o=mxb_pre;reagent=uplt_76" data-tooltip="Premium-Bereich - Premium-Mitglied werden!">
+Premium-Bereich
+<span class="navigation-vertical-subline">Premium-Mitglied werden!</span>
+</a>
+</li>
+
+
+
+
+
+</ul>
+<ul class="component-navigation-vertical component-navigation-vertical-other">
+<li class="navigation-vertical-item">
+<a class="navigation-vertical-anchor foundation-icon-navigation-jobs" href="/jobs" data-tooltip="Stellenmarkt">
+Stellenmarkt
+<span class="flag-notification navigation-vertical-notification" data-update="jobs" style="display:none"></span>
+</a>
+</li>
+<li class="navigation-vertical-item">
+<a class="navigation-vertical-anchor foundation-icon-navigation-events" href="/events?sc_o=mxb_e_da207" data-tooltip="Eventmarkt">
+Eventmarkt
+<span class="flag-notification navigation-vertical-notification" data-update="events" style="display:none"></span>
+</a>
+</li>
+<li class="navigation-vertical-item">
+<a class="navigation-vertical-anchor foundation-icon-navigation-news" href="/news?sc_o=b7916_mxb" data-tooltip="News">
+News
+<span class="flag-notification navigation-vertical-notification" data-update="news" style="display:none"></span>
+</a>
+</li>
+<li class="navigation-vertical-item">
+<a class="navigation-vertical-anchor foundation-icon-navigation-communities" href="/communities" data-tooltip="Gruppen">
+Gruppen
+<span class="flag-notification navigation-vertical-notification" data-update="groups_web" style="display:none"></span>
+</a>
+</li>
+<li class="navigation-vertical-item">
+<a class="navigation-vertical-anchor foundation-icon-navigation-companies" href="/companies" data-tooltip="Unternehmen">
+Unternehmen
+</a>
+</li>
+
+<li class="navigation-vertical-item">
+<a class="navigation-vertical-anchor foundation-icon-profile-education" href="/campus?ref=xing_nav" data-tooltip="Campus">
+Campus
+</a>
+</li>
+
+<li class="navigation-vertical-item navigation-vertical-item-secondary navigation-spacer ">
+<a class="navigation-vertical-anchor foundation-icon-navigation-business-services" href="/app/user?op=xing_services.business" data-tooltip="Für Unternehmen">
+Für Unternehmen
+</a>
+</li>
+<li class="navigation-vertical-item navigation-vertical-item-secondary ">
+<a class="navigation-vertical-anchor foundation-icon-navigation-other-services" href="/app/user?op=xing_services.other" data-tooltip="Weitere Services">
+Weitere Services
+</a>
+</li>
+</ul></nav><script>
+;(function() {
+var list = ["home", "contact_requests", "unread_chats", "jobs", "events", "news", "groups_web"];
+xing.renderStorage(".component-navigation-vertical [data-update]", "navigation", list, 100);
+list.forEach.call(document.querySelectorAll(".navigation-vertical-new"), function(label, index) {
+if (index == 0) {
+label.parentNode.style.fontSize = "13px";
+if (label.offsetLeft > 145) {
+label.className += " navigation-vertical-new-stopped";
+}
+label.parentNode.style.fontSize = "";
+label.style.visibility = "";
+}
+});
+xing.ready("js/navigation.js");
+})();
+</script>
+</div>
+
+<div class="foundation-grid-space" id="content">
+<div id="maincontent" class="" data-qa="e56806d8">
+<noscript>
+<div class="foundation-row">
+<div class="foundation-col-12">
+<div class="app-message app-message-error">
+<div class="app-message-body"><p>Bitte <a href="/app/user?op=javascript_howto">aktivieren Sie JavaScript</a>, um XING nutzen zu können.</p></div>
+</div>
+</div>
+</div>
+</noscript>
+
+<div class="foundation-row">
+<div class="foundation-col-8">
+
+
+
+<div class="startpage-tab-container" data-sub-tabs="#">
+<ul class="tab-nav sup" data-tabnav>
+<li><a data-sub-tab-link="news" href="#networknews">Neuigkeiten</a></li>
+<li>
+<a data-tab-id="reactions" data-sub-tab-link="reactions" href="#reactions">Reaktionen
+<span class="flag-notification" data-update="activities" style="display:none"></span>
+</a>
+</li>
+</ul>
+<script>
+xing.ready(function() {
+var tabHash = location.hash;
+if (tabHash === '#reactions') {
+ttt.pageview('wbm/Startpage_LI', 'wbm/Startpage_LI/home/notifications', ttt.baseData);
+} else {
+ttt.pageview('wbm/Startpage_LI', 'wbm/Startpage_LI/home', ttt.baseData);
+}
+});
+</script><script>
+xing.renderStorage("[data-tabnav] [data-update]", "navigation", ["activities"]);
+xing.on("feedy.tab_change", function() {
+var baseProps = {};
+var hash = location.hash;
+if (xing.feedy && hash === "#networknews") {
+xing.feedy.trigger("refresh");
+} else if(hash === "#reactions") {
+$('[data-update="activities"]').hide();
+$('[data-update="home"]').hide();
+}
+});
+$("[data-sub-tab-link]").on('click', function(){
+var hash = $(this).attr('href');
+if (hash === location.hash) {return;}
+location.hash = hash;
+if (hash === "#reactions") {
+xing.trigger("tracking.track_page_view", {
+pageName: "user/home/notfications",
+channel: "my_network"
+});
+ttt.pageview('wbm/Startpage_LI', 'wbm/Startpage_LI/home/notifications', ttt.baseData);
+}
+else if (hash === "#networknews") {
+xing.trigger("tracking.track_page_view", {
+pageName: "user/home",
+channel: "my_network",
+prop64: "sp2506_click_on_network_news"
+});
+ttt.pageview('wbm/Startpage_LI', 'wbm/Startpage_LI/home', ttt.baseData);
+}
+xing.trigger('feedy.tab_change');
+})
+</script><div data-sub-tab-content="news">
+
+
+
+<div id="apollo-teaser" class="message-box hidden">
+<div class="startpage-teaser startpage-teaser-pic-only dipa-teaser">
+<a id="apollo-teaser-ahref" class="dipa-teaser-link" target="_blank">
+<img id="apollo-teaser-img" class="full-img dipa-teaser-image" width="565"></a>
+<a class="icon button-bar" title="Fenster schließen'" id="apollo-teaser-close" href="#">
+<img class="icn icn-ext-ctr-close" src="/img/v/transparent_r1.gif" alt="Fenster schließen'" width="13" height="13"></a>
+</div>
+</div>
+<script type="text/javascript">
+window.addEventListener('message', function(event) {
+if (event.origin !== 'https://www.xing.com') {
+return;
+}
+var data = {};
+// NOTE: there are several postMessage communications around
+try {
+data = JSON.parse(event.data);
+} catch(error) {
+// NOTE: not our message to reply to
+}
+var apolloWindow = document.getElementById('apollo-teaser-iframe').contentWindow;
+function stripQuotes(string) {
+return string.replace(/['"]/g, "");
+};
+function trackApolloImpression(campaignId) {
+if (campaignId) {
+ttt.event("PropTrackAction", { PropTrackAction: "advertising_startpage_temporary_banner_campaign_id_" + data.campaignId });
+}
+}
+switch (data.type) {
+case 'apollo.startpage':
+$('#apollo-teaser-img').attr({
+'src': stripQuotes(data.imageUrl),
+'alt': stripQuotes(data.linkText),
+'title': stripQuotes(data.linkText)
+});
+$('#apollo-teaser-ahref').attr('href', stripQuotes(data.url));
+$('#apollo-teaser').removeClass('hidden');
+trackApolloImpression(data.campaignId);
+$('#apollo-teaser-close').on('click', function(e) {
+apolloWindow.postMessage('{"type": "apollo.impression"}', 'https://www.xing.com');
+$('#apollo-teaser').addClass('hidden');
+e.preventDefault();
+e.stopPropagation();
+});
+$('#apollo-teaser-ahref').on('click', function(e) {
+apolloWindow.postMessage('{"type": "apollo.click"}', 'https://www.xing.com');
+e.stopPropagation();
+});
+break;
+case 'apollo.prescreen':
+var lightbox_content = '<div class="dipa-teaser-600" data-dipa-lightbox="appboy" data-dipa-link="' + stripQuotes(data.url) + '">\
+<img src="/img/v/transparent_r1.gif" style="width: 100%; height: auto;" class="full-img" \
+data-dipa-image="' + stripQuotes(data.imageUrl) + '" alt="' + stripQuotes(data.linkText) + '" title="' + stripQuotes(data.linkText) + '">\
+<div class="lightbox-callout foundation-new-form clfx">\
+<button class="element-form-button-solid-lime" type="submit">Weiter\
+</script>
+</div>\
+</div>'
+new xing.controls.DipaLightbox({ content: lightbox_content });
+trackApolloImpression(data.campaignId);
+apolloWindow.postMessage('{"type": "apollo.layerImpression"}', 'https://www.xing.com');
+break;
+case 'apollo.init':
+apolloWindow.postMessage('{"type": "apollo.init", "data": ' + 6749602 + '}', 'https://www.xing.com');
+break;
+case 'apollo.upboarding':
+// This if statement only for A/B test. It will be deleted after tests.
+if(data.controlGroup !== 'true'){
+new xing.controls.Lightbox(data.content);
+}
+// This Adobe tracking method is for A/B test, too.
+ttt.event('PropGlobalAction', { PropGlobalAction: data.propGlobalAction, PropAbTest: data.propAbTest });
+break;
+default:
+// do nothing
+}
+}, false);
+
+<iframe name="apollo-teaser" id="apollo-teaser-iframe" src="javascript:false;" sandbox="allow-scripts allow-same-origin" class="hidden" width="100%" frameborder="0"></iframe>
+<script type="text/javascript">
+(function() {
+var apolloIFrame = document.getElementById('apollo-teaser-iframe');
+doc = apolloIFrame.contentWindow.document;
+doc.open().write('<body onload="'+
+'var js = document.createElement(\'script\');'+
+'js.src = \'/appboy-gateway/xing/iframes/startpage.js\';'+
+'document.body.appendChild(js);">');
+doc.close();
+}());
+</script><div class="ajax-recos" data-foundation-ajax-content="/jobs/recommendations/activity_box"></div>
+
+
+
+
+
+<div id="news-feed-home">
+<div class="loading-top"></div>
+<div class="app-message app-message-error" style="display: none;">
+<div class="app-message-body"><p>Aktualisieren Sie diese Seite, um die Neuigkeiten aus Ihrem Netzwerk zu sehen.</p></div>
+</div>
+</div>
+<script>
+xing.ready(function() {
+var container = $("#news-feed-home");
+xing.require([
+"js/edit_widget.js",
+"js/image_on_view.js",
+"js/one_click_add.js",
+"js/one_click_hide.js",
+"js/reco_boxes.js"]
+).afterLoad(function() {
+xing.controls.EditWidget();
+xing.trigger('ajax:content', {
+src:      '/feedy/network_feed',
+target:   container,
+complete: function(status) { if(status === 'fail') {container.find(".app-message-error").show(); }}
+});
+});
+});
+</script>
+</div>
+<div data-sub-tab-content="reactions" data-sub-tab-reload="true" data-sub-tab-source="url=/app/startpage;op=activitybox;cat=ACTIVITY" style="display:none"></div>
+</div>
+
+</div>
+
+<aside class="foundation-col-4 startpage-sidecontent foundation-aside" data-qa="50acb2b53"><div id="premium-module" data-foundation-ajax-content="/premium/visitors/index_small" data-foundation-options='{"queue":"sidebar"}'></div>
+
+
+
+
+<div class="banner-sidebar" data-gpt-banner="DESKTOP_RECTANGLE_ANY_RL" id="gpt-rect" data-banner-label="Anzeige"></div>
+
+
+<div class="optcol-content birthday-box-outer" data-qa="a1d4d3ca4f">
+<h4 class="no-border">Die nächsten Geburtstage</h4>
+
+<div id="birthday-carousel" class="carousel">
+<a href="#" class="left carousel-arrow foundation-icon-shape-arrow-left" rel="prev"></a>
+<ul id="birthday-list-v2">
+<li>
+
+
+<div class="item" data-hover-card="url=/app/startpage;op=birthday_hovercard;b_sid=12591060.c0f9b0;sid=6749602.90a815;layer=#birthday-card;position=false;delay=0.2">
+<a class="img-mask" href="/profile/Stefan_Konrad21/N21.548416">
+<img alt="Stefan Konrad" src="https://www.xing.com/image/a_c_4_8d25c2ab4_12591060_3/stefan-konrad-foto.96x96.jpg" width="48" height="48"></a>
+
+<div class="date">
+<abbr title="Dezember" class="regular block">Dez</abbr>11</div>
+
+</div>
+
+<div class="item" data-hover-card="url=/app/startpage;op=birthday_hovercard;b_sid=16415344.ce58c2;sid=6749602.90a815;layer=#birthday-card;position=false;delay=0.2">
+<a class="img-mask" href="/profile/Erekle_Tolordava/N21.ce147b">
+<img alt="Erekle Tolordava" src="https://www.xing.com/image/3_f_5_72dcd746b_16415344_1/erekle-tolordava-foto.96x96.jpg" width="48" height="48"></a>
+
+<div class="date">
+<abbr title="Dezember" class="regular block">Dez</abbr>11</div>
+
+</div>
+
+<div class="item" data-hover-card="url=/app/startpage;op=birthday_hovercard;b_sid=12462931.994fd3;sid=6749602.90a815;layer=#birthday-card;position=false;delay=0.2">
+<a class="img-mask" href="/profile/Sebastian_Nawrath/N21.dc2ba6">
+<img alt="Sebastian Nawrath" src="https://www.xing.com/img/users/d/7/e/12e994ea1.12462931,3.96x96.jpg" width="48" height="48"></a>
+
+<div class="date">
+<abbr title="Dezember" class="regular block">Dez</abbr>15</div>
+
+</div>
+
+<div class="item" data-hover-card="url=/app/startpage;op=birthday_hovercard;b_sid=4263740.442053;sid=6749602.90a815;layer=#birthday-card;position=false;delay=0.2">
+<a class="img-mask" href="/profile/Mario_Randel/N21.f2932d">
+<img alt="Mario Randel" src="https://www.xing.com/image/b_8_e_9f8c960b8_4263740_2/mario-randel-foto.96x96.jpg" width="48" height="48"></a>
+
+<div class="date">
+<abbr title="Dezember" class="regular block">Dez</abbr>16</div>
+
+</div>
+
+
+
+</li>
+
+
+
+<li data-src="/app/startpage?op=birthday_chunk&amp;offset=4" class="loading">
+
+
+
+<li data-src="/app/startpage?op=birthday_chunk&amp;offset=8" class="loading">
+
+
+
+<li data-src="/app/startpage?op=birthday_chunk&amp;offset=12" class="loading">
+
+
+</ul>
+<a href="#" class="right carousel-arrow foundation-icon-shape-arrow-right active" rel="next"></a>
+</div>
+<div id="birthday-card-wrapper">
+<div id="birthday-card" class="hovercard-custom" style="display:none">
+<div class="triangle"></div>
+<div class="layer-content"></div>
+</div>
+</div>
+<p class="birthday-box-link">
+<a class="see-more" href="/premium/changes/contact_birthday_soon?sc_o=premium_startpage_birthdaybox_birthdaylist_click">
+Geburtstagsübersicht
+</a>
+</p>
+<script>
+xing.ready(function() {
+var triangle = $("#birthday-card .triangle");
+xing.require("js/carousel.js").afterLoad(function() {
+new xing.controls.Carousel($("#birthday-carousel"), {
+slideRange: 1,
+duration: 500,
+infinite: false,
+callback: function(slide, direction) {
+var src = slide.attr("data-src"),
+trackingName;
+if (direction) {
+if (direction == "left") {
+trackingName = "b5851_bb_b";
+}
+else if (direction == "right") {
+trackingName = "b5851_bb_n";
+}
+if (trackingName) {
+xing.trigger("tracking.track_event", {
+trackingName: trackingName,
+extendedParams: {
+eVar56: "D=c56",
+prop56: trackingName,
+linkTrackVars: "prop56"
+}
+});
+}
+}
+$("#birthday-box-hovercard").find("textarea").val("");
+xing.trigger("xing_layer.close_layer");
+if (src) {
+$.ajax(src).done(function(data) {
+slide.removeAttr("data-src")
+.removeClass("loading")
+.html(data);
+xing.utils.Behaviors.update(slide);
+});
+}
+}
+});
+});
+xing.on("xing_layer.open_layer", function(event, element) {
+var item = $(element).closest("#birthday-carousel .item"), left;
+if (item[0]) {
+left = Math.floor(item.position().left + item.outerWidth(true) / 2);
+triangle.css("left", left - 20);
+}
+});
+});
+</script>
+</div>
+
+
+<div id="xrm-box" class="optcol-content hidden" style="padding-bottom: 0; border: 0;">
+<div id="xrm-container"></div>
+</div>
+<script>
+new xing.controls.RenderFrame({
+cntId: '#xrm-container',
+width: 278,
+height: 307,
+src: 'https://xrm.xing.com/widgets/xing?locale=de'
+});
+window.addEventListener('message', function(event) {
+if (event.data.name === 'xrm_iframe_show' && event.data.height > 1) {
+$('#xrm-box').removeClass('hidden')
+$('#xrm-container iframe').height(event.data.height + 1);
+}
+});
+</script><div data-foundation-ajax-content="/app/startpage?op=get_recommendation_box&amp;cl=startpage" data-foundation-options='{"queue":"sidebar","onInview":true}'></div>
+<div id="xas-deliver-module" class="xas-app" data-foundation-ajax-content="/xas/provide?position=sidebar" data-foundation-options='{"queue":"sidebar","onInview":true}'></div>
+<div class="kununu-box optcol-content">
+<h4>
+Jetzt Arbeitgeber bewerten
+<a href="/app/help?op=get_infobox;text=KUNUNU_RATE_EMPLOYER_INFO" data-layer-src="href">
+<img src="/img/v/transparent_r1.gif" alt="" class="icn icn-ext-ctr-info" width="14" height="14"></a>
+<span class="block regular kununu-logo">Anonym und in Partnerschaft mit</span>
+</h4>
+<div id="kununu-ratings-container"></div>
+</div>
+<script>
+new xing.controls.RenderFrame({
+cntId: "#kununu-ratings-container",
+delimiter: "&",
+width: 278,
+height: 330,
+inViewport: true,
+wrapper: ".kununu-box",
+src: "https://xing.kununu.com/widget/iframe/userwidget?d=fQ2Q0ovZA9WAeH7f9HGaWjxGOOoWjax024KAmXrWEIJw2OFtUQoESFUj6lNCdVZP5gJ4sNT3kLM1%0AIw6gSf1Rr5TTBrXhnA%2F50cmvRiVSaa6%2Br%2BEhxjmE6aVOZOITAjpBgEDA%2BamwbXCeiyhbmNlSHlkW%0Ax6uGSMQMsZHbUR0Pup2hXsVmxUGpN%2FejXwOwBFm3LYtBN5hBIXKFUsdf0CGKzvYfSG%2BGdyYsarob%0AB3bQCHYfsHYJrfaXYQp%2F02rQsPxuzc6hOarUwgT20z2FbG%2Bjulcb7Jt96C3EJmVqiEkIZlFyT1bW%0AV5f%2FzQWavqJX1y0hMuou9MKreEDQBHnIqfDmd9Sgznzgn309UIHMXXXeJkA377mqTdHlSWAqVhlI%0A9avP8jLwsTUhBjz1Oc8jcG5PiyRC0U2GNZAqEzSc%2BxC1buG8ISAF0LFK5WFcSARXdeVxsvJotBqF%0AXHkv3CZoH6OoA5w186M8mlFR9vTpMeaeaWhUyeeQvfcgE4KvvD7lUnbMz%2BUK5%2FkrLUg7l4XiFQLx%0ALZnyWrdRw42xxAQoNn9Wo9hXhDMlnAXI2I8saelTAAN1LaQcvvYFB8x0Cf1acekA2AMsjqTW%2BXLe%0AQIWelnmsrpyYLC6fvL7aFIIHniueT%2BVATTV3gy2vv3NnVrP8X6Cyg%2B7axamW0p0GrIELxyByL4U%3D%0A" + "&font=https%3a%2f%2fwww.xing.com%2fassets%2ffrontend_minified%2fcss%2fwebfont-6ee69c71412d8bbc162bf9feaca16775.css"
+});
+window.addEventListener("message", function(event) {
+if (event.origin === "https://xing.kununu.com") {
+var height;
+try {
+data = $.parseJSON(event.data);
+height = parseInt(data.height, 10);
+} catch(e) {}
+if (height > 0) {
+$("#kununu-ratings-container iframe").height(height);
+}
+}
+});
+</script><div class="optcol-content" data-qa="bc4b0590">
+<h4>Anstehende Events</h4>
+<div data-foundation-ajax-content="/events/my_events/start_page_widget" data-foundation-options='{"queue":"sidebar","onInview":true}'></div>
+</div>
+
+
+
+<div id="stats-contacts" class="optcol-content">
+<h4>Ihr Netzwerk</h4>
+<dl class="inv-link clfx">
+<dt class="deg-1"><a href="/contacts">Direkte<br>Kontakte</a></dt>
+<dd class="deg-1"><a href="/contacts">153</a></dd>
+<dt class="deg-2">Kontakte von Kontakten</dt>
+<dd class="deg-2">112.518</dd>
+<dt class="deg-3">Kontakte<br>3. Grades</dt>
+<dd class="deg-3">2.000.547</dd>
+</dl>
+<a class="see-more" href="/contacts/recommendations?sc_o=contacts_startpage_teaser_yournetwork_click">Erweitern Sie Ihr Netzwerk!</a>
+</div>
+<div data-foundation-ajax-content="/contacts/invites/quick_invite_box" data-foundation-options='{"queue":"sidebar","onInview":true}'></div>
+<div id="premium-partners-module" data-foundation-ajax-content="/premium/partners/startpage_teaser_box" data-foundation-options='{"queue":"sidebar","onInview":true}'></div>
+<div id="modal-window-remove" style="display: none;" class="lightbox lightbox-s">
+<div class="wrapper lightbox-inner">
+<h3 id="modal-window-remove:title">Wirklich löschen?</h3>
+<div id="modal-window-remove:text" class="remove-text"></div>
+<div class="txr clfx">
+<button type="button" id="modal-window-remove:ok_label" class="do-confirm">Bestätigen</button>
+<a href="#" id="modal-window-remove:cancel_label" class="cancel-link do-cancel">Abbrechen</a>
+</div>
+</div>
+</div>
+
+</aside>
+</div>
+</main>
+</div>
+
+
+
+<footer class=""><div id="quicklinks">
+<div class="content-center">
+
+<div class="foundation-collapsable"> </div>
+
+<div class="foundation-grid-space">
+<div class="foundation-row">
+<div class="foundation-col-4">
+<dl class="footer-links first">
+<dt>Über XING</dt>
+<dd>
+
+<a href="https://faq.xing.com/de">
+Hilfe &amp; Kontakt
+</a>
+
+</dd>
+<dd>
+
+<a href="https://corporate.xing.com/de/unternehmen/" target="corporate">
+XING SE
+</a>
+
+</dd>
+<dd>
+<a href="https://corporate.xing.com/de/karriere/" target="corporate">
+Karriere bei XING
+</a>
+</dd>
+<dd>
+<a href="https://corporate.xing.com/de/investor-relations/" target="corporate">
+Investor Relations
+</a>
+</dd>
+<dd>
+<a href="https://corporate.xing.com/de/newsroom/" target="corporate">
+Presse
+</a>
+</dd>
+<dd>
+<a href="https://www.xing.com/communities/groups/xing-community-1000150">
+Community
+</a>
+</dd>
+
+<dd>
+<a href="https://spielraum.xing.com" target="spielraum">
+Themenportal "spielraum"
+</a>
+</dd>
+
+<dd>
+<a href="https://blog.xing.com/de/startseite/" target="blog">
+Blog
+</a>
+</dd>
+<dd>
+<a href="https://tech.xing.com/" target="devblog">
+Devblog
+</a>
+</dd>
+<dd>
+<a href="https://dev.xing.com" target="developers">
+Entwickler
+</a>
+</dd>
+
+</dl>
+</div>
+<div class="foundation-col-4">
+<dl class="footer-links">
+<dt>Apps &amp; Tools</dt>
+<dd>
+<a href="https://mobile.xing.com/de/">
+Mobile &amp; Desktop Apps
+</a>
+</dd>
+<dd>
+<a href="https://dev.xing.com/plugins/login_with" target="xinglogin">
+Button "Mit XING einloggen"
+</a>
+</dd>
+<dd>
+<a href="https://www.xing.com/app/share?op=button_builder">
+Button "Auf XING teilen"
+</a>
+</dd>
+
+<dd>
+<a href="https://www.xing.com/app/user?op=downloads">
+Downloads
+</a>
+</dd>
+
+</dl>
+</div>
+<div class="foundation-col-4">
+<dl class="footer-links last">
+<dt>Produkte &amp; Angebote</dt>
+<dd>
+<a href="https://www.xing.com/upsell/premium_offers?reagent=uplt_98">
+Premium
+</a>
+</dd>
+
+<dd>
+<a href="https://www.xing.com/upsell/projobs?reagent=uplt_205">
+ProJobs
+</a>
+</dd>
+
+<dd>
+<a href="https://www.xing.com/upsell/pro_business_offers?reagent=uplt_501">
+ProBusiness
+</a>
+</dd>
+<dd>
+<a href="https://recruiting.xing.com/de/" target="recruiting">
+Personalgewinnung mit XING
+</a>
+</dd>
+
+<dd>
+<a href="https://www.xing.com/xas?sc_o=SI-4110_footer_link_admanager">
+Werbeanzeige erstellen
+</a>
+</dd>
+
+<dd>
+
+<a href="https://werben.xing.com">
+Werben auf XING
+</a>
+
+</dd>
+
+<dd>
+<a href="https://www.xing-events.com" target="amiando">
+Ticketing und Eventvermarktung
+</a>
+</dd>
+<dd>
+<a href="https://www.xing.com/xbp" target="businesspages">
+Business Pages
+</a>
+</dd>
+<dd>
+<a href="https://www.xing.com/salary/" target="gehaltsvergleich">
+Gehaltsvergleich
+</a>
+</dd>
+
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script async>
+(function() {
+document.getElementById('quicklinks').addEventListener('click', function(e) {
+var p = e.target.parentElement;
+if(e.target.nodeName === 'DT') {
+p.className = 'footer-links toggle-' + (p.className.indexOf('toggle-open') > -1 ? 'close' : 'open');
+}
+});
+})();
+</script><div id="projobs-footer-upsell">
+<div class="content-center">
+
+<div class="foundation-collapsable"> </div>
+
+<div class="foundation-grid-space">
+<div class="foundation-row">
+<div class="foundation-col-12">
+
+<img src="/img/v/transparent_r1.gif" class="projobs-footer-upsell-de" width="726" height="20" alt=""><a href="https://www.xing.com/upsell/projobs?reagent=uplt_222" class="projobs-footer-upsell-button projobs-footer-upsell-button-cta">
+<button class="element-form-button-solid-lime" type="button">Zu XING ProJobs</button>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="footer-legal">
+<div class="content-center">
+
+<div class="foundation-collapsable"> </div>
+
+<div class="foundation-grid-space ">
+<div class="foundation-row">
+<div class="foundation-col-12">
+<nav><ul>
+<li>
+<a href="https://www.xing.com/imprint">
+Impressum
+</a>
+</li>
+<li>
+<a href="https://www.xing.com/terms">
+AGB
+</a>
+</li>
+
+<li>
+<a href="https://privacy.xing.com/de">
+Datenschutz bei XING
+</a>
+</li>
+<li>
+<a href="https://privacy.xing.com/de/datenschutzerklaerung">
+Datenschutzerklärung
+</a>
+</li>
+
+
+<li class="pos-rel footer-language-chooser">
+Sprache: <a href="https://www.xing.com/settings/account/language" class="dropdown-link">Deutsch</a>
+</li>
+
+</ul></nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer-copyright">
+<div class="content-center">
+<div class="foundation-grid-space ">
+<div class="foundation-row">
+<div class="foundation-col-12">
+© XING SE | Alle Rechte vorbehalten
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</footer><div style="display:none;">
+
+
+<script>
+
+var s_account="xingcomprod";
+
+xing.ready(function() {
+xing.require("js/sc.js").afterLoad(function() {
+if (window.s_gi && window.s) {
+
+s.eVar45="3130";
+
+s.channel="6d795f6e6574776f726b";
+
+s.prop45="3130";
+
+s.prop12="656d706c6f796565";
+
+s.prop5="3130312d353030";
+
+
+
+s.prop14="6465";
+
+s.prop7="30";
+
+s.prop15="6d";
+
+s.prop4="756e646566696e6564";
+
+s.prop8="313533";
+
+s.prop6="313030";
+
+s.prop16="6c6f676765645f696e";
+
+s.prop3="38663336363937383561656237326435";
+
+s.prop9="30";
+
+s.eVar3="38663336363937383561656237326435";
+
+s.prop19="313432";
+
+
+
+s.prop1="6465";
+
+s.hier1="73746172742f6d79737461727470616765";
+
+s.pageName="757365722f686f6d65";
+
+s.eVar19="313432";
+
+s.eVar25="78696e67";
+
+s.prop2="4672616e6b667572742f4d61696e";
+
+s.prop11="30";
+
+s.prop10="756e646566696e6564";
+
+s.prop25="78696e67";
+
+s.useForcedLinkTracking = false;
+
+s.t();
+
+xing.trigger("sc.ready");
+}
+});
+});
+</script>
+</div>
+
+</body>
+</html>

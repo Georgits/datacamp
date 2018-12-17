@@ -1,0 +1,47 @@
+---
+title: "04_Page"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Overview Page
+================
+Column
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
+Details Page
+================
+Column
+-----------------------------------------------------------------------
+
+### Chart D
+
+```{r}
+
+```
