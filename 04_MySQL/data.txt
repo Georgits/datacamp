@@ -1,0 +1,9 @@
+ROOT
+tsertsvadze
+Tsertsvadze5_MySQL$
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin
+
+USER
+lrngsql
+myfirst
