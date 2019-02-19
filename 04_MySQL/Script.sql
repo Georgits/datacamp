@@ -469,3 +469,92 @@ SELECT e1.emp_id, e1.fname, e1.lname
 	FROM employee AS e1 INNER JOIN employee As e2
 		ON e1.emp_id = e2.superior_emp_id
 	WHERE e1.dept_id != e2.dept_id;
+    
+
+
+
+
+
+/* CHAPTER 6: WORKING WITH SETS */
+DESC product;
+DESC customer;
+SELECT 1 num, 'abc' str
+	UNION
+SELECT 9 num, 'xyz' str;
+
+
+/* UNION ALL: DOESN'T REMOVE DUPLICATES */
+SELECT 'IND' AS type_cd, cust_id, lname AS name
+	FROM individual
+    UNION ALL
+    SELECT 'BUS' AS type_cd, cust_id, name
+    FROM business;
+    
+SELECT 'IND' AS type_cd, cust_id, lname AS name
+	FROM individual
+    UNION ALL
+    SELECT 'BUS' AS type_cd, cust_id, name
+    FROM business
+    UNION ALL
+    SELECT 'BUS' AS type_cd, cust_id, name
+    FROM business;
+    
+ /* UNION: REMOVEs DUPLICATES */
+SELECT 'IND' AS type_cd, cust_id, lname AS name
+	FROM individual
+    UNION
+    SELECT 'BUS' AS type_cd, cust_id, name
+    FROM business
+    UNION
+    SELECT 'BUS' AS type_cd, cust_id, name
+    FROM business;
+    
+    
+/* INTERSECT & EXCEPT: kann in MYSQL nicht genutzt werden; In ORACLE ja*/
+/* SELECT emp_id
+	FROM employee
+    WHERE assigned_branch_id = 2
+		AND (title = 'Teller' OR title = 'Head Teller')
+	INTERSECT
+    SELECT DISTINCT open_emp_id
+    FROM account
+    WHERE open_branch_id = 2;
+  */
+  
+ /* IN MYSQL SIND KLAMMER NICHT MÖGLICH bei SET-OPERATOREN */
+ /*
+(SELECT cust_id
+	FROM account
+    WHERE product_cd IN ('SAV', 'MM')
+    UNION ALL
+    SELECT a.cust_id
+		FROM account AS a INNER JOIN branch AS b
+			ON a.open_branch_id = b.branch_id)
+UNION
+(SELECT cust_id
+		FROM account
+        WHERE avail_balance BETWEEN 500 AND 2500
+        UNION
+        SELECT cust_id
+			FROM account 
+            WHERE product_cd = 'CD'
+            AND avail_balance < 1000);
+*/
+
+/* EXERCISE 6-2*/
+SELECT fname, lname, 'CUST' AS status
+	FROM individual
+    UNION
+    SELECT fname, lname, 'EMP' AS stautus
+    FROM employee;
+    
+/* EXERCISE 6-3*/
+SELECT fname, lname, 'CUST' AS status
+	FROM individual
+    UNION
+    SELECT fname, lname, 'EMP' AS stautus
+    FROM employee
+    ORDER BY lname;
+    
+    
+    
