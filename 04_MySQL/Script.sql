@@ -652,3 +652,117 @@ SELECT ABS(-25.76823), SIGN(-25.76823), round(-25.76823,2);
 
 /* EXERCISE 7-3 */
 SELECT EXTRACT(month from current_date());
+
+
+
+
+
+
+/* CHAPTER 8: GROUPING AND AGGREGATES */
+SELECT open_emp_id, COUNT(*) AS how_many
+	FROM account
+    GROUP BY open_emp_id;
+    
+SELECT open_emp_id, COUNT(*) AS how_many
+	FROM account
+    GROUP BY open_emp_id
+    HAVING COUNT(*) > 4;
+    
+SELECT MAX(avail_balance) AS max_balance,
+	MIN(avail_balance) AS min_balance,
+    AVG(avail_balance) AS avg_balance,
+    SUM(avail_balance) AS tot_balance,
+    COUNT(*) AS num_accounts
+	FROM account
+    WHERE product_cd = 'CHK';
+    
+SELECT product_cd,
+	MAX(avail_balance) AS max_balance,
+	MIN(avail_balance) AS min_balance,
+    AVG(avail_balance) AS avg_balance,
+    SUM(avail_balance) AS tot_balance,
+    COUNT(*) AS num_accounts
+	FROM account
+    GROUP BY product_cd;
+    
+SELECT COUNT(open_emp_id)
+	FROM account;
+    
+SELECT COUNT(DISTINCT open_emp_id)
+	FROM account;
+
+SELECT MAX(pending_balance - avail_balance) AS max_uncleared
+	FROM account;
+    
+    
+CREATE TABLE number_tbl (val SMALLINT);
+INSERT INTO number_tbl VALUES (1);
+INSERT INTO number_tbl VALUES (3);
+INSERT INTO number_tbl VALUES (5);
+INSERT INTO number_tbl VALUES (NULL);
+
+SELECT Count(*) num_rows,
+	COUNT(val) num_vals,
+    SUM(val) total,
+    MAX(val) max_val,
+    AVG(val) avg_val
+    FROM number_tbl;
+    
+    
+SELECT product_cd, SUM(avail_balance) AS prod_balance
+	FROM account
+    GROUP BY product_cd;
+    
+SELECT product_cd, open_branch_id,
+	SUM(avail_balance) AS tot_balance
+    FROM account
+    GROUP BY product_cd, open_branch_id;
+    
+SELECT EXTRACT(YEAR FROM start_date) AS year,
+	COUNT(*) AS how_many
+    FROM employee
+    GROUP BY EXTRACT(Year FROM start_date);
+    
+/* AUFSUMMIERUNG über die Gruppen */
+/* Weitere Option WITH CUBE ist in MYSQL nicht möglich, aberin ORACLE */
+SELECT product_cd, open_branch_id,
+	SUM(avail_balance) AS tot_balance
+    FROM account
+    GROUP BY product_cd, open_branch_id WITH ROLLUP;
+    
+SELECT product_cd, SUM(avail_balance) AS prod_balance
+    FROM account
+    WHERE status = 'ACTIVE'
+    GROUP BY product_cd
+    HAVING SUM(avail_balance) >= 10000;
+
+SELECT product_cd, SUM(avail_balance) AS prod_balance
+    FROM account
+    WHERE status = 'ACTIVE'
+    GROUP BY product_cd
+    HAVING MIN(avail_balance) >= 1000
+		AND MAX(avail_balance) <= 10000;
+
+
+/* EXERCISE 8-1 */
+SELECT COUNT(*)
+	FROM account;
+    
+/* EXERCISE 8-2 */
+SELECT cust_id, COUNT(*) AS num_acc
+	FROM account
+    GROUP BY cust_id;
+
+/* EXERCISE 8-3 */
+SELECT cust_id, COUNT(*) AS num_acc
+	FROM account
+    GROUP BY cust_id
+    HAVING COUNT(*) >= 2;
+    
+/* EXERCISE 8-4 */
+SELECT product_cd, open_branch_id, SUM(avail_balance) AS tot_balance
+	FROM account
+    GROUP BY product_cd, open_branch_id
+    HAVING COUNT(*) > 1
+    ORDER BY tot_balance DESC;
+
