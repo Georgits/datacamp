@@ -555,6 +555,100 @@ SELECT fname, lname, 'CUST' AS status
     SELECT fname, lname, 'EMP' AS stautus
     FROM employee
     ORDER BY lname;
+
+
+
+
+
+
+
+/* CHAPTER 7: Data Generation, Conversion and Manipulation */
+CREATE TABLE string_tbl
+	(char_fld CHAR(30),
+    vchar_fld VARCHAR(30),
+    text_fld TEXT
+    );
+
     
+INSERT INTO string_tbl (char_fld, vchar_fld, text_fld)
+	VALUES ('This is char data',
+			'This is varchar data',
+			'This is text data');
+            
+/* ESCAPE */
+UPDATE string_tbl
+	SET text_fld='This string didn''t work, but it does now';
     
+SELECT quote(text_fld)
+	FROM string_tbl;
     
+SELECT text_fld
+	FROM string_tbl;
+    
+SELECT CHAR(148,149,150,151,152, 153,154,155);
+
+SELECT concat('danke sch', CHAR(148),'n');
+
+SELECT ascii('ä');
+SELECT ascii('ö');
+
+
+DELETE FROM string_tbl;
+INSERT INTO string_tbl (char_fld, vchar_fld, text_fld)
+	VALUES ('This string is 28 characters',
+			'This string is 28 characters',
+			'This string is 28 characters');
+
+
+SELECT * FROM string_tbl;
+
+
+SELECT length(char_fld) AS char_length,
+	length(vchar_fld) AS vchar_length,
+    length(text_fld) AS text_length
+    FROM string_tbl;
+    
+SELECT cust_id, cust_type_cd, fed_id,
+	fed_id REGEXP '.{3}-.{2}-.{4}' AS is_ss_no_format
+	FROM customer;
+    
+SELECT insert('goodbye world', 9, 0, 'cruel ') AS string;
+SELECT insert('goodbye world', 1, 7, 'cruel ') AS string;
+SELECT substring('goodbye world', 9, 5);
+
+
+
+
+SELECT ceil(72.4363), floor(72.8484846);
+SELECT round(72.4363), round(72.8484846);
+SELECT round(72.4363, 1), round(72.8484846, 2);
+SELECT truncate(72.4363, 1), truncate(72.8484846, 3);
+SELECT round(72.4363, -1), truncate(72.8484846, -1);
+
+SELECT @@global.time_zone, @@session.time_zone;
+
+UPDATE individual
+SET birth_date = str_to_date('September 17, 2008', '%M %d, %Y')
+WHERE cust_id = 9999;
+
+SELECT current_date(), current_time(), current_timestamp();
+
+SELECT DATE_ADD(current_date(), interval 5 day);
+SELECT DATE_ADD(current_date(), interval 5 month);
+SELECT DATE_ADD(current_date(), interval '3:27:11' HOUR_SECOND);
+SELECT last_day('2008-09-17');
+SELECT current_timestamp() AS current_est, convert_tz(current_timestamp(), 'US/Eastern', 'UTC') As current_utc;
+SELECT DAYNAME('2008-09-18');
+SELECT EXTRACT(YEAR from '2008-09-18 22:19:05');
+SELECT datediff('2009-09-03 23:59:59', '2009-06-24 00:00:01');
+
+
+
+/* EXERCISE 7-1 */
+SELECT substring('Pluase find the substring in this string', 17,9);
+
+/* EXERCISE 7-2 */
+SELECT ABS(-25.76823), SIGN(-25.76823), round(-25.76823,2);
+
+/* EXERCISE 7-3 */
+SELECT EXTRACT(month from current_date());
