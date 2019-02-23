@@ -766,3 +766,198 @@ SELECT product_cd, open_branch_id, SUM(avail_balance) AS tot_balance
     HAVING COUNT(*) > 1
     ORDER BY tot_balance DESC;
 
+
+
+
+
+
+
+
+
+/* CHAPTER 9: SUBQUERIES */
+
+SELECT account_id, product_cd, cust_id, avail_balance
+	FROM account
+    WHERE account_id = (SELECT MAX(account_id) FROM account);
+    
+/* Noncorrelated subqueries */
+SELECT account_id, product_cd, cust_id, avail_balance
+	FROM account
+    WHERE open_emp_id <> (SELECT e.emp_id
+		FROM employee AS e INNER JOIN branch AS b
+			ON e.assigned_branch_id = b.branch_id
+		WHERE e.title = 'Head Teller' And b.city = 'Woburn');
+
+SELECT branch_id, name, city
+	FROM branch
+    WHERE name IN ('Headquarters', 'Quincy Branch');
+
+SELECT emp_id, fname, lname, title
+	FROM employee
+    WHERE emp_id IN (SELECT superior_emp_id FROM employee);
+    
+SELECT emp_id, fname, lname, title
+	FROM employee
+    WHERE emp_id NOT IN (SELECT superior_emp_id FROM employee WHERE superior_emp_id IS NOT NULL);
+    
+SELECT emp_id, fname, lname, title
+	FROM employee
+    WHERE emp_id <> ALL (SELECT superior_emp_id FROM employee WHERE superior_emp_id IS NOT NULL);
+
+
+
+/* der Unterschied zwischen ALL und ANY */
+SELECT account_id, cust_id, product_cd, avail_balance
+	FROM account
+    WHERE avail_balance < ALL (SELECT a.avail_balance
+		FROM account As a INNER JOIN individual As i
+			ON a.cust_id = i.cust_id
+        WHERE i.fname = 'Frank' AND i.lname = 'Tucker');
+        
+SELECT account_id, cust_id, product_cd, avail_balance
+	FROM account
+    WHERE avail_balance < ANY (SELECT a.avail_balance
+		FROM account As a INNER JOIN individual As i
+			ON a.cust_id = i.cust_id
+        WHERE i.fname = 'Frank' AND i.lname = 'Tucker');
+
+
+SELECT account_id, product_cd, cust_id
+	FROM account
+    WHERE open_branch_id = (SELECT branch_id
+		FROM branch
+        WHERE name = 'Woburn Branch')
+        AND open_emp_id IN (SELECT emp_id
+        FROM employee
+        WHERE title = 'Teller' OR title = 'HEAD Teller');
+        
+SELECT account_id, product_cd, cust_id
+	FROM account
+    WHERE (open_branch_id, open_emp_id) IN
+		(SELECT b.branch_id, e.emp_id
+			FROM branch As b INNER JOIN employee As e
+				ON b.branch_id = e.assigned_branch_id
+            WHERE b.name = 'Woburn Branch'
+            AND (e.title = 'Teller' OR e.title = 'HEAD Teller'));     
+
+
+/* Correlated Subqueries */
+SELECT c.cust_id, c.cust_type_cd, c.city
+	FROM customer c
+	WHERE 2 = (SELECT COUNT(*)
+		FROM account a
+        WHERE a.cust_id = c.cust_id);
+        
+SELECT c.cust_id, c.cust_type_cd, c.city
+	FROM customer c
+	WHERE (SELECT SUM(a.avail_balance)
+			FROM account a
+			WHERE a.cust_id = c.cust_id)
+        BETWEEN 5000 AND 10000;
+
+
+
+/* Convention is to specify either SELCT 1 ot SELECT * when using exists */
+SELECT a.account_id, a.product_cd, a.cust_id, a.avail_balance
+	FROM account a
+    WHERE EXISTS (SELECT 1
+		FROM transaction t
+        WHERE t.account_id = a.account_id
+			AND t.txn_date = '2008-09-22');
+
+SELECT a.account_id, a.product_cd, a.cust_id, a.avail_balance
+	FROM account a
+    WHERE NOT EXISTS (SELECT 1
+		FROM business b
+        WHERE b.cust_id = a.cust_id);
+
+UPDATE account a
+SET a.last_activity_date = 
+	(SELECT MAX(t.txn_date)
+		FROM transaction t 
+        WHERE t.account_id = a.account_id)
+	WHERE EXISTS (SELECT 1
+		FROM transaction t
+        WHERE t.account_id = a.account_id);
+        
+DELETE FROM department
+	WHERE NOT EXISTS (SELECT 1
+		FROM employee
+        WHERE employee.dept_id = department.dept_id);
+        
+SELECT d.dept_id, d.name, e_cnt.how_many AS num_employees
+	FROM department AS d INNER JOIN
+		(SELECT dept_id, COUNT(*) AS how_many
+			FROM employee
+            GROUP BY dept_id) AS e_cnt
+            ON d.dept_id = e_cnt.dept_id;
+
+
+/* Group definitions */
+SELECT 'Small Fry' name, 0 low_limit, 4999.9 high_limit
+UNION ALL
+SELECT 'Average Joes' name, 5000 low_limit, 9999.99 high_limit
+UNION ALL
+SELECT 'Heavy Hitters' name, 1000 low_limit, 9999999.99 high_limit;
+
+
+SELECT gr.name, COUNT(*) num_customers
+	FROM 
+		(SELECT SUM(a.avail_balance) cust_balance 
+			FROM account a INNER JOIN product p 
+				ON a.product_cd = p.product_cd
+			WHERE p.product_type_cd = 'ACCOUNT'
+            GROUP BY a.cust_id) cust_rollup
+            INNER JOIN 
+            (SELECT 'Small Fry' name, 0 low_limit, 4999.9 high_limit
+			UNION ALL 
+			SELECT 'Average Joes' name, 5000 low_limit, 9999.99 high_limit
+			UNION ALL 
+			SELECT 'Heavy Hitters' name, 1000 low_limit, 9999999.99 high_limit) gr 
+            ON cust_rollup.cust_balance  BETWEEN gr.low_limit AND gr.high_limit
+		GROUP BY gr.name;
+
+
+SELECT p.name AS product,
+		b.name AS branch,
+		CONCAT(e.fname, ' ', e.lname) AS name,
+        SUM(a.avail_balance) AS tot_deposits
+	FROM account a INNER JOIN employee e
+		ON a.open_emp_id = e.emp_id
+        INNER JOIN branch b
+        ON a.open_branch_id = b.branch_id
+        INNER JOIN product p
+        ON a.product_cd = p.product_cd
+	WHERE p.product_type_cd = 'ACCOUNT'
+    GROUP BY p.name, b.name, e.fname, e.lname
+    ORDER BY 1, 2;
+
+/* SAME QUERY BUT BETTER */
+SELECT p.name AS product,
+		b.name AS branch,
+		CONCAT(e.fname, ' ', e.lname) AS name,
+        account_groups.tot_deposits
+	FROM 
+		(SELECT product_cd, 
+			open_branch_id AS branch_id,
+			open_emp_id AS emp_id,
+            SUM(avail_balance) AS tot_deposits
+            FROM account
+            GROUP BY product_cd, open_branch_id, open_emp_id) account_groups
+		INNER JOIN employee e ON e.emp_id = account_groups.emp_id
+        INNER JOIN branch b ON b.branch_id = account_groups.branch_id
+        INNER JOIN product p ON p.product_cd = account_groups.product_cd
+	WHERE p.product_type_cd = 'ACCOUNT';
+            
+        
+
+
+
+
+SELECT CONCAT('ALERT! : Account #', a.account_id, 'Has Incorrect Balance!')
+	FROM account AS a
+    WHERE (a.avail_balance, a.pendng_balance) <>
+		(SELECT SUM(), SUM()
+        FROM transaction t
+        WHERE t.account_id = a.account_id);
+        
