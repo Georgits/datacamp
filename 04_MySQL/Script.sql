@@ -950,6 +950,107 @@ SELECT p.name AS product,
 	WHERE p.product_type_cd = 'ACCOUNT';
             
         
+SELECT open_emp_id, COUNT(*) how_many
+	FROM account
+    GROUP BY open_emp_id
+    HAVING COUNT(*) = (SELECT MAX(emp_cnt.how_many)
+		FROM (SELECT COUNT(*) how_many
+			FROM account
+            GROUP BY open_emp_id) emp_cnt
+    );
+
+SELECT
+	(SELECT p.name FROM product p
+		WHERE p.product_cd = a.product_cd
+        AND p.product_type_cd = 'ACCOUNT') product,
+    (SELECT b.name FROM branch b
+		WHERE b.branch_id = a.open_branch_id) branch,
+    (SELECT CONCAT(e.fname, ' ', e.lname) FROM employee e
+		WHERE e.emp_id = a.open_emp_id) name,
+    SUM(a.avail_balance) tot_deposits
+	FROM account a
+    GROUP BY a.product_cd, a.open_branch_id, a.open_emp_id
+    ORDER BY 1,2;
+
+/* ENTFERNUNG VON NULL-ZEILEN */
+SELECT all_prods.product, all_prods.branch, all_prods.name, all_prods.tot_deposits
+	FROM (
+		SELECT
+		(SELECT p.name FROM product p
+			WHERE p.product_cd = a.product_cd
+			AND p.product_type_cd = 'ACCOUNT') product,
+		(SELECT b.name FROM branch b
+			WHERE b.branch_id = a.open_branch_id) branch,
+		(SELECT CONCAT(e.fname, ' ', e.lname) FROM employee e
+			WHERE e.emp_id = a.open_emp_id) name,
+		SUM(a.avail_balance) tot_deposits
+		FROM account a
+		GROUP BY a.product_cd, a.open_branch_id, a.open_emp_id
+		ORDER BY 1,2
+		) all_prods
+    WHERE all_prods.product IS NOT NULL
+    ORDER BY 1,2;
+
+SELECT emp.emp_id, CONCAT(emp.fname, ' ', emp.lname) emp_name,
+	(SELECT CONCAT(boss.fname, ' ', boss.lname)
+		FROM employee boss
+        WHERE boss.emp_id = emp.superior_emp_id) boss_name
+	FROM employee emp
+    WHERE emp.superior_emp_id IS NOT NULL
+    ORDER BY (SELECT boss.lname FROM employee boss
+		WHERE boss.emp_id = emp.superior_emp_id), emp.lname;
+        
+
+INSERT INTO account 
+	(account_id, product_cd, cust_id, open_date, last_activity_date. status, open_branch_id, open_emp_id, avail_balance, pending_balance)
+    VALUES(NULL,
+		(SELECT product_cd FROM product WHERE name = 'savings account'),
+        (SELECT cust_id FROM customer WHERE fed_id = '555-55-5555'),
+        '2008-09-25',
+        '2008-09-25',
+        'ACTIVE',
+        (SELECT branch_id FROM branch WHERE name = 'Quincy Branch'),
+        (SELECT emp_id FROM employee WHERE lname = 'Portman' AND fname = 'Frank'),
+        0,
+        0
+        );
+
+
+/* EXERCISE 9-1 */
+SELECT account_id, product_cd, cust_id, avail_balance
+	FROM account
+    WHERE product_cd IN (SELECT product_cd
+		FROM product
+        WHERE product_type_cd = 'LOAN');
+        
+/* EXERCISE 9-2 */
+SELECT a.account_id, a.product_cd, a.cust_id, a.avail_balance
+	FROM account a 
+    WHERE EXISTS (SELECT 1
+		FROM product p 
+        WHERE p.product_cd = a.product_cd
+			AND  p.product_type_cd = 'LOAN');
+
+
+/* EXERCISE 9-3 */
+SELECT e.emp_id, e.fname, e.lname, levels.name
+	FROM employee e INNER JOIN
+    (
+	SELECT 'trainee' name, '2004-01-01' start_dt, '2005-12-31' end_dt
+	UNION ALL
+	SELECT 'worker' name, '2002-01-01' start_dt, '2003-12-31' end_dt
+	UNION ALL 
+	SELECT 'mentor' name, '2000-01-01' start_dt, '2001-12-31' end_dt
+    ) levels
+    ON e.start_date BETWEEN start_dt AND end_dt;
+
+
+
+/* EXERCISE 9-4 */
+SELECT e.emp_id, e.fname, e.lname,
+	(SELECT d.name FROM department d WHERE e.dept_id = d.dept_id) dept_name,
+   	(SELECT b.name FROM branch b WHERE e.assigned_branch_id = b.branch_id) branch_name
+	FROM employee e;
 
 
 
