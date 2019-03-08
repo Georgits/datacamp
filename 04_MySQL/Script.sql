@@ -1061,4 +1061,149 @@ SELECT CONCAT('ALERT! : Account #', a.account_id, 'Has Incorrect Balance!')
 		(SELECT SUM(), SUM()
         FROM transaction t
         WHERE t.account_id = a.account_id);
-        
+
+
+
+
+
+
+/*CHAPTER 10:  JOINS REVISITED */
+SELECT account_id, cust_id FROM account;
+SELECT cust_id FROM customer;        
+SELECT a.account_id, c.cust_id
+	FROM account a INNER JOIN customer c
+    ON a.cust_id = c.cust_id;
+    
+SELECT a.account_id, b.cust_id, b.name
+	FROM account a INNER JOIN business b
+    ON a.cust_id = b.cust_id;
+SELECT cust_id, name FROM business;
+
+SELECT a.account_id, a.cust_id, b.name
+	FROM account a LEFT OUTER JOIN business b
+    ON a.cust_id = b.cust_id;
+
+SELECT a.account_id, a.cust_id, i.fname, i.lname
+	FROM account a LEFT OUTER JOIN individual i
+    ON a.cust_id = i.cust_id;
+
+SELECT c.cust_id, b.name
+	FROM customer c LEFT OUTER JOIN business b
+    ON c.cust_id = b.cust_id;
+
+SELECT c.cust_id, b.name
+	FROM customer c RIGHT OUTER JOIN business b
+    ON c.cust_id = b.cust_id;
+
+SELECT a.account_id, a.product_cd,
+	CONCAT(i.fname, '', i.lname) person_name,
+    b.name business_name
+    FROM account a LEFT OUTER JOIN individual i
+    ON a.cust_id = i.cust_id
+    LEFT OUTER JOIN business b 
+    ON a.cust_id = b.cust_id;
+    
+    
+SELECT account_ind.account_id, account_ind.product_cd,
+	account_ind.person_name,
+    b.name business_name
+FROM 
+    (SELECT a.account_id, a.product_cd, a.cust_id,
+	CONCAT(i.fname, '', i.lname) person_name
+    FROM account a LEFT OUTER JOIN individual i
+    ON a.cust_id = i.cust_id) account_ind
+    LEFT OUTER JOIN business b 
+    ON account_ind.cust_id = b.cust_id;
+    
+    
+SELECT e.fname, e.lname,
+	e_mgr.fname mgr_fname, e_mgr.lname mgr_lname
+    FROM employee e INNER JOIN employee e_mgr
+    ON e.superior_emp_id = e_mgr.emp_id;
+    
+    
+SELECT e.fname, e.lname,
+	e_mgr.fname mgr_fname, e_mgr.lname mgr_lname
+    FROM employee e LEFT OUTER JOIN employee e_mgr
+    ON e.superior_emp_id = e_mgr.emp_id;
+    
+SELECT e.fname, e.lname,
+	e_mgr.fname mgr_fname, e_mgr.lname mgr_lname
+    FROM employee e LEFT OUTER JOIN employee e_mgr
+    ON e.superior_emp_id = e_mgr.emp_id;
+    
+    
+SELECT pt.name, p.product_cd, p.name
+	FROM product p CROSS JOIN product_type pt;
+    
+    
+    
+
+SELECT date_add('2008-01-01', INTERVAL(ones.num + tens.num + hundreds.num) DAY) dt
+	FROM
+(SELECT 0 num UNION ALL
+SELECT 1 numm UNION ALL
+SELECT 2 numm UNION ALL
+SELECT 3 numm UNION ALL
+SELECT 4 numm UNION ALL
+SELECT 5 numm UNION ALL
+SELECT 6 numm UNION ALL
+SELECT 7 numm UNION ALL
+SELECT 8 numm UNION ALL
+SELECT 9 numm) ones
+CROSS JOIN
+(SELECT 0 num UNION ALL
+SELECT 10 numm UNION ALL
+SELECT 20 numm UNION ALL
+SELECT 30 numm UNION ALL
+SELECT 40 numm UNION ALL
+SELECT 50 numm UNION ALL
+SELECT 60 numm UNION ALL
+SELECT 70 numm UNION ALL
+SELECT 80 numm UNION ALL
+SELECT 90 numm) tens
+CROSS JOIN
+(SELECT 0 num UNION ALL
+SELECT 100 numm UNION ALL
+SELECT 200 numm UNION ALL
+SELECT 300 numm) hundreds
+WHERE date_add('2008-01-01', interval(ones.num + tens.num + hundreds.num) DAY) < '2009-01-01' ORDER BY 1;
+
+
+
+
+
+SELECT days.dt, COUNT(t.txn_id)
+	FROM transaction t RIGHT OUTER JOIN
+    (SELECT date_add('2008-01-01', INTERVAL(ones.num + tens.num + hundreds.num) DAY) dt
+	FROM
+	(SELECT 0 num UNION ALL
+	SELECT 1 numm UNION ALL
+	SELECT 2 numm UNION ALL
+	SELECT 3 numm UNION ALL
+	SELECT 4 numm UNION ALL
+	SELECT 5 numm UNION ALL
+	SELECT 6 numm UNION ALL
+	SELECT 7 numm UNION ALL
+	SELECT 8 numm UNION ALL
+	SELECT 9 numm) ones
+	CROSS JOIN
+	(SELECT 0 num UNION ALL
+	SELECT 10 numm UNION ALL
+	SELECT 20 numm UNION ALL
+	SELECT 30 numm UNION ALL
+	SELECT 40 numm UNION ALL
+	SELECT 50 numm UNION ALL
+	SELECT 60 numm UNION ALL
+	SELECT 70 numm UNION ALL
+	SELECT 80 numm UNION ALL
+	SELECT 90 numm) tens
+	CROSS JOIN
+	(SELECT 0 num UNION ALL
+	SELECT 100 numm UNION ALL
+	SELECT 200 numm UNION ALL
+	SELECT 300 numm) hundreds
+	WHERE date_add('2008-01-01', interval(ones.num + tens.num + hundreds.num) DAY) < '2009-01-01') days
+    ON days.dt = t.txn_date
+    GROUP BY days.dt
+    ORDER BY 1;
