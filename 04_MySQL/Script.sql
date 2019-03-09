@@ -1178,32 +1178,115 @@ SELECT days.dt, COUNT(t.txn_id)
     (SELECT date_add('2008-01-01', INTERVAL(ones.num + tens.num + hundreds.num) DAY) dt
 	FROM
 	(SELECT 0 num UNION ALL
-	SELECT 1 numm UNION ALL
-	SELECT 2 numm UNION ALL
-	SELECT 3 numm UNION ALL
-	SELECT 4 numm UNION ALL
-	SELECT 5 numm UNION ALL
-	SELECT 6 numm UNION ALL
-	SELECT 7 numm UNION ALL
-	SELECT 8 numm UNION ALL
-	SELECT 9 numm) ones
+	SELECT 1 num UNION ALL
+	SELECT 2 num UNION ALL
+	SELECT 3 num UNION ALL
+	SELECT 4 num UNION ALL
+	SELECT 5 num UNION ALL
+	SELECT 6 num UNION ALL
+	SELECT 7 num UNION ALL
+	SELECT 8 num UNION ALL
+	SELECT 9 num) ones
 	CROSS JOIN
 	(SELECT 0 num UNION ALL
-	SELECT 10 numm UNION ALL
-	SELECT 20 numm UNION ALL
-	SELECT 30 numm UNION ALL
-	SELECT 40 numm UNION ALL
-	SELECT 50 numm UNION ALL
-	SELECT 60 numm UNION ALL
-	SELECT 70 numm UNION ALL
-	SELECT 80 numm UNION ALL
-	SELECT 90 numm) tens
+	SELECT 10 num UNION ALL
+	SELECT 20 num UNION ALL
+	SELECT 30 num UNION ALL
+	SELECT 40 num UNION ALL
+	SELECT 50 num UNION ALL
+	SELECT 60 num UNION ALL
+	SELECT 70 num UNION ALL
+	SELECT 80 num UNION ALL
+	SELECT 90 num) tens
 	CROSS JOIN
 	(SELECT 0 num UNION ALL
-	SELECT 100 numm UNION ALL
-	SELECT 200 numm UNION ALL
-	SELECT 300 numm) hundreds
+	SELECT 100 num UNION ALL
+	SELECT 200 num UNION ALL
+	SELECT 300 num) hundreds
 	WHERE date_add('2008-01-01', interval(ones.num + tens.num + hundreds.num) DAY) < '2009-01-01') days
     ON days.dt = t.txn_date
     GROUP BY days.dt
     ORDER BY 1;
+
+
+
+/* Natutal Join */
+SELECT a.account_id, a.cust_id, c.cust_type_cd, c.fed_id
+	FROM account a NATURAL JOIN customer c;
+    
+SELECT a.account_id, a.cust_id, a.open_branch_id, b.name
+	FROM account a NATURAL JOIN branch b;
+    
+    
+/* EXERCISE 10-1 */
+SELECT p.product_cd, a.account_id, a.cust_id, a.avail_balance 
+	FROM product p LEFT OUTER JOIN account a
+    ON p.product_cd = a.product_cd
+    ORDER BY 1;
+    
+/* EXERCISE 10-2 */
+SELECT p.product_cd, a.account_id, a.cust_id, a.avail_balance 
+	FROM account a RIGHT OUTER JOIN product p
+    ON a.product_cd = p.product_cd
+    ORDER BY 1;
+    
+/* EXERCISE 10-3 */
+SELECT a.account_id, a.product_cd, i.fname, i.lname, b.name 
+	FROM account a LEFT OUTER JOIN individual i
+    ON a.cust_id = i.cust_id
+    LEFT OUTER JOIN business b
+    ON a.cust_id = b.cust_id;
+    
+SELECT a.account_id, a.product_cd, i.fname, i.lname, b.name 
+	FROM account a LEFT OUTER JOIN business b
+    ON a.cust_id = b.cust_id
+    LEFT OUTER JOIN individual i
+    ON a.cust_id = i.cust_id;
+    
+/* EXERCISE 10-4 */
+SELECT ones.num + tens.num FROM
+(SELECT 1 num UNION ALL
+SELECT 2 num UNION ALL
+SELECT 3 num UNION ALL
+SELECT 4 num UNION ALL
+SELECT 5 num UNION ALL
+SELECT 6 num UNION ALL
+SELECT 7 num UNION ALL
+SELECT 8 num UNION ALL
+SELECT 9 num UNION ALL
+SELECT 10 num) ones
+CROSS JOIN
+(SELECT 0 num UNION ALL
+SELECT 10 num UNION ALL
+SELECT 20 num UNION ALL
+SELECT 30 num UNION ALL
+SELECT 40 num UNION ALL
+SELECT 50 num UNION ALL
+SELECT 60 num UNION ALL
+SELECT 70 num UNION ALL
+SELECT 80 num UNION ALL
+SELECT 90 num) tens;
+
+
+SELECT ones.num + tens.num + 1 FROM
+(SELECT 0 num UNION ALL
+SELECT 1 num UNION ALL
+SELECT 2 num UNION ALL
+SELECT 3 num UNION ALL
+SELECT 4 num UNION ALL
+SELECT 5 num UNION ALL
+SELECT 6 num UNION ALL
+SELECT 7 num UNION ALL
+SELECT 8 num UNION ALL
+SELECT 9 num) ones
+CROSS JOIN
+(SELECT 0 num UNION ALL
+SELECT 10 num UNION ALL
+SELECT 20 num UNION ALL
+SELECT 30 num UNION ALL
+SELECT 40 num UNION ALL
+SELECT 50 num UNION ALL
+SELECT 60 num UNION ALL
+SELECT 70 num UNION ALL
+SELECT 80 num UNION ALL
+SELECT 90 num) tens;
