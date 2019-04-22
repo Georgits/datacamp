@@ -1524,3 +1524,19 @@ SET last_activity_date = now(),
 WHERE account_id = @chk_id;
 
 COMMIT;
+
+
+
+
+
+
+
+
+
+/* CHAPTER 13 */
+/* INDEXES AND CONSTRAINTS */
+
+CREATE INDEX dept_name_idx ON department (name);
+SHOW INDEX FROM department;
+ALTER TABLE employee ADD INDEX emp_names (lname, fname);
+SHOW INDEX FROM employee;
