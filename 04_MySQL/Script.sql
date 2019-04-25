@@ -1540,3 +1540,78 @@ CREATE INDEX dept_name_idx ON department (name);
 SHOW INDEX FROM department;
 ALTER TABLE employee ADD INDEX emp_names (lname, fname);
 SHOW INDEX FROM employee;
+
+EXPLAIN SELECT cust_id, SUM(avail_balance) tot_bal
+FROM account
+WHERE cust_id IN (1,5,9,11)
+GROUP BY cust_id;
+
+
+
+
+ALTER TABLE account
+ADD INDEX acc_bal_idv (cust_id, avail_balance);
+
+EXPLAIN SELECT cust_id, SUM(avail_balance) tot_bal
+FROM account
+WHERE cust_id IN (1,5,9,11)
+GROUP BY cust_id;
+
+SELECT cust_id
+FROM account;
+
+
+/* Constraint Creation */
+CREATE Table product
+	(product_cd VARCHAR(10) NOT NULL,
+	name VARCHAR(50) NOT NULL,
+    product_type_cd VARCHAR(10) NOT NULL,
+    date_offered DATE,
+    date_retired DATE,
+		CONSTRAINT fk_product_type_cd FOREIGN KEY (product_type_cd)
+			REFERENCES product_type (product_type_cd),
+		CONSTRAINT pk_product  PRIMARY KEY (product_cd)
+        );
+        
+        
+/*Cascading Constraints */
+SELECT product_type_cd, name FROM product_type;
+SELECT product_type_cd, product_cd, name FROM product ORDER BY product_type_cd;
+/* Das funktioniert nicht */
+UPDATE product
+	SET product_type_cd = 'XYZ'
+    WHERE product_type_cd = 'LOAN';
+    
+/* Das funktioniert */
+SHOW INDEX FROM product;
+ALTER TABLE product
+	DROP FOREIGN KEY fk_product_type_cd;
+ALTER TABLE product
+	ADD CONSTRAINT fk_product_type_cd FOREIGN KEY (product_type_cd)
+    REFERENCES product_type (product_type_cd)
+    ON UPDATE CASCADE;
+UPDATE product_type
+	SET product_type_cd = 'XYZ'
+    WHERE product_type_cd = 'LOAN';
+
+
+/* EXERCISE 13-1 */
+SELECT * FROM account limit 10;
+ALTER TABLE account
+	ADD CONSTRAINT account_unq1 UNIQUE (cust_id, product_cd);
+SHOW INDEX FROM account;
+
+
+/* EXERCISE 13-2 */
+SELECT * FROM transaction limit 10;
+CREATE INDEX txn_idx01 ON transaction (txn_date, amount);
+SHOW INDEX FROM transaction;
+
+SELECT txn_date, account_id, txn_type_cd, amount
+	FROM transaction
+    WHERE txn_date > cast('2008-12-31 23:59:59' as datetime);
+ 
+SELECT txn_date, account_id, txn_type_cd, amount
+	FROM transaction
+    WHERE txn_date > cast('2008-12-31 23:59:59' as datetime)
+		AND amount < 1000;
