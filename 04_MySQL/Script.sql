@@ -1615,3 +1615,233 @@ SELECT txn_date, account_id, txn_type_cd, amount
 	FROM transaction
     WHERE txn_date > cast('2008-12-31 23:59:59' as datetime)
 		AND amount < 1000;
+
+
+
+
+
+
+
+
+
+
+
+/* CHAPTER 14 */
+CREATE VIEW customer_vw
+	(cust_id,
+    fed_id,
+    cust_type_cd,
+    address,
+    city,
+    state,
+    zipcode
+    )
+    AS
+    SELECT cust_id, 
+    concat('ends in ', substr(fed_id, 8, 4)) fed_id,
+        cust_type_cd,
+    address,
+    city,
+    state,
+    postal_code
+    FROM customer;
+    
+SELECT cust_id, fed_id, cust_type_cd FROM customer_vw;
+
+DESCRIBE customer_vw;
+
+SELECT cust_type_cd, count(*)
+	FROM customer_vw
+    WHERE state = 'MA'
+    GROUP BY cust_type_cd
+    ORDER bY 1;
+
+
+SELECT cst.cust_id, cst.fed_id, bus.name
+	FROM customer_vw cst
+    INNER JOIN business bus
+    ON cst.cust_id = bus.cust_id;
+    
+CREATE VIEW business_customer_vw
+	(cust_id,
+    fed_id,
+    cust_type_cd,
+    address,
+    city,
+    state,
+    zipcode
+    )
+    AS
+    SELECT cust_id, 
+    concat('ends in ', substr(fed_id, 8, 4)) fed_id,
+        cust_type_cd,
+    address,
+    city,
+    state,
+    postal_code
+    FROM customer
+    WHERE cust_type_cd = 'B';
+
+DESCRIBE business_customer_vw;
+
+
+
+
+CREATE VIEW customer_totals_vw
+	(cust_id,
+    cust_type_cd,
+    cust_name,
+    num_accounts,
+    tot_deposits
+    )
+    AS
+    SELECT cst.cust_id, cst.cust_type_cd,
+    CASE
+		WHEN cst.cust_type_cd = 'B' THEN
+        (SELECT bus.name FROM business bus WHERE bus.cust_id = cst.cust_id)
+        ELSE
+        (SELECT concat(ind.fname, ' ', ind.lname)
+			FROM individual ind WHERE ind.cust_id = cst.cust_id)
+        END cust_name,
+        sum(CASE WHEN act.status = 'ACTIVE' THEN 1 ELSE 0 END) tot_active_accounts,
+        sum(CASE WHEN act.status = 'ACTIVE' THEN act.avail_balance ELSE 0 END) tot_balance
+	FROM customer cst
+    INNER JOIN account act
+    ON act.cust_id = cst.cust_id
+    GROUP BY cst.cust_id, cst.cust_type_cd;
+
+CREATE TABLE customer_totals
+AS
+SELECT * FROM customer_totals_vw;
+
+CREATE OR REPLACE VIEW customer_totals_vw
+	(cust_id,
+    cust_type_cd,
+    cust_name,
+    num_accounts,
+    tot_deposits
+    )
+    AS
+    SELECT cust_id, cust_type_cd, cust_name, num_accounts, tot_deposits
+    FROM customer_totals;
+    
+    
+    
+    /* Hiding complexity */
+CREATE VIEW branch_activity_vw
+		(branch_name,
+        city,
+        state,
+        num_employees,
+        num_active_accounts,
+        tot_transactions
+        )
+        AS
+        SELECT br.name, br.city, br.state,
+			(SELECT count(*)
+            FROM employee emp
+            WHERE emp.assigned_branch_id = br.branch_id) num_emps,
+			(SELECT count(*)
+            FROM account acnt
+            WHERE acnt.status = 'ACTIVE' AND acnt.open_branch_id = br.branch_id) num_account,
+			(SELECT count(*)
+            FROM transaction tnx
+            WHERE tnx.execution_branch_id = br.branch_id) num_tnxs
+		FROM branch br;
+	
+SELECT * FROM branch_activity_vw;
+
+
+/* Updatable Views */
+CREATE VIEW customer_vw
+	(cust_id,
+    fed_id,
+    cust_type_cd,
+    address,
+    city,
+    state,
+    zipcode
+    )
+    AS
+    SELECT cust_id, 
+    concat('ends in ', substr(fed_id, 8, 4)) fed_id,
+        cust_type_cd,
+    address,
+    city,
+    state,
+    postal_code
+    FROM customer;
+    
+    UPDATE customer_vw
+    SET city = 'Wooburn'
+    WHERE city = 'Woburn';
+    
+SELECT DISTINCT city FROM customer;
+
+
+
+CREATE VIEW business_customer_vw_2
+	(cust_id,
+    fed_id,
+    address,
+    city,
+    state,
+    postal_code,
+    business_name,
+    state_id,
+    incorp_date
+    )
+    AS
+    SELECT cst.cust_id,
+	cst.fed_id,
+	cst.address,
+    cst.city,
+    cst.state,
+    cst.postal_code,
+    bsn.name,
+    bsn.state_id,
+    bsn.incorp_date
+    FROM customer cst INNER JOIN business bsn
+    ON cst.cust_id = bsn.cust_id
+    WHERE cust_type_cd = 'B';
+
+DESCRIBE business_customer_vw_2;
+
+UPDATE business_customer_vw_2
+SET postal_code = '99999'
+WHERE cust_id = 10;
+
+UPDATE business_customer_vw_2
+SET incorp_date = '2008-11-17'
+WHERE cust_id = 10;
+
+
+
+/* Exercise 14-1 */
+CREATE VIEW supervisor_emp
+	(supervisor_name,
+	employee_name)
+	AS
+    SELECT 
+	concat(spr.fname, ' ', spr.lname),
+    concat(emp.fname, ' ', emp.lname)
+    FROM employee emp LEFT OUTER JOIN employee spr
+    ON emp.superior_emp_id = spr.emp_id;
+
+SELECT * FROM supervisor_emp;
+
+
+/* Exercise 14-2 */
+CREATE VIEW branch_summary_vw
+	(name,
+    city,
+    tot_balance)
+    AS
+    SELECT
+    br.name, br.city,
+    SUM(acnt.avail_balance)
+    FROM branch br INNER JOIN account acnt
+    ON br.branch_id = acnt.open_branch_id
+    GROUP BY br.name, br.city;
+    
+SELECT * FROM branch_summary_vw;
