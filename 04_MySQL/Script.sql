@@ -1845,3 +1845,100 @@ CREATE VIEW branch_summary_vw
     GROUP BY br.name, br.city;
     
 SELECT * FROM branch_summary_vw;
+
+
+
+
+
+
+
+
+
+/* Chapter 15 */
+SELECT table_name, table_type
+FROM information_schema.tables
+WHERE table_schema = 'bank'
+ORDER BY 1;
+
+SELECT table_name, table_type
+FROM information_schema.tables
+WHERE table_schema = 'bank' AND table_type = 'BASE TABLE'
+ORDER BY 1;
+
+SELECT table_name, is_updatable
+FROM information_schema.views
+WHERE table_schema = 'bank'
+ORDER BY 1;
+
+
+SELECT column_name, data_type, character_maximum_length char_max_len,
+	numeric_precision nun_prcsn, numeric_scale num_scale
+    FROM information_schema.columns
+    WHERE table_schema = 'bank' AND table_name = 'account'
+    ORDER BY ordinal_position;
+
+/* Retrieve information about indxes */
+SELECT index_name, non_unique, seq_in_index, column_name
+	FROM information_schema.statistics
+    WHERE table_schema = 'bank' AND table_name = 'account'
+    ORDER BY 1, 3;
+    
+/* Retrieve constraints */
+SELECT constraint_name, table_name, constraint_type
+	FROM infromation_schema.table_constraints
+    WHERE table_schema = 'bank'
+    ORDER BY 3,1;
+    
+    
+    
+/* Schema Generation Scripts */
+create table customer
+ (cust_id integer unsigned not null auto_increment,
+  fed_id varchar(12) not null,
+  cust_type_cd enum('I','B') not null,
+  address varchar(30),
+  city varchar(20),
+  state varchar(20),
+  postal_code varchar(10),
+  constraint pk_customer primary key (cust_id)
+ );
+ 
+ 
+ SELECT 'CREATE TABLE customer ( ' create_table_statement
+ UNION ALL
+ SELECT cols.txt
+ FROM
+	(SELECT concat(' ', column_name, ' ' column_type,
+		CASE
+			WHEN is_nullable = 'NO' THEN ' not null'
+			ELSE ''
+		END,
+        CASE
+			WHEN extra IS NOT NULL THEN concat(' ', extra)
+            ELSE ''
+		END,
+        ',') txt
+	  FROM information_schema.columns
+      WHERE table_schema = 'bank' AND table_name = 'customer'
+      ORDER BY ordinal_position
+      ) cols
+UNION ALL
+SELECT concat(' constraint primary key (')
+FROM information_schema.table_constraints
+WHERE table_schema = 'bank' AND table_name = 'customer'
+	AND constraint_type = 'PRIMARY KEY'
+UNION ALL
+SELECT cols.txt
+FROM
+	(SELECT concat(CASE WHEN ordinal_position > 1 THEN ' ,'
+		ELSE '  ' END, column_name) txt
+        FROM information_schema.key_column_usage
+        WHERE table_schema = 'bank' AND table_name = 'customer'
+			AND constraint_name = 'PRIMARY'
+		ORDER BY ordinal_position
+        ) cols
+UNION ALL
+SELECT ' )'
+UNION ALL
+SELECT ')';
+ 
