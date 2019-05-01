@@ -1942,3 +1942,106 @@ SELECT ' )'
 UNION ALL
 SELECT ')';
  
+ 
+ 
+ 
+ 
+ 
+ /* Deployment Verification */
+ SELECT tbl.table_name,
+	(SELECT count(*) FROM information_schema.columns clm
+		WHERE clm.table_schema = tbl.table_schema
+        AND clm.table_name = tbl.table_name) num_columns,
+	(SELECT count(*) FROM information_schema.statistics sta
+		WHERE sta.table_schema = tbl.table_schema
+        AND sta.table_name = tbl.table_name) num_indexes,
+	(SELECT count(*) FROM information_schema.table_constraints tc
+		WHERE tc.table_schema = tbl.table_schema
+        AND tc.table_name = tbl.table_name
+        AND tc.constraint_type = 'PRIMARY KEY') num_promary_keys
+	FROM information_schema.tables tbl
+    WHERE tbl.table_schema = 'bank' AND tbl.table_type = 'BASE TABLE'
+    ORDER BY 1;
+
+
+/* Dynami SQL Generation */
+SET @qry = 'SELECT cust_id, cust_type_cd, fed_id FROM customer';
+PREPARE dynsql1 FROM @qry;
+EXECUTE dynsql1;
+DEALLOCATE PREPARE dynsql1;
+
+
+SET @qry = 'SELECT product_cd, name, product_type_cd, date_offered, date_retired FROM product WHERE product_cd = ?';
+PREPARE dynsql2 FROM @qry;
+SET @prodcd = 'CHK';
+EXECUTE dynsql2 USING @prodcd;
+
+SET @prodcd = 'SAV';
+EXECUTE dynsql2 USING @prodcd;
+
+DEALLOCATE PREPARE dynsql2;
+
+
+
+
+SELECT concat('SELECT ',
+	concat_ws(',', cols.col1, cols.col2, cols.col3, cols.col4,
+		cols.col5, cols.col6, cols.col7, cols.col8, cols.col9),
+        ' FROM product WHERE product_cd = ?')
+	INTO @qry
+    FROM
+		(SELECT
+			max(CASE WHEN ordinal_position = 1 THEN column_name ELSE NULL END) col1,
+   			max(CASE WHEN ordinal_position = 2 THEN column_name ELSE NULL END) col2,
+   			max(CASE WHEN ordinal_position = 3 THEN column_name ELSE NULL END) col3,
+			max(CASE WHEN ordinal_position = 4 THEN column_name ELSE NULL END) col4,
+   			max(CASE WHEN ordinal_position = 5 THEN column_name ELSE NULL END) col5,
+   			max(CASE WHEN ordinal_position = 6 THEN column_name ELSE NULL END) col6,
+			max(CASE WHEN ordinal_position = 7 THEN column_name ELSE NULL END) col7,
+   			max(CASE WHEN ordinal_position = 8 THEN column_name ELSE NULL END) col8,
+   			max(CASE WHEN ordinal_position = 9 THEN column_name ELSE NULL END) col9
+	FROM information_schema.columns
+    WHERE table_schema = 'bank' AND table_name = 'product'
+    GROUP BY table_name
+    ) cols;
+    
+SELECT @qry;
+PREPARE dynsql3 FROM @qry;
+SET @prodcd = 'MM';
+EXECUTE dynsql3 USING @prodcd;
+DEALLOCATE PREPARE dynsql3;
+
+
+/* EXERCISE 15-1 */
+SELECT  DISTINCT table_name, index_name
+FROM information_schema.statistics
+WHERE table_schema = 'bank';
+
+/* EXERCISE 15-2 */
+SELECT concat(
+	CASE
+		WHEN st.seq_in_index = 1 THEN
+			concat('ALTER TABLE ', st.table_name, ' ADD',
+				CASE
+					WHEN st.non_unique = 0 THEN ' UNIQUE '
+                    ELSE ' '
+				END,
+                'INDEX ',
+                st.index_name, ' (', st.column_name)
+		ELSE concat(' ', st.column_name)
+	END,
+    CASE
+		WHEN st.seq_in_index = 
+			(SELECT max(st2.seq_in_index)
+            FROM information_schema.statistics st2
+            WHERE st2.table_schema = st.table_schema
+				AND st2.table_name = st.table_name
+                AND st2.index_name = st.index_name)
+			THEN ');'
+            ELSE ''
+		END
+	) index_creation_statement
+FROM information_schema.statistics st
+WHERE st.table_schema = 'bank'
+	AND st.table_name = 'employee'
+ORDER BY st.index_name, st.seq_in_index;
