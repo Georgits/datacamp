@@ -2045,3 +2045,61 @@ FROM information_schema.statistics st
 WHERE st.table_schema = 'bank'
 	AND st.table_name = 'employee'
 ORDER BY st.index_name, st.seq_in_index;
+
+
+
+
+
+
+
+
+
+
+
+
+/* MySQL Extensions to the SQL Language */
+
+/* The Limit Clause */
+SELECT open_emp_id, COUNT(*) how_many
+FROM account
+GROUP BY open_emp_id
+ORDER BY how_many DESC
+LIMIT 3;
+
+
+SELECT open_emp_id, COUNT(*) how_many
+FROM account
+GROUP BY open_emp_id
+ORDER BY how_many ASC
+LIMIT 2;
+
+
+/* find the third-best performer */
+SELECT open_emp_id, COUNT(*) how_many
+FROM account
+GROUP BY open_emp_id
+ORDER BY how_many DESC
+LIMIT 2, 1;
+
+/* all but the top two performers */
+SELECT open_emp_id, COUNT(*) how_many
+FROM account
+GROUP BY open_emp_id
+ORDER BY how_many DESC
+LIMIT 2, 9999999999;
+
+/* Write to a file */
+SELECT emp_id, fname, lname, start_date
+INTO OUTFILE 'C:\\Users\\D91067\\Desktop\\R\\datacamp\\04_MySQL\\emp_list.txt'
+FROM employee;
+
+SELECT emp_id, fname, lname, start_date
+INTO OUTFILE 'C:\\Users\\D91067\\Desktop\\R\\datacamp\\04_MySQL\\emp_list_delim.txt'
+FIELDS TERMINATED BY '|'
+FROM employee;
+
+SELECT emp_id, fname, lname, start_date
+INTO OUTFILE 'C:\\Users\\D91067\\Desktop\\R\\datacamp\\04_MySQL\\emp_list_delim.txt'
+FIELDS TERMINATED BY '|'
+LINES TERMINATED BY '@'
+FROM employee;
