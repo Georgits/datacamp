@@ -2103,3 +2103,54 @@ INTO OUTFILE 'C:\\Users\\D91067\\Desktop\\R\\datacamp\\04_MySQL\\emp_list_delim.
 FIELDS TERMINATED BY '|'
 LINES TERMINATED BY '@'
 FROM employee;
+
+
+/* Combination Insert / Update Statements = Upsert*/
+CREATE Table branch_usage
+	(branch_id SMALLINT UNSIGNED NOT NULL,
+    cust_id INTEGER UNSIGNED NOT NULL,
+    last_visited_on DATETIME,
+    CONSTRAINT pk_branch_usage PRIMARY KEY (branch_id, cust_id)
+    );
+    
+INSERT INTO branch_usage (branch_id, cust_id, last_visited_on)
+VALUES (1,5,current_timestamp());
+    
+INSERT INTO branch_usage (branch_id, cust_id, last_visited_on)
+VALUES (1,5,current_timestamp())
+ON DUPLICATE KEY UPDATE last_visited_on = current_timestamp();
+    
+
+
+/* Ordered Updates and Deletes */
+CREATE TABLE login_history
+	(cust_id INTEGER UNSIGNED NOT NULL,
+    login_date DATETIME,
+    CONSTRAINT pk_login_history PRIMARY KEY(cust_id, login_date)
+    );
+    
+INSERT INTO login_history (cust_id, login_date)
+SELECT c.cust_id,
+	adddate(a.open_date, INTERVAL a.account_id * c.cust_id HOUR)
+    FROM customer c CROSS JOIN account a;
+
+/* 50th most recent login */
+SELECT login_date FROM login_history
+ORDER BY login_date DESC
+LIMIT 49,1;
+
+DELETE FROM login_history
+WHERE login_date < '2004-07-02 09:00:00';
+
+DELETE FROM login_history
+ORDER BY login_date ASC
+LIMIT 262;
+
+UPDATE account
+SET avail_balance = avail_balance + 100
+WHERE product_cd IN ('CHK', 'SAV', 'MM')
+ORDER BY open_date ASC
+LIMIT 10;
+
+
+SELECT * FROM login_history;
