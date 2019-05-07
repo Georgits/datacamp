@@ -2154,3 +2154,53 @@ LIMIT 10;
 
 
 SELECT * FROM login_history;
+
+
+
+
+
+/* Multitable Updates and Deletes */
+CREATE TABLE individual2 AS SELECT * FROM individual;
+CREATE TABLE customer2 AS SELECT * FROM customer;
+CREATE TABLE account2 AS SELECT * FROM account;
+
+/* statt */
+DELETE FROM account2 WHERE cust_id = 1;
+DELETE FROM customer2 WHERE cust_id = 1;
+DELETE FROM individual2 WHERE cust_id = 1;
+
+/* ein Multistatement */
+DELETE account2, customer2, individual2
+FROM account2 INNER JOIN customer2
+	ON account2.cust_id = customer2.cust_id
+	INNER JOIN individual2
+	ON customer2.cust_id = individual2.cust_id
+WHERE individual2.cust_id = 1;
+
+
+
+SELECT account2.account_id
+FROM account2 INNER JOIN customer2
+	ON account2.cust_id = customer2.cust_id
+	INNER JOIN individual2
+	ON customer2.cust_id = individual2.cust_id
+WHERE individual2.fname = 'John' AND individual2.lname = 'Hayward';
+
+/* Einfach SELECT durch DELETE austauschen */
+DELETE account2
+FROM account2 INNER JOIN customer2
+	ON account2.cust_id = customer2.cust_id
+	INNER JOIN individual2
+	ON customer2.cust_id = individual2.cust_id
+WHERE individual2.fname = 'John' AND individual2.lname = 'Hayward';
+
+
+/* Multitable Update */
+UPDATE individual2 INNER JOIN customer2
+	ON individual2.cust_id = customer2.cust_id
+	INNER JOIN account2
+    ON customer2.cust_id = account2.cust_id
+SET individual2.cust_id = individual2.cust_id + 10000,
+	customer2.cust_id = customer2.cust_id + 10000,
+	account2.cust_id = account2.cust_id + 10000
+WHERE individual2.cust_id = 3;
