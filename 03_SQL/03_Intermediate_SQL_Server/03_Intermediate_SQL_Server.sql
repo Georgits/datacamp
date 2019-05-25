@@ -131,3 +131,210 @@ SELECT WeightValue,
        POWER(WeightValue, 2) AS WeightSquare, 
        SQRT(WeightValue) AS WeightSqrt
 FROM mixdata;
+
+
+
+-- CHAPTER 3: Processing Data in SQL Server
+-- In diesem Chapter ist der Code in T-SQL
+-- Creating and using variables
+-- Declare the variable (a SQL Command, the var name, the datatype)
+
+-- T - SQL
+DECLARE @counter INT 
+-- Set the counter to 20
+SET @counter = 20
+-- Select and increment the counter by one 
+-- Print the variable
+SELECT @counter
+
+-- T - SQL
+-- Creating and using variables
+-- Declare the variable (a SQL Command, the var name, the datatype)
+DECLARE @counter INT 
+-- Set the counter to 20
+SET @counter = 20
+-- Select and increment the counter by one 
+SET @counter = @counter + 1
+-- Print the variable
+SELECT @counter
+
+
+-- Creating a WHILE loop
+DECLARE @counter INT 
+SET @counter = 20
+
+-- Create a loop
+WHILE @counter < 30
+
+-- Loop code starting point
+BEGIN
+	SELECT @counter = @counter + 1
+-- Loop finish
+END
+
+-- Check the value of the variable
+SELECT @counter
+
+-- Queries with derived tables (I)
+SELECT a.RecordId, a.Age, a.BloodGlucoseRandom, 
+-- Select maximum glucose value (use colname from derived table)    
+       b.MaxGlucose
+FROM Kidney a
+-- Join to derived table
+JOIN (SELECT Age, MAX(BloodGlucoseRandom) AS MaxGlucose FROM Kidney GROUP BY Age) b
+-- Join on Age
+ON a.Age = b.Age
+
+-- Queries with derived tables (II)
+-- In this exercise, you will create a derived table to return all patient records with the highest BloodPressure at their Age level.
+SELECT *
+FROM Kidney a
+-- Create derived table: select age, max blood pressure from kidney grouped by age
+JOIN (SELECT Age, MAX(BloodPressure) AS MaxBloodPressure FROM kidney GROUP BY Age) b
+-- JOIN on BloodPressure equal to MaxBloodPressure
+ON a.BloodPressure = b.MaxBloodPressure
+-- Join on Age
+AND a.Age = b.Age
+
+
+-- Creating CTEs (I)
+-- Specify the keyowrds to create the CTE
+WITH BloodGlucoseRandom (MaxGlucose) 
+AS (SELECT MAX(BloodGlucoseRandom) AS MaxGlucose FROM Kidney)
+
+SELECT a.Age, b.MaxGlucose
+FROM Kidney a
+-- Join the CTE on blood glucose equal to max blood glucose
+JOIN BloodGlucoseRandom b
+ON a.BloodGlucoseRandom = b.MaxGlucose;
+
+
+-- Creating CTEs (II)
+-- Create the CTE
+WITH BloodPressure 
+AS (SELECT MAX(BloodPressure) AS MaxBloodPressure FROM Kidney)
+
+SELECT *
+FROM Kidney a
+-- Join the CTE  
+JOIN BloodPressure b
+ON a.BloodPressure = b.MaxBloodPressure;
+
+
+
+
+-- CHAPTER 4: Window Functions
+-- Window functions with aggregations (I)
+SELECT OrderID, TerritoryName, 
+       -- Total price for each partition
+       SUM(OrderPrice) 
+       -- Create the window and partitions
+       OVER (PARTITION BY TerritoryName) AS TotalPrice
+FROM orders;
+
+
+-- Window functions with aggregations (II)
+SELECT OrderID, TerritoryName, 
+       -- Number of rows per partition
+       COUNT(*) 
+       -- Create the window and partitions
+       OVER (PARTITION BY TerritoryName) AS TotalOrders
+FROM orders;
+
+
+-- First value in a window
+SELECT TerritoryName, OrderDate, 
+       -- Select the first value in each partition
+       FIRST_VALUE(OrderDate) 
+       -- Create the partitions and arrange the rows
+       OVER(PARTITION BY TerritoryName ORDER BY OrderDate) AS FirstOrder
+FROM orders;
+
+
+-- Previous and next values
+SELECT TerritoryName, OrderDate, 
+       -- Specify the previous OrderDate in the window
+       LAG(OrderDate) 
+       -- Over the window, partition by territory & order by order date
+       OVER(PARTITION BY TerritoryName ORDER BY OrderDate) AS PreviousOrder,
+       -- Specify the next OrderDate in the window
+       LEAD(OrderDate) 
+       -- Create the partitions and arrange the rows
+       OVER(PARTITION BY TerritoryName ORDER BY OrderDate) AS NextOrder
+FROM orders;
+
+
+-- Creating running totals
+-- You usually don't have to use ORDER BY when using aggregations, but if you want to create running totals, you should arrange your rows!
+-- In this exercise, you will create a running total of OrderPrice
+SELECT TerritoryName, OrderDate, 
+       -- Create a running total
+       SUM(OrderPrice) 
+       -- Create the partitions and arrange the rows
+       OVER(PARTITION BY TerritoryName ORDER BY OrderDate) AS TerritoryTotal	  
+FROM orders;
+
+
+-- Assigning row numbers
+SELECT TerritoryName, OrderDate, 
+       -- Assign a row number
+       ROW_NUMBER() 
+       -- Create the partitions and arrange the rows
+       OVER(PARTITION BY TerritoryName ORDER BY OrderDate) AS OrderCount
+FROM orders;
+
+SELECT TerritoryName, OrderDate, 
+       -- Assign a row number
+       ROW_NUMBER() 
+       -- Create the partitions and arrange the rows
+       OVER(PARTITION BY TerritoryName ORDER BY OrderDate) AS OrderCount,
+              -- Create a running total
+       SUM(OrderPrice) 
+       -- Create the partitions and arrange the rows
+       OVER(PARTITION BY TerritoryName ORDER BY OrderDate) AS TerritoryTotal	  
+FROM orders;
+
+
+-- Calculating standard deviation
+SELECT OrderDate, TerritoryName, 
+       -- Calculate the standard deviation
+	   -- STDEV(OrderPrice) / T-SQL
+   	   STDDEV(OrderPrice) 
+       OVER (PARTITION BY TerritoryName ORDER BY OrderDate) AS StdDevPrice	  
+FROM orders;
+
+
+-- Calculating mode (I)
+-- T-SQL
+-- Create a CTE Called ModePrice which contains two columns
+WITH ModePrice (OrderPrice, UnitPriceFrequency)
+AS
+(
+	SELECT OrderPrice, 
+	ROW_NUMBER() 
+	OVER(PARTITION BY OrderPrice ORDER BY OrderPrice) AS UnitPriceFrequency
+	FROM Orders 
+)
+
+-- Select everything from the CTE
+SELECT * FROM ModePrice ;
+
+
+
+-- T-SQL
+-- Calculating mode (II)
+-- CTE from the previous exercise
+WITH ModePrice (OrderPrice, UnitPriceFrequency)
+AS
+(
+	SELECT OrderPrice,
+	ROW_NUMBER() 
+    OVER (PARTITION BY OrderPrice ORDER BY OrderPrice) AS UnitPriceFrequency
+	FROM Orders
+)
+
+-- Select the order price from the CTE
+SELECT OrderPrice AS ModeOrderPrice
+FROM ModePrice
+-- Select the maximum UnitPriceFrequency from the CTE
+WHERE UnitPriceFrequency IN (SELECT MAX(UnitPriceFrequency) FROM ModePrice);

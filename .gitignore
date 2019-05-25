@@ -5,3 +5,5 @@
 *.db
 *.Rprof
 .Rproj.user
+*.mp4
+chapter*.pdf
