@@ -6,4 +6,6 @@
 *.Rprof
 .Rproj.user
 *.mp4
+*.zip
+*.sqlite
 chapter*.pdf
