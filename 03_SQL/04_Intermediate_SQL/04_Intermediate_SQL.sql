@@ -412,7 +412,7 @@ SELECT
     (SELECT AVG(home_team_goal + away_team_goal) FROM matches WHERE season = '2012/2013') AS overall_avg
 FROM 
 	-- Select the stage and average goals in 2012/2013 from match
-	(SELECT
+	(SELECT country
 		 stage,
          AVG(home_team_goal + away_team_goal) AS avg_goals
 	 FROM matches
@@ -425,9 +425,3 @@ WHERE
 
 
 
-
-
-
-
-
-SELECT * FROM matches;
