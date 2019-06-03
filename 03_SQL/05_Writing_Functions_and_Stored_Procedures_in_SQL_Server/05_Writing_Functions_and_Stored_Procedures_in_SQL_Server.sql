@@ -1,3 +1,14 @@
+use 05_writing_functions_and_stored_procedures_in_sql_server;
+
+-- Das ist ein T-SQL Script und funktionniert ohne Anpassung in MySQL nicht
+-- Wie das geht, s. beispielhaft direkt in nachfolgenden Zeilen
+
+-- https://s3.amazonaws.com/capitalbikeshare-data/index.html
+
+-- Chapter 1:  Temporal EDA, Variables & Date Manipulation
+
+
+-- T-SQL
 -- Transactions per day
 SELECT
   -- Select the date portion of StartDate
@@ -12,6 +23,21 @@ ORDER BY CONVERT(DATE, StartDate);
 
 
 
+-- MySQL
+SELECT
+  -- Select the date portion of StartDate
+  CONVERT(StartDate, DATE) as StartDate,
+  -- Measure how many records exist for each StartDate
+  COUNT(*) as CountOfRows 
+FROM CapitalBikeShare 
+-- Group by the date portion of StartDate
+GROUP BY CONVERT(StartDate, DATE)
+-- Sort the results by the date portion of StartDate
+ORDER BY CONVERT(StartDate, DATE);
+
+
+
+-- Ab hier wieder T-SQL
 -- Seconds or no seconds?
 SELECT
 	-- Count the number of IDs
@@ -132,3 +158,97 @@ SELECT DATEDIFF(month, '2/26/2018', '3/3/2018')
 -- First day of month
 -- Find the first day of the current month
 SELECT DATEADD(month, DATEDIFF(month, 0, GETDATE()), 0)
+
+
+
+-- Chapter 2: User Defined Functions
+-- What was yesterday?
+-- Create GetYesterday()
+CREATE FUNCTION GetYesterday()
+-- Specify return data type
+RETURNS date AS BEGIN
+-- Calculate yesterday's date value
+RETURN (SELECT DATEADD(day, -1, GETDATE()))
+END;
+
+-- One in one out
+-- Create SumRideHrsSingleDay
+CREATE FUNCTION SumRideHrsSingleDay (@DateParm date)
+-- Specify return data type
+RETURNS numeric
+AS
+-- Begin
+BEGIN
+RETURN
+-- Add the difference between StartDate and EndDate
+(SELECT SUM(DATEDIFF(second, StartDate, EndDate))/3600
+FROM CapitalBikeShare
+ -- Only include transactions where StartDate = @DateParm
+WHERE CAST(StartDate AS date) = @DateParm)
+-- End
+END;
+
+
+
+-- Multiple inputs one output
+-- Create the function
+CREATE FUNCTION SumRideHrsDateRange (@StartDateParm datetime, @EndDateParm datetime)
+-- Specify return data type
+RETURNS numeric
+AS
+BEGIN
+RETURN
+-- Sum the difference between StartDate and EndDate
+(SELECT SUM(DATEDIFF(second, StartDate, EndDate))/3600
+FROM CapitalBikeShare
+-- Include only the relevant transactions
+WHERE StartDate > @StartDateParm and StartDate < @EndDateParm)
+END;
+
+
+-- Inline TVF
+-- Create the function
+CREATE FUNCTION SumStationStats(@StartDate AS datetime)
+-- Specify return data type
+RETURNS TABLE
+AS
+RETURN
+SELECT
+	StartStation,
+    -- Use COUNT() to select RideCount
+	COUNT(ID) AS RideCount,
+    -- Use SUM() to calculate TotalDuration
+    SUM(DURATION) AS TotalDuration
+FROM CapitalBikeShare
+WHERE CAST(StartDate as Date) = @StartDate
+-- Group by StartStation
+GROUP BY StartStation;
+
+
+
+-- Multi statement TVF
+-- Create the function
+CREATE FUNCTION CountTripAvgDuration (@Month CHAR(2), @Year CHAR(4))
+-- Specify return variable
+RETURNS @DailyTripStats TABLE(
+	TripDate	date,
+	TripCount	int,
+	AvgDuration	numeric)
+AS
+BEGIN
+-- Insert query results into @DailyTripStats
+INSERT INTO @DailyTripStats 
+SELECT
+    -- Cast StartDate as a date
+	CAST(StartDate AS date),
+    COUNT(ID),
+    AVG(Duration)
+FROM CapitalBikeShare
+WHERE
+	DATEPART(month, StartDate) = @Month AND
+    DATEPART(year, StartDate) = @Year
+-- Group by StartDate as a date
+GROUP BY CAST(StartDate AS date)
+-- Return
+RETURN
+END;

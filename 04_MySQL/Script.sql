@@ -2204,3 +2204,6 @@ SET individual2.cust_id = individual2.cust_id + 10000,
 	customer2.cust_id = customer2.cust_id + 10000,
 	account2.cust_id = account2.cust_id + 10000
 WHERE individual2.cust_id = 3;
+
+
+SELECT * FROM country;
