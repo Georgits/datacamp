@@ -252,3 +252,55 @@ GROUP BY CAST(StartDate AS date)
 -- Return
 RETURN
 END;
+
+
+
+-- Execute scalar with select
+-- Create @BeginDate
+DECLARE @BeginDate AS date = '3/1/2018'
+-- Create @EndDate
+DECLARE @EndDate AS date = '3/10/2018' 
+SELECT
+  -- Select @BeginDate
+  @BeginDate AS BeginDate,
+  -- Select @EndDate
+  @EndDate AS EndDate,
+  -- Execute SumRideHrsDateRange()
+ dbo.SumRideHrsDateRange(@BeginDate, @EndDate) AS TotalRideHrs
+ 
+ 
+ 
+ 
+ -- EXEC scalar
+ -- Create @RideHrs
+DECLARE @RideHrs AS numeric
+-- Execute SumRideHrsSingleDay() and store the result in @RideHrs
+EXEC @RideHrs = dbo.SumRideHrsSingleDay @DateParm = '3/5/2018' 
+SELECT 
+  'Total Ride Hours for 3/5/2018:', 
+  @RideHrs
+  
+  
+  -- Execute TVF into variable
+  -- Create @StationStats
+DECLARE @StationStats TABLE(
+	StartStation nvarchar(100), 
+	RideCount int, 
+	TotalDuration numeric)
+-- Populate @StationStats with the results of the function
+INSERT INTO @StationStats
+SELECT TOP 10 *
+-- Execute SumStationStats with 3/15/2018
+FROM dbo.SumStationStats('3/15/2018') 
+ORDER BY RideCount DESC
+-- Select all the records from @StationStats
+SELECT * 
+FROM @StationStats
+
+
+
+ 
+ 
+ 
+
+
