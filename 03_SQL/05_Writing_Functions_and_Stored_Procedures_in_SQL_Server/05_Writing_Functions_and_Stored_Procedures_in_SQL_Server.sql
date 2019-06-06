@@ -298,9 +298,109 @@ SELECT *
 FROM @StationStats
 
 
+-- CREATE OR ALTER
+-- Update SumStationStats
+CREATE OR ALTER FUNCTION dbo.SumStationStats(@EndDate AS date)
+-- Enable SCHEMABINDING
+RETURNS TABLE WITH SCHEMABINDING
+AS
+RETURN
+SELECT
+	StartStation,
+    COUNT(ID) AS RideCount,
+    SUM(DURATION) AS TotalDuration
+FROM dbo.CapitalBikeShare
+-- Cast EndDate as date and compare to @EndDate
+WHERE CAST(EndDate AS date) = @Enddate
+GROUP BY StartStation;
+ 
+ 
+ 
+ 
+ 
+ -- CHAPTER 3: Stored Procedures
+ -- CREATE PROCEDURE with OUTPUT
+ -- Create the stored procedure
+CREATE PROCEDURE dbo.cuspSumRideHrsSingleDay
+    -- Declare the input parameter
+	@DateParm date,
+    -- Declare the output parameter
+	@RideHrsOut numeric OUTPUT
+AS
+-- Don't send the row count 
+SET NOCOUNT ON
+BEGIN
+-- Assign the query result to @RideHrsOut
+SELECT
+	@RideHrsOut = SUM(DATEDIFF(second, StartDate, EndDate))/3600
+FROM CapitalBikeShare
+-- Cast StartDate as date and compare with @DateParm
+WHERE CAST(StartDate AS date) = @DateParm
+RETURN
+END;
 
- 
- 
+
+
+-- Use SP to INSERT
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cusp_RideSummaryCreate (@DateParm date)
+AS
+BEGIN
+SET NOCOUNT ON
+-- Insert into the Date and RideHours columns
+INSERT INTO dbo.SumRideHrsSingleDay(Date, RideHours)
+-- Insert @DateParm and the result of SumRideHrsSingleDay
+VALUES(@DateParm, dbo.SumRideHrsSingleDay(@DateParm)) 
+
+-- Select the record that was just inserted
+SELECT
+    -- Select Date column
+	Date,
+    -- Select RideHours column
+    RideHours
+FROM dbo.RideSummary
+-- Check whether Date equals @DateParm
+WHERE Date = @DateParm
+END;
+
+
+
+-- Use SP to UPDATE
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cuspRideSummaryUpdate
+	-- Specify @Date input parameter
+	(@Date as date,
+     -- Specify @RideHrs input parameter
+     @RideHrs numeric(18,0))
+AS
+BEGIN
+SET NOCOUNT ON
+-- Update RideSummary
+Update RideSummary
+-- Set
+SET
+	Date = @Date,
+    RideHours = @RideHrs
+-- Include records where Date equals @Date
+WHERE Date = @Date
+END;
+
+
+-- Use SP to DELETE
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cuspRideSummaryDelete
+	-- Specify @DateParm input parameter
+	(@DateParm Date,
+     -- Specify @RowCountOut output parameter
+     @RowCountOut int OUTPUT)
+AS
+BEGIN
+-- Delete record(s) where Date equals @DateParm
+DELETE FROM dbo.RideSummary
+WHERE Date = @DateParm
+-- Set @RowCountOut to @@ROWCOUNT
+SET  @RowCountOut = @@ROWCOUNT
+END;
  
 
 
