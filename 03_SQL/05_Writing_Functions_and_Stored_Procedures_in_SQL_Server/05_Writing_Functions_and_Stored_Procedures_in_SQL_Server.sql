@@ -402,5 +402,116 @@ WHERE Date = @DateParm
 SET  @RowCountOut = @@ROWCOUNT
 END;
  
+ 
+ 
+ 
+ 
+ 
+
+-- EXECUTE with OUTPUT parameter
+-- Create @RideHrs
+DECLARE @RideHrs AS numeric(18,0)
+-- Execute the stored procedure
+EXEC dbo.cuspSumRideHrsSingleDay
+    -- Pass the input parameter
+	@DateParm = '3/1/2018',
+    -- Store the output in RideHrsOut
+	@RideHrsOut = @RideHrs OUTPUT
+-- Select RideHrs
+SELECT @RideHrs AS RideHours;
 
 
+
+
+-- EXECUTE with return value
+-- Create @ReturnStatus
+DECLARE @ReturnStatus AS int
+-- Execute the SP, storing the result in @ReturnStatus
+EXEC @ReturnStatus = dbo.cuspRideSummaryUpdate
+    -- Specify @DateParm
+	@DateParm = '3/1/2018',
+    -- Specify @RideHrs
+	@RideHrs = 300
+
+-- Select the columns of interest
+SELECT
+	@ReturnStatus AS ReturnStatus,
+    Date,
+    RideHours
+FROM dbo.ridesummary 
+WHERE Date = '3/1/2018';
+
+
+
+-- EXECUTE with OUTPUT & return value
+-- Create @ReturnStatus
+DECLARE @ReturnStatus AS int
+-- Create @RowCount
+DECLARE @RowCount AS int
+
+-- Execute the SP, storing the result in @ReturnStatus
+EXEC @ReturnStatus = dbo.cuspRideSummaryDelete 
+    -- Specify @DateParm
+	@DateParm = '3/1/2018',
+    -- Specify RowCountOut
+	@RowCountOut = @RowCount OUTPUT
+
+-- Select the columns of interest
+SELECT
+	@ReturnStatus AS ReturnStatus,
+    @RowCount AS 'RowCount';
+    
+
+
+
+-- Your very own TRY..CATCH
+-- Alter the stored procedure
+CREATE OR ALTER PROCEDURE dbo.cuspRideSummaryDelete
+	-- (Incorrectly) specify @DateParm
+	@DateParm nvarchar(30),
+    -- Specify @Error
+	@Error nvarchar(max) = NULL OUTPUT
+AS
+SET NOCOUNT ON
+BEGIN
+  -- Start of the TRY block
+  BEGIN TRY
+  	  -- Delete
+      DELETE FROM RideSummary
+      WHERE Date = @DateParm
+  -- End of the TRY block
+  END TRY
+  -- Start of the CATCH block
+  BEGIN CATCH
+		SET @Error = 
+		'Error_Number: '+ CAST(ERROR_NUMBER() AS VARCHAR) +
+		'Error_Severity: '+ CAST(ERROR_SEVERITY() AS VARCHAR) +
+		'Error_State: ' + CAST(ERROR_STATE() AS VARCHAR) + 
+		'Error_Message: ' + ERROR_MESSAGE() + 
+		'Error_Line: ' + CAST(ERROR_LINE() AS VARCHAR)
+  -- End of the CATCH block
+  END CATCH
+END;
+
+
+-- CATCH an error
+-- Create @ReturnCode
+DECLARE @ReturnCode int
+-- Create @ErrorOut
+DECLARE @ErrorOut nvarchar(max)
+-- Execute the SP, storing the result in @ReturnCode
+execute @ReturnCode = dbo.cuspRideSummaryDelete
+    -- Specify @DateParm
+	@DateParm = '1/32/2018',
+    -- Assign @ErrorOut to @Error
+	@Error = @ErrorOut OUTPUT
+-- Select @ReturnCode and @ErrorOut
+SELECT
+	@ReturnCode AS ReturnCode,
+    @ErrorOut AS ErrorMessage;
+    
+    
+    
+    
+    
+-- CHAPTER 4: NYC Taxi Ride Case Study
