@@ -13,8 +13,7 @@ import tensorflow as tf
 tf.enable_eager_execution()
 from tensorflow import constant, add
 from tensorflow import keras
-from tensorflow.python.keras.optimizers import Adam
-# from tf.keras.optimizers.Adam import Adam, SGD
+from tensorflow.python.keras.optimizers import SGD
 
 
 import os
@@ -338,3 +337,206 @@ print(intercept.numpy(), slope.numpy())
 
 
 
+
+
+# Chapter 3: Neural Networks in TensorFlow
+# The linear algebra of dense layers
+borrower_features = pd.DataFrame(np.array([[20000.0, 2, 2,1,24,2,2,-1,-1,-2]]), 
+                                 columns=['LIMIT_BAL', 'SEX', 'EDUCATION', 'MARRIAGE', 'AGE', 'PAY_0', 'PAY_2', 'PAY_3', 'PAY_4', 'PAY_5'])
+# Define inputs as a 32-bit float
+inputs = np.array(borrower_features, np.float32)
+
+# Initialize weights as 10x3 variable of ones
+weights = tf.Variable(tf.ones((10, 3)))
+
+# Perform matrix multiplication of the inputs by the weights
+product = tf.matmul(inputs, weights)
+
+# Apply sigmoid transformation
+dense = tf.keras.activations.sigmoid(product)
+
+
+
+# The low-level approach with multiple examples
+borrower_features = tf.constant([[ 3.,  3., 23.],
+       [ 2.,  1., 24.],
+       [ 1.,  1., 49.],
+       [ 1.,  1., 49.],
+       [ 2.,  1., 29.]], tf.float32)
+
+weights = tf.Variable([[-1.  ],
+       [-2.  ],
+       [ 0.05]])
+
+# Compute the product of features and weights
+products = tf.matmul(borrower_features, weights)
+
+# Apply a sigmoid activation function
+dense = keras.activations.sigmoid(products)
+
+# Print products and dense tensors as numpy arrays
+print(products.numpy())
+print(dense.numpy())
+
+
+
+
+
+
+
+# Using the dense layer operation
+# Note that input data has been defined and is available as a 100x10 tensor: inputs. Additionally, keras.layers() is available.
+
+data_path = 'uci_credit_card.csv'
+
+# Load the dataset as a dataframe named housing 
+uci_credit_card = pd.read_csv(data_path)
+features = ['LIMIT_BAL', 'SEX', 'EDUCATION', 'MARRIAGE', 'AGE', 'PAY_0', 'PAY_2', 'PAY_3', 'PAY_4', 'PAY_5']
+inputs = uci_credit_card[features][:100]
+
+# inputs muss noch in tensorflow konvertiert werden (tensorflow.python.framework.ops.EagerTensor).
+# https://medium.com/when-i-work-data/converting-a-pandas-dataframe-into-a-tensorflow-dataset-752f3783c168
+inputs = (
+    tf.data.Dataset.from_tensor_slices(
+        (tf.cast(uci_credit_card[features].values, tf.float32)))
+    )
+
+for features_tensor in inputs:
+    print(f'features:{features_tensor}')
+# inputs muss noch in tensorflow konvertiert werden (tensorflow.python.framework.ops.EagerTensor).
+
+
+# Define the first dense layer
+dense1 = tf.keras.layers.Dense(7, activation='sigmoid')(inputs)
+
+# Define a dense layer with 3 output nodes
+dense2 = tf.keras.layers.Dense(3, activation='sigmoid')(dense1)
+
+# Define a dense layer with 1 output node
+outputs = tf.keras.layers.Dense(1, activation='sigmoid')(dense2)
+
+# Print dense layer 2 without using the numpy method
+print(dense2)
+
+
+
+
+
+
+
+# Binary classification problems
+features = ['BILL_AMT1','BILL_AMT2','BILL_AMT3']
+payments = uci_credit_card[features].values
+
+# Construct input layer from features
+input_layer = tf.constant(payments, tf.float32)
+
+# Define first dense layer
+dense_layer_1 = keras.layers.Dense(3, activation='relu')(input_layer)
+
+# Define second dense layer
+dense_layer_2 = keras.layers.Dense(2, activation='relu')(dense_layer_1)
+
+# Define output layer
+output_layer = keras.layers.Dense(1, activation='sigmoid')(dense_layer_2)
+print(output_layer)
+
+
+
+
+# Multiclass classification problems
+features = ['BILL_AMT1','BILL_AMT2','BILL_AMT3', 'BILL_AMT4','BILL_AMT5','BILL_AMT6','PAY_AMT1','PAY_AMT2','PAY_AMT3','PAY_AMT4']
+borrower_features = uci_credit_card[features].values
+
+# Construct input layer from borrower features
+input_layer = tf.constant(borrower_features, tf.float32)
+
+# Define first dense layer
+dense_layer_1 = keras.layers.Dense(10, activation='sigmoid')(input_layer)
+
+# Define second dense layer
+dense_layer_2 = keras.layers.Dense(8, activation='relu')(dense_layer_1)
+
+# Define output layer
+output_layer = keras.layers.Dense(6, activation='softmax')(dense_layer_2)
+print(output_layer)
+
+# Knowing when to use sigmoid, relu, and softmax activations is an important step towards building and training neural networks in tensorflow.
+
+
+
+
+# The dangers of local minima
+
+initializer_1 = tf.Variable(5.0, tf.float32)
+initializer_2 = tf.Variable(0.1, tf.float32)
+
+# Define the optimization operation
+opt = tf.keras.optimizers.SGD(lr=0.001)
+
+for j in range(1000):
+	# Perform minimization using the loss function and initializer_1
+	opt.minimize(lambda: loss(initializer_1), var_list=[initializer_1])
+	# Perform minimization using the loss function and initializer_2
+	opt.minimize(lambda: loss(initializer_2), var_list=[initializer_2])
+
+# Print initializer_1 and initializer_2 as numpy arrays
+print(initializer_1.numpy(), initializer_2.numpy())
+
+
+
+# NICHT LAUFFÄHIG!!!!
+# Avoiding local minima
+# Define the optimization operation for opt_1
+opt_1 = keras.optimizers.RMSprop(learning_rate=0.001, momentum=0.0)
+
+# Define the optimization operation for opt_2
+opt_2 = keras.optimizers.RMSprop(learning_rate=0.001, momentum=0.99)
+
+for j in range(100):
+	opt_1.minimize(lambda: loss(momentum_1), var_list=[momentum_1])
+    # Define the minimization operation for opt_2
+	opt_2.minimize(lambda: loss(momentum_2), var_list=[momentum_2])
+
+# Print momentum 1 and momentum 2 as numpy arrays
+print(momentum_1.numpy(), momentum_2.numpy())
+
+
+
+# Initialization in TensorFlow
+# Define the layer 1 weights
+weights1 = tf.Variable(tf.random.normal([23,7]))
+
+# Initialize the layer 1 bias
+bias1 = tf.Variable(tf.ones([7]))
+
+# Define the layer 2 weights
+weights2 = tf.Variable(tf.random.normal([7,1]))
+
+# Define the layer 2 bias
+bias2 = tf.Variable(0.0)
+
+
+
+# NICHT LAUFFÄHIG!!!!
+
+# Training neural networks with TensorFlow
+# In this exercise, you will train a neural network to predict whether a credit card holder will default. The features and targets you will use to train your network are available in the Python shell as borrower_features and default. You defined the weights and biases in the previous exercise.
+# Note that output_layer is defined as σ(layer1∗weights2+bias2), where σ
+# is the sigmoid activation, layer1 is a tensor of nodes for the first hidden dense layer, weight2 is a tensor of weights, and bias2 is the bias tensor.
+# The trainable variables are weights1, bias1, weights2, and bias2. Additionally, the following operations have been imported for you: nn.relu() and keras.layers.Dropout()
+def loss_function(weights1, bias1, weights2, bias2, features, targets):
+	# Apply relu activation functions to layer 1
+	layer1 = nn.relu(add(matmul(features, weights1), bias1))
+    # Apply dropout
+	dropout = keras.layers.Dropout(0.25)(layer1)
+	layer2 = nn.sigmoid(add(matmul(dropout, weights2), bias2))
+    # Pass targets and layers2 to the cross entropy loss
+	return keras.losses.binary_crossentropy(targets, layer2)
+  
+for j in range(0, 30000, 2000):
+	features, targets = borrower_features[j:j+2000, :], default[j:j+2000, :]
+    # Complete the optimizer
+	opt.minimize(lambda: loss_function(weights1, bias1, weights2, bias2, features, targets), var_list=[weights1, bias1, weights2, bias2])
+    
+print(weights1.numpy())
