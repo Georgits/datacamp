@@ -678,3 +678,40 @@ model.evaluate(train_features, train_labels)
 
 # Evaluate the model using the test data
 model.evaluate(test_features, test_labels)
+
+
+
+
+
+# Preparing to train with Estimators
+data_path = 'kc_house_data.csv'
+housing = pd.read_csv(data_path)
+
+# Define feature columns for bedrooms and bathrooms
+bedrooms = tf.feature_column.numeric_column("bedrooms")
+bathrooms = tf.feature_column.numeric_column("bathrooms")
+
+# Define the list of feature columns
+feature_list = [bedrooms, bathrooms]
+
+def input_fn():
+	# Define the labels
+	labels = np.array(housing['price'])
+	# Define the features
+	features = {'bedrooms':np.array(housing['bedrooms']), 
+                'bathrooms':np.array(housing['bathrooms'])}
+	return features, labels
+
+
+
+# Defining Estimators
+# Define the model and set the number of steps
+model = estimator.DNNRegressor(feature_columns=feature_list, hidden_units=[2,2])
+model.train(input_fn, steps=1)
+
+# Modify the code to use a LinearRegressor(), remove the hidden_units, and set the number of steps to 2.
+# # Define the model and set the number of steps
+model = estimator.LinearRegressor(feature_columns=feature_list)
+model.train(input_fn, steps=2)
+# Note that you have other premade estimator options, such as BoostedTreesRegressor(), and can also create your own custom estimators.
+
