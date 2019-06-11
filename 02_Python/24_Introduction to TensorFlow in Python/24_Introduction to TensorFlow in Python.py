@@ -540,3 +540,141 @@ for j in range(0, 30000, 2000):
 	opt.minimize(lambda: loss_function(weights1, bias1, weights2, bias2, features, targets), var_list=[weights1, bias1, weights2, bias2])
     
 print(weights1.numpy())
+
+
+
+
+
+
+
+
+
+
+
+
+# CHAPTER 4: High Level APIs in TensorFlow
+# The sequential model in Keras
+# Define a Keras sequential model
+model = tf.keras.Sequential()
+
+# Define the first dense layer
+model.add(keras.layers.Dense(16, activation='relu', input_shape=(784,)))
+
+# Define the second dense layer
+model.add(keras.layers.Dense(8, activation='relu'))
+
+# Define the output layer
+model.add(keras.layers.Dense(4, activation='softmax'))
+
+
+
+
+# Compiling a sequential model
+# Define a Keras sequential model
+model = keras.Sequential()
+
+# Define the first dense layer
+model.add(keras.layers.Dense(16, activation='sigmoid', input_shape=(784,)))
+
+# Define the output layer
+model.add(keras.layers.Dense(4, activation='softmax'))
+
+# Compile the model
+model.compile('adam', loss='categorical_crossentropy')
+
+# Print a model summary
+print(model.summary())
+
+
+
+
+
+# Defining a multiple input model
+# For model 1, pass the input layer to layer 1 and layer 1 to layer 2
+m1_layer1 = keras.layers.Dense(12, activation='sigmoid')(m1_inputs)
+m1_layer2 = keras.layers.Dense(4, activation='softmax')(m1_layer1)
+
+# For model 2, pass the input layer to layer 1 and layer 1 to layer 2
+m2_layer1 = keras.layers.Dense(8, activation='relu')(m2_inputs)
+m2_layer2 = keras.layers.Dense(4, activation='softmax')(m2_layer1)
+
+# Merge model outputs
+merged = keras.layers.add([m1_layer2, m2_layer2])
+
+# Define functional model
+model = keras.Model(inputs=[m1_inputs, m2_inputs], outputs=merged)
+
+
+
+# NICHT LAUFFÄHIG, da die daten fehlen
+# Training with Keras
+# Define a sequential model
+model = tf.keras.Sequential()
+
+# Define a hidden layer
+model.add(keras.layers.Dense(16, activation='relu', input_shape=(784,)))
+
+# Define the output layer
+model.add(keras.layers.Dense(4, activation='softmax'))
+
+# Compile the model
+model.compile('SGD', loss='categorical_crossentropy')
+
+# Complete the fitting operation
+model.fit(sign_language_features, sign_language_labels, epochs=5)
+
+
+
+
+# Metrics and validation with Keras
+# With the keras API, you only needed 14 lines of code to define, compile, train, and validate a model.
+# Define sequential model
+model = tf.keras.Sequential()
+
+# Define the first layer
+model.add(keras.layers.Dense(32, activation = 'sigmoid',  input_shape= (784,)))
+
+# Add activation function to classifier
+model.add(keras.layers.Dense(4, activation='softmax'))
+
+# Set the optimizer, loss function, and metrics
+model.compile(optimizer='RMSprop', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Add the number of epochs and the validation split
+model.fit(sign_language_features, sign_language_labels, epochs=10, validation_split=0.1)
+
+
+
+
+
+
+# Overfitting detection
+# Define sequential model
+model = keras.Sequential()
+
+# Define the first layer
+model.add(keras.layers.Dense(512, activation = 'relu',  input_shape= (784,)))
+
+# Add activation function to classifier
+model.add(keras.layers.Dense(4, activation='softmax'))
+
+# Finish the model compilation
+model.compile(optimizer=keras.optimizers.Adam(lr=0.0001), 
+              loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Complete the model fit operation
+model.fit(sign_language_features, sign_language_labels, epochs=50, validation_split=0.5)
+
+
+
+
+
+
+# Evaluating models
+# In practice, we often split the dataset into test and train sets.
+# We then split the validation sample off from the train set using the validation_split parameter of model.fit().
+# Evaluate the model using the train data
+model.evaluate(train_features, train_labels)
+
+# Evaluate the model using the test data
+model.evaluate(test_features, test_labels)
