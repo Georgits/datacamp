@@ -111,3 +111,187 @@ GROUP BY athlete_name
 HAVING COUNT(medal) > 2
 -- Sort to show the most gold medals at the top
 ORDER BY medals DESC;
+
+
+
+
+
+-- CHAPTER 2: Creating Reports
+-- Planning the filter
+-- Pull distinct event names found in winter_games
+SELECT DISTINCT event
+FROM winter_games;
+
+
+-- JOIN then UNION query
+-- Query season, country, and events for all summer events
+SELECT 
+	'summer' AS season, 
+    country, 
+    COUNT(DISTINCT event) AS events
+FROM summer_games AS s
+JOIN countries AS c
+ON s.country_id = c.id
+GROUP BY country
+-- Combine the queries
+UNION ALL
+-- Query season, country, and events for all winter events
+SELECT 
+	'winter' AS season, 
+    country, 
+    COUNT(DISTINCT event) AS events
+FROM winter_games AS w
+JOIN countries AS c
+ON w.country_id = c.id
+GROUP BY country
+-- Sort the results to show most events at the top
+ORDER BY events DESC;
+
+
+
+-- UNION then JOIN query
+-- Add outer layer to pull season, country and unique events
+SELECT 
+	season, 
+    country, 
+    COUNT(DISTINCT event) AS events
+FROM
+    -- Pull season, country_id, and event for both seasons
+    (SELECT 
+     	'summer' AS season, 
+     	country_id, 
+     	event
+    FROM summer_games
+    UNION ALL
+    SELECT 
+     	'winter' AS season, 
+     	country_id, 
+     	event
+    FROM winter_games) AS subquery
+JOIN countries AS c
+ON subquery.country_id = c.id
+-- Group by any unaggregated fields
+GROUP BY season, country
+-- Order to show most events at the top
+ORDER BY events DESC;
+
+
+
+-- CASE statement refresher
+SELECT 
+	name,
+    -- Output 'Tall Female', 'Tall Male', or 'Other'
+	CASE WHEN gender = 'F' AND height >= 175 THEN 'Tall Female'
+    WHEN gender = 'M' AND height >= 190 THEN 'Tall Male'
+    ELSE 'Other' END AS segment
+FROM athletes;
+
+
+
+-- BMI bucket by sport
+-- Pull in sport, bmi_bucket, and athletes
+SELECT 
+	sport,
+    -- Bucket BMI in three groups: <.25, .25-.30, and >.30	
+    CASE WHEN (100 * weight / (height * height)) < .25 THEN '<.25'
+    WHEN (100 * weight / (height * height)) <= .30 THEN '.25-.30'
+    WHEN (100 * weight / (height * height)) > .30 THEN '>.30' END AS bmi_bucket,
+    COUNT(DISTINCT name) AS athletes
+FROM summer_games AS s
+JOIN athletes AS a
+ON s.athlete_id = a.id
+-- GROUP BY non-aggregated fields
+GROUP BY bmi_bucket, sport
+-- Sort by sport and then by athletes in descending order
+ORDER BY sport, athletes DESC;
+
+
+-- Troubleshooting CASE statements
+/*-- Query from last exercise shown below.  Comment it out.
+SELECT 
+	sport,
+    CASE WHEN weight/height^2*100 <.25 THEN '<.25'
+    WHEN weight/height^2*100 <=.30 THEN '.25-.30'
+    WHEN weight/height^2*100 >.30 THEN '>.30' END AS bmi_bucket,
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games AS s
+JOIN athletes AS a
+ON s.athlete_id = a.id
+GROUP BY sport, bmi_bucket
+ORDER BY sport, athletes DESC; */
+
+-- Show height, weight, and bmi for all athletes
+SELECT 
+	height,
+    weight,
+    weight/height^2*100 AS bmi
+FROM athletes
+-- Filter for NULL bmi values
+WHERE weight/height^2*100 is null;
+
+
+-- Uncomment the original query
+SELECT 
+	sport,
+    CASE WHEN weight/(height*height)*100 <.25 THEN '<.25'
+    WHEN weight/(height*height) *100 <=.30 THEN '.25-.30'
+    WHEN weight/(height*height)*100 >.30 THEN '>.30'
+    -- Add ELSE statement to output 'no weight recorded'
+    ELSE 'no weight recorded' END AS bmi_bucket,
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games AS s
+JOIN athletes AS a
+ON s.athlete_id = a.id
+GROUP BY sport, bmi_bucket
+ORDER BY sport, athletes DESC;
+
+
+
+-- Filtering with a JOIN
+-- Pull summer bronze_medals, silver_medals, and gold_medals
+SELECT 
+	SUM(bronze) AS bronze_medals, 
+    SUM(silver) AS silver_medals, 
+    SUM(gold) AS gold_medals
+FROM 
+(
+SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    athlete_id
+	FROM summer_games) AS s
+JOIN athletes AS a
+ON s.athlete_id = a.id
+-- Filter for athletes age 16 or below
+WHERE age < 17;
+
+
+
+-- Filtering with a subquery
+-- Pull summer bronze_medals, silver_medals, and gold_medals
+SELECT 
+    SUM(bronze) AS bronze_medals, 
+    SUM(silver) AS silver_medals, 
+    SUM(gold) AS gold_medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    athlete_id
+	FROM summer_games) AS s
+-- Add the WHERE statement below
+WHERE s.athlete_id IN
+    -- Create subquery list for athlete_ids age 16 or below    
+    (SELECT id
+     FROM athletes
+     WHERE age < 17);
+
+
