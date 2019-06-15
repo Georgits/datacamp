@@ -295,3 +295,497 @@ WHERE s.athlete_id IN
      WHERE age < 17);
 
 
+-- Report 2: Top athletes in nobel-prized countries
+-- Pull event and unique athletes from summer_games 
+SELECT 	
+	event,
+	COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games
+GROUP BY event;
+
+-- Pull event and unique athletes from summer_games 
+SELECT 
+	event, 
+    -- Add the gender field below
+    CASE WHEN event LIKE '%Women%' THEN 'female'
+    ELSE 'male' END AS gender,
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games
+GROUP BY event;
+
+-- Pull event and unique athletes from summer_games 
+SELECT 
+    event,
+    -- Add the gender field below
+    CASE WHEN event LIKE '%Women%' THEN 'female' 
+    ELSE 'male' END AS gender,
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games
+-- Only include countries that won a nobel prize
+WHERE country_id IN 
+	(SELECT country_id
+    FROM country_stats
+    WHERE nobel_prize_winners > 0)
+GROUP BY event;
+
+
+-- Pull event and unique athletes from summer_games 
+SELECT 
+    event,
+    -- Add the gender field below
+    CASE WHEN event LIKE '%Women%' THEN 'female' 
+    ELSE 'male' END AS gender,
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games
+-- Only include countries that won a nobel prize
+WHERE country_id IN 
+	(SELECT country_id 
+    FROM country_stats 
+    WHERE nobel_prize_winners > 0)
+GROUP BY event
+-- Add the second query below and combine with a UNION
+UNION
+SELECT 
+    event,
+    -- Add the gender field below
+    CASE WHEN event LIKE '%Women%' THEN 'female' 
+    ELSE 'male' END AS gender,
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM winter_games
+-- Only include countries that won a nobel prize
+WHERE country_id IN 
+	(SELECT country_id 
+    FROM country_stats 
+    WHERE nobel_prize_winners > 0)
+GROUP BY event
+-- Order and limit the final output
+ORDER BY athletes DESC
+LIMIT 10;
+
+
+
+-- CHAPTER 3: Cleaning & Validation
+-- Identifying data types
+-- Pull column_name & data_type from the columns table
+SELECT 
+	column_name,
+    data_type
+FROM information_schema.columns
+-- Filter for the table 'country_stats'
+WHERE table_name = 'country_stats';
+
+
+-- Interpreting error messages
+-- Comment out the previous query
+-- Comment out the previous query
+SELECT AVG(CAST(population AS DECIMAL)) AS avg_population
+FROM country_stats;
+
+-- Using date functions on strings
+SELECT 
+	year,
+    -- Pull decade, decade_truncate, and the world's gdp
+   /* POSTGRESSQL
+   DATEPART('decade', CAST(year AS date)) AS decade,
+    DATE_TRUNC('decade', CAST(year AS date)) AS decade_truncated, */
+    SUM(gdp) AS world_gdp
+FROM country_stats
+-- Group and order by year in descending order
+GROUP BY year
+ORDER BY year DESC;
+
+
+-- String functions
+-- Convert country to lower case
+SELECT 
+	country, 
+    LOWER(country) AS country_altered
+FROM countries
+GROUP BY country;
+
+/* POSTGRESSQL
+-- Convert country to proper case
+SELECT 
+	country, 
+    INITCAP(country) AS country_altered
+FROM countries
+GROUP BY country;
+*/
+
+-- Output the left 3 characters of country
+SELECT 
+	country, 
+    LEFT(country, 3) AS country_altered
+FROM countries
+GROUP BY country;
+
+
+-- Output all characters starting with position 7
+SELECT 
+	country, 
+    SUBSTRING(country from 7) AS country_altered
+FROM countries
+GROUP BY country;
+
+
+-- Replacing and removing substrings
+SELECT 
+	region, 
+    -- Replace all '&' characters with the string 'and'
+    REPLACE(region, '&', 'and') AS character_swap,
+    -- Remove all periods
+    REPLACE(region, '.', '') AS character_remove
+FROM countries
+WHERE region LIKE '%Latin%'
+GROUP BY region;
+
+SELECT
+	region,
+	COUNT(*)
+ from countries
+WHERE region LIKE '%Latin%'
+ GROUP BY region;
+ 
+ 
+ SELECT 
+	region, 
+    -- Replace all '&' characters with the string 'and'
+    REPLACE(region,'&','and') AS character_swap,
+    -- Remove all periods
+    REPLACE(region,'.','') AS character_remove,
+    -- Combine the functions to run both changes at once
+    REPLACE(REPLACE(region,'&','and'), '.','') AS character_swap_and_remove
+FROM countries
+WHERE region LIKE '%Latin%'
+GROUP BY region;
+
+
+
+-- Fixing incorrect groupings
+-- Pull event and unique athletes from summer_games_messy 
+SELECT
+    -- Remove trailing spaces and alias as event_fixed
+	event, 
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games
+-- Update the group by accordingly
+GROUP BY event;
+
+
+-- Pull event and unique athletes from summer_games_messy 
+SELECT 
+    -- Remove dashes from all event values
+    TRIM(event) AS event_fixed, 
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games
+-- Update the group by accordingly
+GROUP BY event_fixed;
+
+
+-- Pull event and unique athletes from summer_games_messy 
+SELECT 
+    -- Remove dashes from all event values
+    REPLACE(TRIM(event), '-','') AS event_fixed, 
+    COUNT(DISTINCT athlete_id) AS athletes
+FROM summer_games
+-- Update the group by accordingly
+GROUP BY event_fixed;
+
+
+
+
+-- Filtering out nulls
+-- Show total gold_medals by country
+SELECT 
+	country,
+    SUM(gold) AS gold_medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    country_id
+    FROM winter_games) AS w
+JOIN countries AS c
+ON w.country_id = c.id
+GROUP BY country
+-- Order by gold_medals in descending order
+ORDER BY gold_medals DESC;
+
+
+
+-- Show total gold_medals by country
+SELECT 
+	country, 
+    SUM(gold) AS gold_medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    country_id
+    FROM winter_games) AS w
+JOIN countries AS c
+ON w.country_id = c.id
+-- Removes any row with no gold medals
+WHERE gold IS NOT NULL
+GROUP BY country
+-- Order by gold_medals in descending order
+ORDER BY gold_medals DESC;
+
+
+-- Show total gold_medals by country
+SELECT 
+	country, 
+    SUM(gold) AS gold_medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    country_id
+    FROM winter_games) AS w
+JOIN countries AS c
+ON w.country_id = c.id
+-- Comment out the WHERE statement
+-- WHERE gold IS NOT NULL
+GROUP BY country
+-- Replace WHERE statement with equivalent HAVING statement
+HAVING SUM(gold) IS NOT NULL
+-- Order by gold_medals in descending order
+ORDER BY gold_medals DESC;
+
+
+
+-- Fixing calculations with coalesce
+-- Pull events and golds by athlete_id for summer events
+SELECT 
+    athlete_id,
+    COUNT(event) AS total_events, 
+    SUM(gold) AS gold_medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    event,
+    athlete_id
+    FROM summer_games) AS s
+GROUP BY athlete_id
+-- Order by total_events descending and athlete_id ascending
+ORDER BY total_events DESC, athlete_id ASC;
+
+
+-- Pull events and golds by athlete_id for summer events
+SELECT 
+    athlete_id,
+    -- Add a field that averages the existing gold field
+    AVG(gold) AS avg_golds,
+    COUNT(event) AS total_events, 
+    SUM(gold) AS gold_medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    event,
+    athlete_id
+    FROM summer_games) AS s
+GROUP BY athlete_id
+-- Order by total_events descending and athlete_id ascending
+ORDER BY total_events DESC, athlete_id ASC;
+
+
+
+-- Pull events and golds by athlete_id for summer events
+SELECT 
+    athlete_id,
+    -- Add a field that averages the existing gold field
+    AVG(COALESCE(gold,0)) AS avg_golds,
+    COUNT(event) AS total_events, 
+    SUM(gold) AS gold_medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    event,
+    athlete_id
+    FROM summer_games) AS s
+GROUP BY athlete_id
+-- Order by total_events descending and athlete_id ascending
+ORDER BY total_events DESC, athlete_id ASC;
+
+
+
+
+-- Identifying duplication
+-- Pull total gold_medals for winter sports
+SELECT sum(gold) as gold_medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold
+    FROM winter_games) AS w;
+    
+    
+-- Show gold_medals and avg_gdp by country_id
+SELECT 
+	w.country_id, 
+    SUM(gold) AS gold_medals, 
+    AVG(gdp) AS avg_gdp
+FROM 
+(SELECT
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    country_id
+    FROM winter_games) AS w
+JOIN country_stats AS c
+-- Only join on the country_id fields
+ON w.country_id = c.country_id
+GROUP BY w.country_id;
+
+
+
+-- Calculate the total gold_medals in your query
+SELECT SUM(gold_medals)
+FROM
+	(SELECT 
+	w.country_id, 
+    SUM(gold) AS gold_medals, 
+    AVG(gdp) AS avg_gdp
+		FROM 
+		(SELECT
+			CASE WHEN medal = 'Gold' THEN 1
+			ELSE NULL END AS gold,
+			country_id
+			FROM winter_games) AS w
+		JOIN country_stats AS c
+		-- Only join on the country_id fields
+		ON w.country_id = c.country_id
+		GROUP BY w.country_id) AS subquery;
+        
+        
+-- Fixing duplication through a JOIN
+SELECT SUM(gold_medals)
+FROM
+	(SELECT 
+	w.country_id, 
+    SUM(gold) AS gold_medals, 
+    AVG(gdp) AS avg_gdp
+		FROM 
+		(SELECT
+			CASE WHEN medal = 'Gold' THEN 1
+			ELSE NULL END AS gold,
+			country_id,
+            year
+			FROM winter_games) AS w
+		JOIN country_stats AS c
+		-- Only join on the country_id fields
+		ON w.country_id = c.country_id AND CAST(w.year AS date) = CAST(c.year AS date)
+		GROUP BY w.country_id) AS subquery;
+        
+        
+        
+-- Report 3: Countries with high medal rates
+SELECT 
+	c.country,
+    -- Add the three medal fields using one sum function
+	SUM(COALESCE(bronze,0) + COALESCE(silver,0) + COALESCE(gold,0)) AS medals
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    country_id
+    FROM summer_games) AS s
+JOIN countries AS c
+ON s.country_id = c.id
+GROUP BY country
+ORDER BY medals DESC;
+
+
+
+SELECT 
+	c.country,
+    -- Pull in pop_in_millions and medals_per_million 
+	population,
+    -- Add the three medal fields using one sum function
+	SUM(COALESCE(bronze,0) + COALESCE(silver,0) + COALESCE(gold,0)) AS medals,
+	SUM(COALESCE(bronze,0) + COALESCE(silver,0) + COALESCE(gold,0)) / CAST(cs.population AS decimal)*1000000 AS medals_per_million
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    country_id,
+    year
+    FROM summer_games) AS s
+JOIN countries AS c 
+ON s.country_id = c.id
+-- Update the newest join statement to remove duplication
+JOIN country_stats AS cs 
+ON s.country_id = cs.country_id AND CAST(s.year AS date) = CAST(cs.year AS date)
+GROUP BY c.country, population
+ORDER BY medals DESC;
+
+
+
+SELECT 
+	-- Clean the country field to only show country_code
+    LEFT(REPLACE(UPPER(TRIM(c.country)), '.', ''), 3) AS country_code,
+    -- Pull in pop_in_millions and medals_per_million 
+	population,
+    -- Add the three medal fields using one sum function
+	SUM(COALESCE(bronze,0) + COALESCE(silver,0) + COALESCE(gold,0)) AS medals,
+	SUM(COALESCE(bronze,0) + COALESCE(silver,0) + COALESCE(gold,0)) / CAST(cs.population AS decimal)*1000000 AS medals_per_million
+FROM 
+(SELECT
+	CASE WHEN medal = 'Bronze' THEN 1
+	ELSE NULL END AS bronze,
+	CASE WHEN medal = 'Silver' THEN 1
+	ELSE NULL END AS silver,
+	CASE WHEN medal = 'Gold' THEN 1
+	ELSE NULL END AS gold,
+    country_id,
+    year
+    FROM summer_games) AS s
+JOIN countries AS c 
+ON s.country_id = c.id
+-- Update the newest join statement to remove duplication
+JOIN country_stats AS cs 
+ON s.country_id = cs.country_id AND s.year = CAST(cs.year AS date)
+-- Filter out null populations
+WHERE cs.population IS NOT NULL
+GROUP BY c.country, population
+-- Keep only the top 25 medals_per_million rows
+ORDER BY medals_per_million DESC
+LIMIT 25;
